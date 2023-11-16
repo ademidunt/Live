@@ -6,12 +6,25 @@ const styles = StyleSheet.create({
       backgroundColor: '#1E1E1E',
       alignItems: 'center',
       justifyContent: 'center',
-      borderTopColor: '#4709CD'
+      //borderTopColor: '#red'
     },
   
     text:{
       color: '#FFFFFF',
-    }
+    },
+
+    emailContainer:{
+      flex: 1,
+      flexDirection: 'row',
+      columnGap: 10
+    },
+
+    scrollview:{
+      flex: 0.5,
+      backgroundColor:'red',
+      padding: 20
+    },
+
   });
 
 module.exports = styles ;
