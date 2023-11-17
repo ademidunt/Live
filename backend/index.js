@@ -1,16 +1,14 @@
 //express and port
-const express = require('express');
+import express from 'express';
 const app = express();
-const cors = require ('cors');
+import cors from 'cors';
 const port = process.env.PORT || 4000;
 
 //import routes
-const admin = require('./routes/admin');
 
 
 //middleware
 app.use(cors());
-app.use('/api/admin/:adminUser', admin);
 
 
 //DB Connection
