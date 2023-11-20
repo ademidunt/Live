@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
-import PhotoUploadComponent from '../../components/PhotoUpload'
+import PhotoUploadComponent from '../../components/'
 
 const CreateProfileScreen = () => {
   const [username, setUsername] = useState('');
