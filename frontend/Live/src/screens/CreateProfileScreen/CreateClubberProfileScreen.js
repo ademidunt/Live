@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
-import PhotoUploadComponent from '../../components/'
+
 
 const CreateProfileScreen = () => {
   const [username, setUsername] = useState('');
@@ -68,12 +68,7 @@ const CreateProfileScreen = () => {
       />
 
       <Text>Profile Picture:</Text>
-      <PhotoUploadComponent
-        selectedImage = {profilePicture}
-        onImageChange={handleProfilePictureChange}
-      />
 
-      <Button title="Create Profile" onPress={handleCreateProfile} />
     </View>
   );
 };
