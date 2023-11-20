@@ -2,27 +2,20 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
 
 const CreateProfileScreen = () => {
-  const [name, setName] = useState('');
-  const [usernamename, setuserName] = useState('');
+  const [clubName, setClubName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setpassword] = useState('');
-  const [dob, setDob] = useState('');
   const [bio, setBio] = useState('');
-  const [profilePicture, setProfilePicture] = useState(null);
 
-  const handleProfilePictureChange = (imageUri) => {
-    setProfilePicture(imageUri);
-  };
-
-  const handleCreateProfile = () => {
+  const handleCreateClub = () => {
     // Send data to the backend here
     const userData = {
-      name,
-      dob,
+      name: clubName,
+      email,
+      password,
       bio,
-      profilePicture,
+
     };
-
-
   };
 
   return (
@@ -30,15 +23,15 @@ const CreateProfileScreen = () => {
       <Text>Name:</Text>
       <TextInput
         style={styles.input}
-        value={name}
-        onChangeText={(text) => setName(text)}
+        value={clubName}
+        onChangeText={(text) => setClubName(text)}
       />
 
     <Text>Username:</Text>
       <TextInput
         style={styles.input}
-        value={usernamename}
-        onChangeText={(text) => setUsername(text)}
+        value={email}
+        onChangeText={(text) => setEmail(text)}
       />
 
     <Text>password:</Text>
@@ -49,36 +42,16 @@ const CreateProfileScreen = () => {
         onChangeText={(text) => setpassword(text)}
       />
 
-      <Text>Date of Birth:</Text>
-      <TextInput
-        style={styles.input}
-        value={dob}
-        onChangeText={(text) => setDob(text)}
-        placeholder="YYYY-MM-DD"
-      />
-
       <Text>Bio:</Text>
       <TextInput
         style={styles.input}
         value={bio}
         onChangeText={(text) => setBio(text)}
         multiline
+        placeholder ="be sure to use descriptive keywords in your bio!"
       />
 
-      <Text>Profile Picture:</Text>
-      {profilePicture && (
-        <Image source={{ uri: profilePicture }} style={styles.profilePicture} />
-      )}
-      <Button
-        title="Select Profile Picture"
-        onPress={() => {
-          // Implement image picker logic here
-          // For example, you can use a library like react-native-image-picker
-          // and update the handleProfilePictureChange function
-        }}
-      />
-
-      <Button title="Create Profile" onPress={handleCreateProfile} />
+      <Button title="Create Club" onPress={handleCreateClub} />
     </View>
   );
 };

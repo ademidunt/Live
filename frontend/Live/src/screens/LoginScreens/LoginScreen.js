@@ -3,33 +3,32 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import CreateProfileScreen from "../CreateProfileScreen/CreateProfileScreen";
 
 const LoginScreen = () => {
 
     const navigation = useNavigation();
 
-  const handleLogin = () => {
-    // should take user to a log in page not yet created
-    console.log('Login button pressed');
+  const handleClubberLogin = () => {
+    navigation.navigate('ClubberLogin');
+    console.log('Create Profile button pressed');
   };
 
-  const handleCreateProfile = () => {
-    // Implement your create profile logic here
-    navigation.navigate('CreateProfile');
+  const handleClubLogin = () => {
+
+    navigation.navigate('ClubLogin');
     console.log('Create Profile button pressed');
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Live</Text>
+      <Text style={styles.title}>Welcom to Live! Let's get started! </Text>
       
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity style={styles.button} onPress={handleClubberLogin}>
+        <Text style={styles.buttonText}>I am a Clubber</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
-        <Text style={styles.buttonText}>Create Profile</Text>
+      <TouchableOpacity style={styles.button} onPress={handleClubLogin}>
+        <Text style={styles.buttonText}>I have a Club</Text>
       </TouchableOpacity>
     </View>
   );
