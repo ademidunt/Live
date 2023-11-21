@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert} from 'react-native';
+import PhotoUploadComponent from '../../components/ProfileHeader/PhotoUpload';
 
 
 const CreateProfileScreen = () => {
@@ -15,28 +16,39 @@ const CreateProfileScreen = () => {
   };
 
   const handleCreateProfile = () => {
+    //make sure all the required fields are complete 
+    if (!username || !email || !password || !dob || !bio ) {
+      Alert.alert('Incomplete profile!', 'Please fill in all fields to create a prodile.');
+      return;
+    }
     // Send data to the backend here
     const userData = {
-      name: username,
+      username,
       email,
       dob,
       bio,
       profilePicture,
     };
 
+    // Print user data to the console for testing
+  console.log('User Data:', userData);
+  };
 
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
   };
 
   return (
+    <TouchableWithoutFeedback onPress={dismissKeyboard}>
     <View style={styles.container}>
-      <Text>Name:</Text>
+      <Text>Username:</Text>
       <TextInput
         style={styles.input}
         value={username}
         onChangeText={(text) => setUsername(text)}
       />
 
-    <Text>Username:</Text>
+    <Text>email:</Text>
       <TextInput
         style={styles.input}
         value={email}
@@ -68,8 +80,14 @@ const CreateProfileScreen = () => {
       />
 
       <Text>Profile Picture:</Text>
+      <PhotoUploadComponent onChange={handleProfilePictureChange}/> 
+
+      <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
+        <Text style={styles.buttonText}>Create Profile</Text>
+      </TouchableOpacity>
 
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 

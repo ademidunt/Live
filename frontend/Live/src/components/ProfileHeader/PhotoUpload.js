@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { View, Image, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
+//create a component with select image field
 const PhotoUploadComponent = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImagePicker = async () => {
+    //request permission to access media libary
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status !== 'granted') {
@@ -13,6 +15,7 @@ const PhotoUploadComponent = () => {
       return;
     }
 
+    //one granted, use image picker API to launch media libary and let use pick image
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -20,6 +23,7 @@ const PhotoUploadComponent = () => {
       quality: 1,
     });
 
+    //this checks if user canceld out of media libary 
     if (!result.cancelled) {
       setSelectedImage({ uri: result.uri });
     }
