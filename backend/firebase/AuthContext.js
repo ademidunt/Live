@@ -1,5 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react'
-import {auth} from '../firebase'
+import {auth} from './firebase'
 import { getAuth, sendEmailVerification } from "firebase/auth";
 
 
@@ -47,10 +47,7 @@ export  function AuthProvider ({ children }) {
         const unsubscribe=auth.onAuthStateChanged(user =>
             {
                 setCurrentUser(user)
-                setLoading(false)
-              
-                
-           
+                setLoading(false)    
             })
         return unsubscribe
     },[])
