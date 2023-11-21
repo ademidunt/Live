@@ -10,7 +10,7 @@ const CreateProfileScreen = () => {
   const handleCreateClub = () => {
     // Send data to the backend here
     const userData = {
-      name: clubName,
+      clubName,
       email,
       password,
       bio,
