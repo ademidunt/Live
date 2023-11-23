@@ -10,6 +10,7 @@ var isUser = true;
 export default function ProfileScreen() {
 
   const [btnPressed, setActiveBtn] = useState('active');
+  const [isEdit , setEdit] = useState(false);
 
   return (
     <View style={styles.ProfileScreen}>
@@ -23,7 +24,18 @@ export default function ProfileScreen() {
           <View style={[styles.headerCtnt, styles.venueName]}><Text style={[styles.text, styles.venueNameTxt]}>Venue Name</Text></View>
           {
             isUser &&
-            <View style={[styles.headerCtnt, styles.edit]}><Text style={[styles.text, styles.editTxt,]}>Edit</Text></View>
+            <View style={[styles.headerCtnt, styles.edit]}>
+              <Pressable 
+              onPress={()=>{setEdit(!isEdit)}} 
+              style={[]}>
+                { !isEdit &&
+                <Text style={[styles.text, styles.editTxt,]}>Edit</Text>
+                }
+                { isEdit &&
+                <Text style={[styles.text, styles.editTxt, styles.doneTxt]}>Done</Text>
+                }
+              </Pressable>
+            </View>
           }
           {
             !isUser &&
@@ -66,8 +78,14 @@ export default function ProfileScreen() {
           {btnPressed == 'active' &&
           <View style={styles.aboutSctn}>
             <View style={[styles.aboutCtnt,styles.abouBio]}>
-              <Text style={[styles.text, styles.aboutBioTxt]}>Lolus in metus. Egestas maecenas pharetra convallis posuere morbi leo urna. Arcu vitae elementum curabitur vitae nunc. Scelerisque varius morbi enim nunc faucibus a pellentesque. Faucibus pulvinar elementum integer enim neque volutpat. Nibh tellus molestie nunc non blandit. Tellus orci ac auctor augue mauris augue neque gravida. Vitae nunc sed velit dignissim sodales ut eu sem. Gravida neque convallis</Text>
+              <TextInput 
+              style={[styles.text, styles.aboutBioTxt]}
+              editable = {isEdit}
+              multiline
+              >
+                Lolus in metus. Egestas maecenas pharetra convallis posuere morbi leo urna. Arcu vitae elementum curabitur vitae nunc. Scelerisque varius morbi enim nunc faucibus a pellentesque. Faucibus pulvinar elementum integer enim neque volutpat. Nibh tellus molestie nunc non blandit. Tellus orci ac auctor augue mauris augue neque gravida. Vitae nunc sed velit dignissim sodales ut eu sem. Gravida neque convallis</TextInput>
             </View>
+
             <View style={[styles.aboutCtnt,styles.aboutLctn]}>
               <Text>Location</Text>
             </View>

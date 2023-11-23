@@ -238,7 +238,13 @@ const styles = StyleSheet.create({
 
     reservationTxt:{
       fontSize:20
-    }
+    },
+
+    doneTxt:{
+      color:'#9166ED'
+    },
+
+    
   });
 
 module.exports = styles ;
