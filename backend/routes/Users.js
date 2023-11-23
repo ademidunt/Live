@@ -1,22 +1,37 @@
-import { db } from './firebase.js';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import express from 'express';
+import { getUsers , getUser, createUser, updateUser } from '../controllers/userOps.js';
 
-export default async function databasetest() {
-    try {
-        await createUser("hi");
-        console.log("hi");
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
+const app = express();
+const port = 3000;
 
-async function createUser(email) {
-    try {
-        await setDoc(doc(db, "Users", email), { email: email, status: "active", type: "user" });
-        console.log("User created successfully");
-    } catch (error) {
-        console.error("Error creating user:", error);
-        throw error; // Re-throw the error to be caught by the calling function
-    }
-}
-databasetest()
+app.use(express.json());
+
+//Get all users
+app.get('/', async (req, res) => {
+    res.send(await getUsers());
+})
+//Get a user by userId
+app.get('/:userId', async (req, res) => {
+    console.log(req.params);
+    res.send(await getUser(req.params.userId));
+});
+//Create a new user
+app.post('/', async (req, res) => {
+    let email = req.body.email;
+    let name = req.body.name;
+
+    const user = {"email": email, "name": name}
+
+    res.send(await createUser(user));
+});
+//Update a user
+app.post('/:userId', async (req, res) => {
+    let email = req.body.email;
+    let name = req.body.name;
+
+    const user = {userId: req.params.userId, "email": email, "name": name}
+
+    res.send(await updateUser(user));
+});
+
+export default app;
