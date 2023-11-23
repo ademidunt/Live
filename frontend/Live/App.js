@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import ProfileScreen from "./src/screens/ProfileScreen/ProfileScreen";
+import ProfileScreen from "./src/screens/VenueProfileScreen/VenueProfileScreen";
 import SearchScreen from "./src/screens/SearchScreen/SearchScreen";
 import ReservationScreen from './src/screens/ReservationScreen/ReservationScreen';
 import TestScreen from './src/screens/TestScreen/TestScreen';

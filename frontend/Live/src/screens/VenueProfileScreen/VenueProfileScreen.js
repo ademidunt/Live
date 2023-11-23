@@ -3,9 +3,9 @@ import React, {useState} from 'react';
 import { TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
 
 const ProfileHandler = require('../../handlers/ProfileHandler')
-const styles = require('./ProfileScreenStyles')
+const styles = require('./VenueProfileScreenStyles')
 
-var isUser = false;
+var isUser = true;
 
 export default function ProfileScreen() {
 
