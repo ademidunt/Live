@@ -1,5 +1,6 @@
 import express from 'express';
-import users from './routes/Users.js'
+import users from './routes/Users.js';
+import clubber from './routes/Clubber.js';
 
 const app = express();
 const port = 3000;
@@ -16,3 +17,4 @@ app.get('/', async (req, res) => {
 });
 
 app.use('/user', users);
+app.use('/clubber', clubber);
