@@ -1,15 +1,16 @@
-//express and port
+//import 
 import express from 'express';
-const app = express();
 import cors from 'cors';
-const port = process.env.PORT || 4000;
+import ClubberProfiles from './routes/ClubberProfiles.js'
 
-//import routes
+//express and port 
+const app = express();
+const port = process.env.PORT || 4000;
 
 
 //middleware
 app.use(cors());
-
+app.use('/ClubberProfiles', ClubberProfiles);
 
 //DB Connection
 

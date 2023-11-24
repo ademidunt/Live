@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 //create a component with select image field
-const PhotoUploadComponent = () => {
+
+//THERE IS A BUG HERE THAT I CANNOT FIX I NEED HELPP!!!
+const PhotoUploadComponent = ({handleProfilePictureChange}) => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [uri, setUri] = useState('');
+
+  useEffect(() => {
+
+    if (selectedImage != null ){
+
+     setUri(selectedImage.uri)
+     console.log(`the uri is ${uri}`)
+
+    }
+      
+
+  }, [selectedImage])
+  
 
   const handleImagePicker = async () => {
     //request permission to access media libary
@@ -23,18 +39,34 @@ const PhotoUploadComponent = () => {
       quality: 1,
     });
 
-    //this checks if user canceld out of media libary 
-    if (!result.cancelled) {
-      setSelectedImage({ uri: result.uri });
+    const updateSelectedImage = async () => {
+      return setSelectedImage({ uri: result.assets[0].uri });
+
     }
+
+    //this checks if user canceld out of media libary 
+    if (!result.canceled) {
+      console.log(`picture uploaded`)
+      console.log(JSON.stringify(result.assets[0].uri))
+      const newUri = await updateSelectedImage()
+      console.log(` please please work ${newUri}`)
+
+
+    }
+
+
   };
+
 
   return (
     <View>
       {selectedImage && (
         <Image source={selectedImage} style={{ width: 200, height: 200 }} />
       )}
-      <Button title="Select Image" onPress={handleImagePicker} />
+      <Button title="Select Image" onPress={
+        () => {handleImagePicker(); handleProfilePictureChange(uri)}
+        
+        } />
     </View>
   );
 };

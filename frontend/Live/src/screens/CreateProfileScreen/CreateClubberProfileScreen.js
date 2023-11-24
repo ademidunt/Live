@@ -9,10 +9,12 @@ const CreateProfileScreen = () => {
   const [password, setpassword] = useState('');
   const [dob, setDob] = useState('');
   const [bio, setBio] = useState('');
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePicture, setProfilePicture] = useState('goodbye');
 
-  const handleProfilePictureChange = (imageUri) => {
-    setProfilePicture(imageUri);
+  //using to update props between this and photoupload component 
+  const handleProfilePictureChange = (image) => {
+    console.log(image)
+    setProfilePicture(image);
   };
 
   const handleCreateProfile = () => {
@@ -21,16 +23,43 @@ const CreateProfileScreen = () => {
       Alert.alert('Incomplete profile!', 'Please fill in all fields to create a prodile.');
       return;
     }
+    //update the profile picture that was selected 
+   
     // Send data to the backend here
+    // setProfilePicture(PhotoUploadComponent.selectedImage.uri)
     const userData = {
       username,
       email,
+      password,
       dob,
       bio,
       profilePicture,
     };
 
-    // Print user data to the console for testing
+    const updateDatabase = async () => {
+      console.log(`new session`)
+      // right now I am using my IP address , probably incorrect
+      fetch(`http://192.168.2.50:4000/ClubberProfiles/CreateProfile`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body : JSON.stringify(userData)
+        })
+        .then(async (res) => {
+          if (res.ok) {
+            console.log(`added to the databse successfully`)
+          }
+          else{
+            console.log(`something went wront ${JSON.stringify(res)}`)
+          }
+        })
+    }
+
+  updateDatabase();
+  // Print user data to the console for testing
+  console.log(profilePicture)
   console.log('User Data:', userData);
   };
 
@@ -80,7 +109,7 @@ const CreateProfileScreen = () => {
       />
 
       <Text>Profile Picture:</Text>
-      <PhotoUploadComponent onChange={handleProfilePictureChange}/> 
+      <PhotoUploadComponent handleProfilePictureChange={handleProfilePictureChange}/> 
 
       <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
         <Text style={styles.buttonText}>Create Profile</Text>
@@ -107,6 +136,17 @@ const styles = StyleSheet.create({
     height: 100,
     resizeMode: 'cover',
     marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#7a21c0',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+    width: 200,
+    alignItems: 'center',
+    ustifyContent: 'center', 
+    alignSelf: 'center', 
+    color: '#fff', // Text color
   },
 });
 
