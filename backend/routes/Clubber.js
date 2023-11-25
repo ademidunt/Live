@@ -1,8 +1,7 @@
 import express from 'express';
-import { getClubbers, getClubber, createClubber, updateClubber } from '../controllers/clubberOps.js';
+import { getClubbers, getClubber, createClubber, updateClubber, getClubberByToken } from '../controllers/ClubberOps.js';
 
 const app = express();
-const port = 3000;
 
 app.use(express.json());
 
@@ -34,4 +33,9 @@ app.post('/:clubberId', async (req, res) => {
     res.send(await updateClubber(clubber));
 });
 
+//Get clubber by api token
+app.get('/token/:token', async (req, res) => {
+    console.log(req.params);
+    res.send(await getClubberByToken(req.params.token));
+});
 export default app;
