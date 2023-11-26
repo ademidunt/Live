@@ -1,5 +1,6 @@
-import { db } from "../firebase/firebase.js";
+import { db, auth } from "../firebase/firebase.js";
 import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query} from 'firebase/firestore';
+import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 /*
 Database operations for manipulating the clubber collection.
 */
@@ -47,6 +48,7 @@ export async function getClubber(clubberId) {
 export async function createClubber(clubber) {
     try {
         let clubberId = null;
+        await createUserWithEmailAndPassword(auth, clubber.email, clubber.password)
         await addDoc(collection(db, "Clubber"), clubber)
             .then(function(docRef){//Get new document id.
                 console.log("Created clubber with ID: " + docRef.id);

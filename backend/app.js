@@ -1,5 +1,4 @@
 import express from 'express';
-import users from './routes/Users.js';
 import clubber from './routes/Clubber.js';
 import venue from './routes/Venue.js';
 import subscription from './routes/Subscription.js';
