@@ -1,5 +1,5 @@
 import express from 'express';
-import { getClubbers, getClubber, createClubber, updateClubber, getClubberByToken } from '../controllers/ClubberOps.js';
+import { getClubbers, getClubber, createClubber, updateClubber, getClubberByToken, loginClubber } from '../controllers/ClubberOps.js';
 
 const app = express();
 
@@ -24,7 +24,7 @@ app.post('/', async (req, res) => {
 });
 
 //Update a clubber
-app.post('/:clubberId', async (req, res) => {
+app.post('/update/:clubberId', async (req, res) => {
     const clubber = {
         ...req.body,
         ...{clubberId: req.params.clubberId}
@@ -38,4 +38,21 @@ app.get('/token/:token', async (req, res) => {
     console.log(req.params);
     res.send(await getClubberByToken(req.params.token));
 });
+
+app.post('/login', async (req, res) => {
+    const clubber = {
+        ...req.body,
+    };
+     try {
+        const token = await loginClubber(clubber.email, clubber.password);
+        console.log(token);
+
+        // Send the token as a response to the client
+        res.send({ token });
+    } catch (error) {
+        console.error("Error in login route:", error);
+        res.status(500).send({ error: 'Login failed' });
+    }
+});
+
 export default app;
