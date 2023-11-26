@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
+import { Modal, TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
 
 const ProfileHandler = require('../../handlers/ProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
@@ -11,6 +11,21 @@ export default function ProfileScreen() {
 
   const [btnPressed, setActiveBtn] = useState('active');
   const [isEdit , setEdit] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+
+  const [aboutBioTxt, setBioTxt] = useState('Lolus in metus. Egestas maecenas pharetra convallis posuere morbi leo urna. Arcu vitae elementum curabitur vitae nunc. Scelerisque varius morbi enim nunc faucibus a pellentesque. Faucibus pulvinar elementum integer enim neque volutpat. Nibh tellus molestie nunc non blandit. Tellus orci ac auctor augue mauris augue neque gravida. Vitae nunc sed velit dignissim sodales ut eu sem. Gravida neque convallis')
+  const [venueWeb, setVenueWeb] = useState('www.w.com')
+  const [venueNum, setVenueNum] = useState('www.w.com')
+  const [venueMail, setVenueMail] = useState('www.w.com')
+
+  const EditTextInput = () => {
+    const [val, setVal] = useState('www.w.com')
+
+    return(
+      <TextInput value={val} onChangeText={(val) => setVal(val)} editable = {isEdit} style={[styles.text]}></TextInput>
+    );
+  }
 
   return (
     <View style={styles.ProfileScreen}>
@@ -26,7 +41,7 @@ export default function ProfileScreen() {
             isUser &&
             <View style={[styles.headerCtnt, styles.edit]}>
               <Pressable 
-              onPress={()=>{setEdit(!isEdit)}} 
+              onPress={()=>{setEdit(!isEdit), isEdit?setModalVisible(true):''}}
               style={[]}>
                 { !isEdit &&
                 <Text style={[styles.text, styles.editTxt,]}>Edit</Text>
@@ -35,6 +50,25 @@ export default function ProfileScreen() {
                 <Text style={[styles.text, styles.editTxt, styles.doneTxt]}>Done</Text>
                 }
               </Pressable>
+
+              <Modal
+                animationType="slide"
+                visible={modalVisible}
+                transparent={true}
+                >
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <Text style={styles.text}>Save Changes?</Text>
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => setModalVisible(!modalVisible)}>
+                        <Text style={styles.textStyle}>Save</Text>
+                        <Text style={styles.textStyle}>Discard</Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                </Modal>
+
             </View>
           }
           {
@@ -77,13 +111,15 @@ export default function ProfileScreen() {
           {/* About section */}
           {btnPressed == 'active' &&
           <View style={styles.aboutSctn}>
-            <View style={[styles.aboutCtnt,styles.abouBio]}>
+            <View style={[styles.aboutCtnt, isEdit? styles.aboutEdit: '']}>
               <TextInput 
-              style={[styles.text, styles.aboutBioTxt]}
+              style={[styles.text, styles.aboutBioTxt, ]}
               editable = {isEdit}
               multiline
+              value={aboutBioTxt}
+              onChangeText={(val) => setBioTxt(val)}
               >
-                Lolus in metus. Egestas maecenas pharetra convallis posuere morbi leo urna. Arcu vitae elementum curabitur vitae nunc. Scelerisque varius morbi enim nunc faucibus a pellentesque. Faucibus pulvinar elementum integer enim neque volutpat. Nibh tellus molestie nunc non blandit. Tellus orci ac auctor augue mauris augue neque gravida. Vitae nunc sed velit dignissim sodales ut eu sem. Gravida neque convallis</TextInput>
+              </TextInput>
             </View>
 
             <View style={[styles.aboutCtnt,styles.aboutLctn]}>
@@ -92,21 +128,20 @@ export default function ProfileScreen() {
           </View>
           }
 
-
           {/* Contact section */}
           {btnPressed == 'contact' &&
           <View style={[styles.contactSctn]}>
             <View style={[styles.contactCtnt]}>
               <Text style={[styles.text]}>Website:</Text>
-              <View style={styles.contactCtntDsply}><Text style={[styles.text]}>www.Venue.com</Text></View>
+              <View style={[styles.contactCtntDsply, isEdit? styles.aboutEdit: '']}><TextInput value={venueWeb} onChangeText={(val) => setVenueWeb(val)} editable = {isEdit} style={[styles.text]}></TextInput></View>
             </View>
             <View style={[styles.contactCtnt]}>
               <Text style={[styles.text]}>Number:</Text>
-              <View style={styles.contactCtntDsply}><Text style={[styles.text]}>1800-000-000</Text></View>
+              <View style={[styles.contactCtntDsply, isEdit? styles.aboutEdit: '']}><TextInput value={venueNum} onChangeText={(val) => setVenueNum(val)} editable = {isEdit} style={[styles.text]}></TextInput></View>
             </View>
             <View style={[styles.contactCtnt]}>
               <Text style={[styles.text]}>Email:</Text>
-              <View style={styles.contactCtntDsply}><Text style={[styles.text]}>mail@mail.com</Text></View>
+              <View style={[styles.contactCtntDsply, isEdit? styles.aboutEdit: '']}><TextInput value={venueMail} onChangeText={(val) => setVenueMail(val)} editable = {isEdit} style={[styles.text]}></TextInput></View>
             </View>
             {/* <View style={[styles.contactCtnt]}>
               <Text style={[styles.text]}>Instagram:</Text>
