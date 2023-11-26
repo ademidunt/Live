@@ -48,11 +48,14 @@ export async function getClubber(clubberId) {
 export async function createClubber(clubber) {
     try {
         let clubberId = null;
-        await createUserWithEmailAndPassword(auth, clubber.email, clubber.password)
-        await addDoc(collection(db, "Clubber"), clubber)
+
+        const userCredential = await createUserWithEmailAndPassword(auth, clubber.email, clubber.password)
+        const uid = userCredential.user.uid;
+        
+        await setDoc(doc(db, "Clubber", uid), clubber)
             .then(function(docRef){//Get new document id.
-                console.log("Created clubber with ID: " + docRef.id);
-                clubberId = {"clubberId": docRef.id}
+                console.log("Created clubber with ID: " + uid);
+                clubberId = {"clubberId": uid}
             });
 
         clubber = {//Create clubber object with new id.
@@ -99,5 +102,15 @@ export async function getClubberByToken(token) {
     } catch (error) {
         console.error("Error getting clubber:", error);
         throw error; // Re-throw the error to be caught by the calling function
+    }
+}
+export async function loginClubber(username, password) {
+    try{
+        signInWithEmailAndPassword(auth, username, password);
+
+    }
+    catch{
+        console.error("Login failed:", error);
+        throw error;
     }
 }
