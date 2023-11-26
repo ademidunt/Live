@@ -1,16 +1,16 @@
 import { db } from "../firebase/firebase.js";
 import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query} from 'firebase/firestore';
 /*
-Database operations for manipulating the clubber collection.
+Database operations for manipulating the promotion collection.
 */
-export async function getClubbers() {
+export async function getPromotions() {
     try {
-        const querySnapshot = await getDocs(collection(db, "Clubber"));
+        const querySnapshot = await getDocs(collection(db, "Promotion"));
         let dataArr = []
         querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         let docId = {
-            "clubberId": doc.id
+            "promotionId": doc.id
         }
         let data = {
             ...docId,
@@ -22,14 +22,14 @@ export async function getClubbers() {
 
         return(dataArr);
     } catch (error) {
-        console.error("Error getting clubbers:", error);
+        console.error("Error getting promotion:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
-//Get clubber
-export async function getClubber(clubberId) {
+//Get a single promotion based on promotionId.
+export async function getPromotion(promotionId) {
     try {
-        const docSnap = await getDoc(doc(db, "Clubber", clubberId));
+        const docSnap = await getDoc(doc(db, "Promotion", promotionId));
 
         if (docSnap.exists()) {
             console.log("Document data:", docSnap.data());
@@ -39,51 +39,51 @@ export async function getClubber(clubberId) {
             console.log("No such document");
         }
     } catch (error) {
-        console.error("Error getting clubbers:", error);
+        console.error("Error getting promotion:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
-//Create clubber.
-export async function createClubber(clubber) {
+//Create promotion.
+export async function createPromotion(promotion) {
     try {
-        let clubberId = null;
-        await addDoc(collection(db, "Clubber"), clubber)
+        let promotionId = null;
+        await addDoc(collection(db, "Promotion"), promotion)
             .then(function(docRef){//Get new document id.
-                console.log("Created clubber with ID: " + docRef.id);
-                clubberId = {"clubberId": docRef.id}
+                console.log("Created promotion with ID: " + docRef.id);
+                promotionId = {"promotionId": docRef.id}
             });
 
-        clubber = {//Create clubber object with new id.
-            ...clubber,
-            ...clubberId
+        promotion = {//Create promotion object with new id.
+            ...promotion,
+            ...promotionId
         }
-        return clubber;//Return clubber object.
+        return promotion;//Return promotion object.
     } catch (error) {
-        console.error("Error creating clubber:", error);
+        console.error("Error creating promotion:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
-//Update clubber.
-export async function updateClubber(clubber) {
+//Update promotion.
+export async function updatePromotion(promotion) {
     try {
-        await setDoc(doc(db, "Clubber", clubber.clubberId), clubber);
-        console.log("Updated user " + clubber.clubberId);
+        await setDoc(doc(db, "Promotion", promotion.promotionId), promotion);
+        console.log("Updated promotion " + promotion.promotionId);
     } catch (error) {
-        console.error("Error creating user:", error);
+        console.error("Error updating promotion:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
-//Get clubber by api token
-export async function getClubberByToken(token) {
+//Get promotion by venueId
+export async function getPromotionByVenueId(venueId) {
     try {
-        const clubberRef = collection(db, "Clubber");
-        const q = query(clubberRef, where("token", "==", token));
+        const promotionRef = collection(db, "Promotion");
+        const q = query(promotionRef, where("venueId", "==", venueId));
         const querySnap = await getDocs(q);
 
         let dataArr = []
         querySnap.forEach((doc) => {
             let docId = {
-                "clubberId": doc.id
+                "promotionId": doc.id
             }
             let data = {
                 ...docId,
@@ -95,7 +95,7 @@ export async function getClubberByToken(token) {
     
         return(dataArr);
     } catch (error) {
-        console.error("Error getting clubber:", error);
+        console.error("Error getting promotion:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
