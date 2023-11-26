@@ -1,5 +1,7 @@
 import { db } from "../firebase/firebase.js";
 import { collection, doc, getDoc, getDocs, addDoc, setDoc} from 'firebase/firestore';
+import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
+
 /*
 Database operations for manipulating the venue collection.
 */

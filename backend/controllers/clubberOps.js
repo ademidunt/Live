@@ -108,12 +108,12 @@ export async function getClubberByToken(token) {
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
-export async function loginClubber(username, password) {
+export async function loginClubber(email, password) {
     try{
-        const userCredential = await signInWithEmailAndPassword(auth, username, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const token = await userCredential.user.getIdToken();
         const uid = userCredential.user.uid; //get the unique user id from firebase auth
-        const clubber = {//Create clubber object with new id.
+        const clubber = {//Create clubber object with UID and token.
             token: token,
             uid: uid,
         }
