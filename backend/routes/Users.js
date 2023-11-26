@@ -1,5 +1,7 @@
 import express from 'express';
 import { getUsers , getUser, createUser, updateUser } from '../controllers/userOps.js';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {auth} from '../firebase/firebase.js';
 
 const app = express();
 const port = 3000;
