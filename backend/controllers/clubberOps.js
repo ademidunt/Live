@@ -48,18 +48,22 @@ export async function getClubber(clubberId) {
 export async function createClubber(clubber) {
     try {
         let clubberId = null;
-
+        //obtain the user credentials after creating the user 
         const userCredential = await createUserWithEmailAndPassword(auth, clubber.email, clubber.password)
-        const uid = userCredential.user.uid;
+        const uid = userCredential.user.uid; //get the unique user id from firebase auth
         
         await setDoc(doc(db, "Clubber", uid), clubber)
             .then(function(docRef){//Get new document id.
                 console.log("Created clubber with ID: " + uid);
                 clubberId = {"clubberId": uid}
             });
+        //get the token after creating the user
+        const token = await userCredential.user.getIdToken();
 
         clubber = {//Create clubber object with new id.
             ...clubber,
+            token: token,
+            password: undefined,
             ...clubberId
         }
         return clubber;//Return clubber object.
