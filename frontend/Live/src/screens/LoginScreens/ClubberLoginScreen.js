@@ -9,8 +9,9 @@ const LoginScreen = () => {
     const navigation = useNavigation();
 
   const handleLogin = () => {
-    // should take user to a log in page not yet created
-    console.log('Login button pressed');
+    //implement signin logic here
+    navigation.navigate('ClubberSignIn')
+    console.log('Login button pressed');  
   };
 
   const handleCreateProfile = () => {

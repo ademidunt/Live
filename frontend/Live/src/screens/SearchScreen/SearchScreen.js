@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
 
-const styles = require('./SearchScreenStyles')
+const styles = require('../SearchScreen/SearchScreenStyles')
 
 export default function SearchScreen() {
   return (
