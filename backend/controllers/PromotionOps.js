@@ -99,3 +99,20 @@ export async function getPromotionByVenueId(venueId) {
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
+//Lazy loading, 10 posts at a time, get events
+export async function getPromotionFeed(lastVisible = null) {
+    try {
+      let query = admin.firestore().collection('posts').orderBy('timestamp', 'desc').limit(10);
+  
+      if (lastVisible) {
+        query = query.startAfter(lastVisible);
+      }
+  
+      const snapshot = await query.get();
+      const posts = snapshot.docs.map((doc) => doc.data());
+      return posts;
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      throw new Error('Failed to fetch posts');
+    }
+  }
