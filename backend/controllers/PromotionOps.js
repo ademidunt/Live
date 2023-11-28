@@ -1,5 +1,5 @@
 import { db } from "../firebase/firebase.js";
-import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query} from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query, orderBy, limit, startAfter} from 'firebase/firestore';
 /*
 Database operations for manipulating the promotion collection.
 */
@@ -100,17 +100,26 @@ export async function getPromotionByVenueId(venueId) {
     }
 }
 //Lazy loading, 10 posts at a time, get events
-export async function getPromotionFeed(lastVisible = null) {
+export async function getPromotionFeed(lastVisible) {
     try {
-      let query = admin.firestore().collection('posts').orderBy('timestamp', 'desc').limit(10);
-  
-      if (lastVisible) {
-        query = query.startAfter(lastVisible);
-      }
-  
-      const snapshot = await query.get();
-      const posts = snapshot.docs.map((doc) => doc.data());
-      return posts;
+        const postsCollection = collection(db, 'Promotion');
+        let queryForPosts = query(postsCollection, orderBy('postedTimestamp', 'desc'));
+    
+        if (lastVisible) {
+            queryForPosts = query(postsCollection, orderBy('postedTimestamp','desc'), startAfter(lastVisible));
+          }
+      
+          // Manually limit the number of documents retrieved
+          queryForPosts = query(queryForPosts, limit(2));
+      
+          const snapshot = await getDocs(queryForPosts);
+      
+          const posts = snapshot.docs.map((doc) => doc.data());
+      
+          // Get the last document in the snapshot for the next query
+          const lastDoc = snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1].id : null;
+      
+          return { posts, lastDoc };
     } catch (error) {
       console.error('Error fetching posts:', error);
       throw new Error('Failed to fetch posts');

@@ -1,5 +1,5 @@
 import express from 'express';
-import { getPromotion, getPromotions, createPromotion, updatePromotion, getPromotionByVenueId} from '../controllers/PromotionOps.js';
+import { getPromotion, getPromotions, createPromotion, updatePromotion, getPromotionByVenueId, getPromotionFeed} from '../controllers/PromotionOps.js';
 
 const app = express();
 
@@ -36,6 +36,13 @@ app.post('/:promotionId', async (req, res) => {
 //Get promotions with venueId
 app.get('/venue/:venueId', async (req, res) => {
     res.send(await getPromotionByVenueId(req.params.venueId));
+});
+
+app.get('/feed/load', async(req, res) => {
+    const post = {
+        ...req.body
+    }
+    res.send(await getPromotionFeed(post.num));
 });
 
 export default app;
