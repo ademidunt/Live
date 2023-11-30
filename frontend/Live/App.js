@@ -5,8 +5,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import ProfileScreen from "./src/screens/ProfileScreen/ProfileScreen";
+import ProfileScreen from "./src/screens/VenueProfileScreen/VenueProfileScreen";
 import SearchScreen from "./src/screens/SearchScreen/SearchScreen";
+import ReservationScreen from './src/screens/ReservationScreen/ReservationScreen';
+import TestScreen from './src/screens/TestScreen/TestScreen';
 import LoginScreen from "./src/screens/LoginScreens/LoginScreen"
 import ClubberLoginScreen from "./src/screens/LoginScreens/ClubberLoginScreen";
 import ClubLoginScreen from "./src/screens/LoginScreens/ClubLoginScreen";
@@ -25,8 +27,9 @@ export default function App() {
     initialRouteName={tabNavigator.initialRouteName}
     screenOptions={tabNavigator.screenOptions}
     >
-      <Tab.Screen name="Login" component={LoginStackNavigator} />
-      <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="Search" component={SearchScreen}/>
+      <Tab.Screen name="LoginScreen" component={LoginStackNavigator} />
+      <Tab.Screen name="Reservation" component={ReservationScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   </NavigationContainer>

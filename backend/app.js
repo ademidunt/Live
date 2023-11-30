@@ -1,42 +1,34 @@
 import express from 'express';
-import { getUsers , getUser, createUser, updateUser } from './controllers/userOps.js';
+import clubber from './routes/Clubber.js';
+import venue from './routes/Venue.js';
+import subscription from './routes/Subscription.js';
+import review from './routes/Review.js';
+import promotion from './routes/Promotion.js';
+import promoter from './routes/Promoter.js';
+import connection from './routes/Connection.js';
+import clubberVenue from './routes/ClubberVenue.js';
+import booking from './routes/Booking.js';
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('Welcome to LIVE backend.')
-})
-
 app.listen(port, ()=>{
     console.log(`Example app listeing on port ${port}`)
-})
+});
+
 //Get all users
-app.get('/user/', async (req, res) => {
-    res.send(await getUsers());
-})
-//Get a user by userId
-app.get('/user/:userId', async (req, res) => {
-    console.log(req.params);
-    res.send(await getUser(req.params.userId));
+app.get('/', async (req, res) => {
+    res.send('Welcome to Live API');
 });
-//Create a new user
-app.post('/user/', async (req, res) => {
-    let email = req.body.email;
-    let name = req.body.name;
-
-    const user = {"email": email, "name": name}
-
-    res.send(await createUser(user));
-});
-//Update a user
-app.post('/user/:userId', async (req, res) => {
-    let email = req.body.email;
-    let name = req.body.name;
-
-    const user = {userId: req.params.userId, "email": email, "name": name}
-
-    res.send(await updateUser(user));
-});
+//Routes linked
+app.use('/clubber', clubber);
+app.use('/venue', venue);
+app.use('/subscription', subscription);
+app.use('/review', review);
+app.use('/promotion', promotion);
+app.use('/promoter', promoter);
+app.use('/connection', connection);
+app.use('/clubberVenue', clubberVenue);
+app.use('/booking', booking);
