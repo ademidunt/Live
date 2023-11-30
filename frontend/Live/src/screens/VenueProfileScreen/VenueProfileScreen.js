@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import { Modal, TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
 
 const ProfileHandler = require('../../handlers/ProfileHandler')
@@ -10,20 +10,49 @@ var isUser = true;
 export default function ProfileScreen() {
 
   const [btnPressed, setActiveBtn] = useState('active');
-  const [isEdit , setEdit] = useState(false);
+  const [isEdit , setIsEdit] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
 
-  const [aboutBioTxt, setBioTxt] = useState('Lolus in metus. Egestas maecenas pharetra convallis posuere morbi leo urna. Arcu vitae elementum curabitur vitae nunc. Scelerisque varius morbi enim nunc faucibus a pellentesque. Faucibus pulvinar elementum integer enim neque volutpat. Nibh tellus molestie nunc non blandit. Tellus orci ac auctor augue mauris augue neque gravida. Vitae nunc sed velit dignissim sodales ut eu sem. Gravida neque convallis')
+  //const [aboutBioTxt, setBioTxt] = useState('Lolus in metus. Egestas maecenas pharetra convallis posuere morbi leo urna. Arcu vitae elementum curabitur vitae nunc. Scelerisque varius morbi enim nunc faucibus a pellentesque. Faucibus pulvinar elementum integer enim neque volutpat. Nibh tellus molestie nunc non blandit. Tellus orci ac auctor augue mauris augue neque gravida. Vitae nunc sed velit dignissim sodales ut eu sem. Gravida neque convallis')
+  const [aboutBioTxt, setBioTxt ] = useState({cur:"yes", new:''})
+  const [aboutBioTxtFnc, setAboutBioTxtFnc] = useState(()=> (val)=>{setBioTxt(val)})
+  //const test = useRef(()=> (val)=>{setBioTxt(val)})
   const [venueWeb, setVenueWeb] = useState('www.w.com')
   const [venueNum, setVenueNum] = useState('www.w.com')
   const [venueMail, setVenueMail] = useState('www.w.com')
+  const [editChange , setEditChange] = useState(false)
 
-  const EditTextInput = () => {
-    const [val, setVal] = useState('www.w.com')
+
+  const[savedData , setSavedData] = useState([])
+
+  const saveData =() => {
+    if(!editChange){
+      col
+    }
+  }
+
+  const EditTextInput = ({text, fnctn}) => {
+      
+    //put new txt if its has changed
+    const [val, setVal] = useState(editChange ? text.new : text.cur)
+    
+    finishEdit = (newText) => {
+       
+      //setNewVal(newText)
+
+      if(newText !== text.cur){
+        setEditChange(true)
+        fnctn({cur: text.cur, new: newText}) 
+      }
+      else{
+        setEditChange(false)
+        fnctn({cur:text.cur, new: ''})
+      }
+    }
 
     return(
-      <TextInput value={val} onChangeText={(val) => setVal(val)} editable = {isEdit} style={[styles.text]}></TextInput>
+      <TextInput defaultValue={val} onEndEditing={(val)=> {finishEdit(val.nativeEvent.text)}} editable = {isEdit} style={[styles.text, styles.aboutBioTxt]}></TextInput>
     );
   }
 
@@ -41,7 +70,7 @@ export default function ProfileScreen() {
             isUser &&
             <View style={[styles.headerCtnt, styles.edit]}>
               <Pressable 
-              onPress={()=>{setEdit(!isEdit), isEdit?setModalVisible(true):''}}
+              onPress={()=>{setIsEdit(!isEdit), isEdit && editChange ?setModalVisible(true):''}}
               style={[]}>
                 { !isEdit &&
                 <Text style={[styles.text, styles.editTxt,]}>Edit</Text>
@@ -59,12 +88,19 @@ export default function ProfileScreen() {
                   <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                       <Text style={styles.text}>Save Changes?</Text>
+
                       <Pressable
                         style={[styles.button, styles.buttonClose]}
-                        onPress={() => setModalVisible(!modalVisible)}>
+                        onPress={() => {setModalVisible(!modalVisible); saveData()}}>
                         <Text style={styles.textStyle}>Save</Text>
+                      </Pressable>
+
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {setModalVisible(!modalVisible); setEditChange(false)}}>
                         <Text style={styles.textStyle}>Discard</Text>
                       </Pressable>
+
                     </View>
                   </View>
                 </Modal>
@@ -112,16 +148,17 @@ export default function ProfileScreen() {
           {btnPressed == 'active' &&
           <View style={styles.aboutSctn}>
             <View style={[styles.aboutCtnt, isEdit? styles.aboutEdit: '']}>
-              <TextInput 
+              {/* <TextInput 
               style={[styles.text, styles.aboutBioTxt, ]}
               editable = {isEdit}
               multiline
               value={aboutBioTxt}
               onChangeText={(val) => setBioTxt(val)}
               >
-              </TextInput>
+              </TextInput> */}
+              <EditTextInput text={aboutBioTxt} fnctn={aboutBioTxtFnc}></EditTextInput>
             </View>
-
+            
             <View style={[styles.aboutCtnt,styles.aboutLctn]}>
               <Text>Location</Text>
             </View>
