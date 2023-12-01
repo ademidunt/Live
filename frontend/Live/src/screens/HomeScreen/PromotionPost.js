@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet,Dimensions } from 'react-native';
 
 const PromotionPost = ({ businessName, description, imageURL }) => {
   return (
@@ -10,30 +10,42 @@ const PromotionPost = ({ businessName, description, imageURL }) => {
     </View>
   );
 };
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
-    margin: 16,
-    padding: 16,
-    alignItems: 'center',
+    marginHorizontal: width * 0.000001, // Adjusted margin to 5% of the device width on each side
+    padding: 40,
+    backgroundColor: 'black',
   },
-  image: {
-    width: 200,
-    height: 200,
-    borderRadius: 8,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
+  },
+  profileImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
   },
   businessName: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 8,
+    color: 'white',
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    borderRadius: 8,
+    marginBottom: 10,
   },
   description: {
     fontSize: 16,
-    textAlign: 'center',
+    color: 'white',
   },
 });
 
