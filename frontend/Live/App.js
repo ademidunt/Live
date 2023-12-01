@@ -14,6 +14,7 @@ import ClubberLoginScreen from "./src/screens/LoginScreens/ClubberLoginScreen";
 import ClubLoginScreen from "./src/screens/LoginScreens/ClubLoginScreen";
 import CreateClubberProfileScreen from "./src/screens/CreateProfileScreen/CreateClubberProfileScreen";
 import CreateClubProfileScreen from "./src/screens/CreateProfileScreen/CreateClubProfileScreen";
+import HomeScreen from "./src/screens/HomeScreen/PromotionPost"
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -44,6 +45,7 @@ const LoginStackNavigator = () => {
       <Stack.Screen name="ClubLogin" component={ClubLoginScreen} />
       <Stack.Screen name="CreateClubberProfile" component={CreateClubberProfileScreen} />
       <Stack.Screen name="CreateClubProfile" component={CreateClubProfileScreen} />
+      <Stack.Screen name= "HomeScreen" component={HomeScreen} />
     </Stack.Navigator>
   );
 };
