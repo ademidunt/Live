@@ -16,6 +16,7 @@ const CreateProfileScreen = () => {
       bio,
 
     };
+    
   };
 
   return (
