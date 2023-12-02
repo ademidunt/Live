@@ -15,6 +15,7 @@ import ClubLoginScreen from "./src/screens/LoginScreens/ClubLoginScreen";
 import CreateClubberProfileScreen from "./src/screens/CreateProfileScreen/CreateClubberProfileScreen";
 import CreateClubProfileScreen from "./src/screens/CreateProfileScreen/CreateClubProfileScreen";
 import ClubberSignInScreen from "./src/screens/SignInScreen/ClubberSignInScreen";
+//import CreateNewPostScreen from  
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -48,6 +49,11 @@ const LoginStackNavigator = () => {
       <Stack.Screen name ="ClubberSignIn" component={ClubberSignInScreen}/>
     </Stack.Navigator>
   );
-};
-
-
+  //const SearchScreen = () => {
+    //return (
+     // <Stack.Navigator initialRouteName="Search">
+      //  <Stack.Screen name="Search" com ponent={SearchScreen} />
+      //</Stack.Navigator>
+   // );
+//};
+}
