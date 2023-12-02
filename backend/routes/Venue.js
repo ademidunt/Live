@@ -1,5 +1,5 @@
 import express from 'express';
-import { getVenue, getVenues, createVenue, updateVenue } from '../controllers/VenueOps.js';
+import { getVenue, getVenues, createVenue, updateVenue, loginVenue } from '../controllers/VenueOps.js';
 
 const app = express();
 
@@ -18,19 +18,41 @@ app.get('/:venueId', async (req, res) => {
 
 //Create a new venue
 app.post('/', async (req, res) => {
-    const venue = req.body;
+    try{
+        const venue = req.body;
 
     res.send(await createVenue(venue));
+    }
+    catch (error){
+        console.error("Error in create venue route:", error);
+        res.status(500).send({ error: 'Create venue failed' });
+    }
 });
 
 //Update a venue
-app.post('/:venueId', async (req, res) => {
+app.post('/update/:venueId', async (req, res) => {
     const venue = {
         ...req.body,
         ...{venueId: req.params.venueId}
     }
 
     res.send(await updateVenue(venue));
+});
+
+app.post('/login', async (req, res) => {
+    const venue = {
+        ...req.body,
+    };
+     try {
+        const token = await loginVenue(venue.email, venue.password);
+        console.log(token);
+
+        // Send the token as a response to the client
+        res.send({ token });
+    } catch (error) {
+        console.error("Error in login route:", error);
+        res.status(500).send({ error: 'Login failed' });
+    }
 });
 
 export default app;

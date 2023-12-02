@@ -1,4 +1,4 @@
-import { db } from "../firebase/firebase.js";
+import { db, auth } from "../firebase/firebase.js";
 import { collection, doc, getDoc, getDocs, addDoc, setDoc} from 'firebase/firestore';
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 
@@ -49,19 +49,26 @@ export async function getVenue(venueId) {
 export async function createVenue(venue) {
     try {
         let venueId = null;
-        await addDoc(collection(db, "Venue"), venue)
+        const userCredential = await createUserWithEmailAndPassword(auth, venue.email, venue.password)
+        const uid = userCredential.user.uid; //get the unique user id from firebase auth
+        
+        await setDoc(doc(db, "Venue", uid), venue)
             .then(function(docRef){//Get new document id.
-                console.log("Created venue with ID: " + docRef.id);
-                venueId = {"venueId": docRef.id}
+                console.log("Created venue with ID: " + uid);
+                venueId = {"clubberId": uid}
             });
+        //get the token after creating the user
+        const token = await userCredential.user.getIdToken();
 
-        venue = {//Create venue object with new id.
+        venue = {//Create clubber object with new id.
             ...venue,
+            token: token,
+            password: undefined,
             ...venueId
         }
-        return venue;//Return venue object.
+        return venue;//Return clubber object.
     } catch (error) {
-        console.error("Error creating venue:", error);
+        console.error("Error creating clubber:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
@@ -73,5 +80,22 @@ export async function updateVenue(venue) {
     } catch (error) {
         console.error("Error updating venue:", error);
         throw error; // Re-throw the error to be caught by the calling function
+    }
+}
+
+export async function loginVenue(email, password) {
+    try{
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const token = await userCredential.user.getIdToken();
+        const uid = userCredential.user.uid; //get the unique user id from firebase auth
+        const venue = {//Create clubber object with UID and token.
+            token: token,
+            uid: uid,
+        }
+        return venue;//Return clubber object.
+    }
+    catch(error){
+        console.error("Login failed:", error);
+        throw error;
     }
 }
