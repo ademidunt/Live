@@ -1,34 +1,49 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert} from 'react-native';
-import PhotoUploadComponent from '../../components/ProfileHeader/PhotoUpload';
-
+import React, { useState, useEffect } from 'react';
+import { View, Image, Button, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 const CreateProfileScreen = () => {
-  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, SetLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setpassword] = useState('');
   const [dob, setDob] = useState('');
   const [bio, setBio] = useState('');
-  const [profilePicture, setProfilePicture] = useState('goodbye');
+  const [profilePicture, setProfilePicture] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  //using to update props between this and photoupload component 
-  const handleProfilePictureChange = (image) => {
-    console.log(image)
-    setProfilePicture(image);
+  const handleImagePicker = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (status !== 'granted') {
+      console.log('Permission to access media library denied');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      console.log(JSON.stringify(result))
+      setSelectedImage({ uri: result.assets[0].uri })
+      setProfilePicture(result.assets[0].uri)
+      console.log(profilePicture)
+    }
   };
 
   const handleCreateProfile = () => {
-    //make sure all the required fields are complete 
-    if (!username || !email || !password || !dob || !bio ) {
-      Alert.alert('Incomplete profile!', 'Please fill in all fields to create a prodile.');
+    if (!firstName || !email || !password || !dob || !bio) {
+      Alert.alert('Incomplete profile!', 'Please fill in all fields to create a profile.');
       return;
     }
-    //update the profile picture that was selected 
-   
-    // Send data to the backend here
-    // setProfilePicture(PhotoUploadComponent.selectedImage.uri)
+
     const userData = {
-      username,
+      firstName,
+      lastName,
       email,
       password,
       dob,
@@ -36,31 +51,28 @@ const CreateProfileScreen = () => {
       profilePicture,
     };
 
+    //should probably add something that catches when the email is already in the adatabse and makes an alert
     const updateDatabase = async () => {
-      console.log(`new session`)
-      // right now I am using my IP address , probably incorrect
-      fetch(`http://192.168.2.50:4000/ClubberProfiles/CreateProfile`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-type': 'application/json',
-          },
-          body : JSON.stringify(userData)
-        })
+      console.log(`new session`);
+      fetch(`http://192.168.2.50:3000/clubber/`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      })
         .then(async (res) => {
           if (res.ok) {
-            console.log(`added to the databse successfully`)
+            console.log(`added to the database successfully`);
+          } else {
+            console.log(`something went wrong ${JSON.stringify(res)}`);
           }
-          else{
-            console.log(`something went wront ${JSON.stringify(res)}`)
-          }
-        })
-    }
+        });
+    };
 
-  updateDatabase();
-  // Print user data to the console for testing
-  console.log(profilePicture)
-  console.log('User Data:', userData);
+    updateDatabase();
+    console.log(profilePicture);
+    console.log('User Data:', userData);
   };
 
   const dismissKeyboard = () => {
@@ -69,53 +81,63 @@ const CreateProfileScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
-    <View style={styles.container}>
-      <Text>Username:</Text>
-      <TextInput
-        style={styles.input}
-        value={username}
-        onChangeText={(text) => setUsername(text)}
-      />
+      <View style={styles.container}>
+        <Text>First Name:</Text>
+        <TextInput
+          style={styles.input}
+          value={firstName}
+          onChangeText={(text) => setFirstName(text)}
+        />
+        <Text>Last Name:</Text>
+        <TextInput
+          style={styles.input}
+          value={lastName}
+          onChangeText={(text) => SetLastName(text)}
+        />
 
-    <Text>email:</Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-      />
+        <Text>Email:</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
 
-    <Text>password:</Text>
-      <TextInput
-        style={styles.input}
-        value={password}
-        secureTextEntry={true}
-        onChangeText={(text) => setpassword(text)}
-      />
+        <Text>Password:</Text>
+        <TextInput
+          style={styles.input}
+          value={password}
+          secureTextEntry={true}
+          onChangeText={(text) => setpassword(text)}
+        />
 
-      <Text>Date of Birth:</Text>
-      <TextInput
-        style={styles.input}
-        value={dob}
-        onChangeText={(text) => setDob(text)}
-        placeholder="YYYY-MM-DD"
-      />
+        <Text>Date of Birth:</Text>
+        <TextInput
+          style={styles.input}
+          value={dob}
+          onChangeText={(text) => setDob(text)}
+          placeholder="YYYY-MM-DD"
+        />
 
-      <Text>Bio:</Text>
-      <TextInput
-        style={styles.input}
-        value={bio}
-        onChangeText={(text) => setBio(text)}
-        multiline
-      />
+        <Text>Bio:</Text>
+        <TextInput
+          style={styles.input}
+          value={bio}
+          onChangeText={(text) => setBio(text)}
+          multiline
+        />
 
-      <Text>Profile Picture:</Text>
-      <PhotoUploadComponent handleProfilePictureChange={handleProfilePictureChange}/> 
+        <Text>Profile Picture:</Text>
+        <View>
+          {selectedImage && (
+            <Image source={selectedImage} style={{ width: 200, height: 200 }} />
+          )}
+          <Button title="Select Image" onPress={() => { handleImagePicker(); }} />
+        </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
-        <Text style={styles.buttonText}>Create Profile</Text>
-      </TouchableOpacity>
-
-    </View>
+        <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
+          <Text style={styles.buttonText}>Create Profile</Text>
+        </TouchableOpacity>
+      </View>
     </TouchableWithoutFeedback>
   );
 };
@@ -144,8 +166,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: 200,
     alignItems: 'center',
-    ustifyContent: 'center', 
-    alignSelf: 'center', 
+    justifyContent: 'center',
+    alignSelf: 'center',
     color: '#fff', // Text color
   },
 });
