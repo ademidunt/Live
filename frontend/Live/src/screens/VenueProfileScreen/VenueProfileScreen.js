@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
 import { TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
+import CreateNewEvent from './NewEvent/NewEvent';
 
 const ProfileHandler = require('../../handlers/ProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
@@ -60,6 +61,16 @@ export default function ProfileScreen() {
             </Pressable>
           </View>
           </View>
+          <View style={[styles.btnPnlRow, styles.btnPnlRow2]}>
+          <View style={styles.contactInfoBtn}>
+            <Pressable onPress={()=>{setActiveBtn('newEvent')}} 
+            style={({pressed})=> [
+            {backgroundColor: pressed || btnPressed == 'newEvent' ? "#9166ED": "#4709CD"},
+            styles.btn ]}>
+              <Text style={styles.text}>Create New Event</Text>
+            </Pressable>
+          </View>
+          </View>
         </View>
 
           {/* About section */}
@@ -100,6 +111,10 @@ export default function ProfileScreen() {
               </View>
             </View> */}
           </View>
+          }
+
+          {btnPressed == 'newEvent' &&
+            <CreateNewEvent/>
           }
 
           {
