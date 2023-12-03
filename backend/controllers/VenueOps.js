@@ -23,11 +23,7 @@ export async function search(keyword){
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            results.push({
-                id: doc.id,
-                name: data.venueName,
-                // Add other fields as needed
-            });
+            results.push(data.venueName);
         
 
     } 

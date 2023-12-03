@@ -32,6 +32,8 @@ const styles = StyleSheet.create({
     resultItem: {
       marginVertical: 10,
       color: '#fff',
+      fontSize: 30,
+      alignItems: 'center'
     },
   });
 
