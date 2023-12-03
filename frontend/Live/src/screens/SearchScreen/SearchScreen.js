@@ -42,7 +42,7 @@ export default function SearchScreen() {
         style={styles.input}
         value={searchQuery}
         onChangeText={(text) => setSearchQuery(text)}
-        placeholder="Search"
+        placeholder="Search for venue"
       />
       <Button title="Search" onPress={handleSearch} />
 
