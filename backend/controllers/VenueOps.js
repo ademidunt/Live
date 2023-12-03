@@ -1,10 +1,47 @@
 import { db } from "../firebase/firebase.js";
-import { collection, doc, getDoc, getDocs, addDoc, setDoc} from 'firebase/firestore';
+import { collection, query, where, doc, getDoc, getDocs, addDoc, setDoc} from 'firebase/firestore';
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
+
 
 /*
 Database operations for manipulating the venue collection.
 */
+
+export async function search(keyword){
+    keyword = keyword.toLowerCase()
+    console.log(keyword)
+
+    try{
+        const results = [];
+        const obj = {
+            "test" : "test"
+        };
+
+        //this is like doing the like sql function according to chatgpt
+        const q = query(collection(db, "Venue"), where("venueName", ">=", keyword), where("venueName", "<=", keyword + '\uf8ff'));
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            results.push({
+                id: doc.id,
+                name: data.venueName,
+                // Add other fields as needed
+            });
+        
+
+    } 
+    )
+    console.log('Results:', results);
+    return results
+    }catch(error) {
+
+        console.error('Error getting documents:', error);
+    }
+    
+    
+}
+
 export async function getVenues() {
     try {
         const querySnapshot = await getDocs(collection(db, "Venue"));

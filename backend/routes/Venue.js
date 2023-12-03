@@ -1,5 +1,5 @@
 import express from 'express';
-import { getVenue, getVenues, createVenue, updateVenue } from '../controllers/VenueOps.js';
+import { getVenue, getVenues, createVenue, updateVenue, search } from '../controllers/VenueOps.js';
 
 const app = express();
 
@@ -14,6 +14,13 @@ app.get('/', async (req, res) => {
 app.get('/:venueId', async (req, res) => {
     console.log(req.params);
     res.send(await getVenue(req.params.venueId));
+});
+
+//search venue name
+app.get('/search/:keyword', async (req, res) => {
+    console.log(req.params);
+   
+    res.send(await search(req.params.keyword));
 });
 
 //Create a new venue

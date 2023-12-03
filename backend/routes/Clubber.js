@@ -1,5 +1,5 @@
 import express from 'express';
-import { getClubbers, getClubber, createClubber, updateClubber, getClubberByToken, loginClubber } from '../controllers/ClubberOps.js';
+import { getClubbers, getClubber, createClubber, updateClubber, getClubberByToken, loginClubber } from '../controllers/clubberOps.js';
 
 const app = express();
 
