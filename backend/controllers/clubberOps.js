@@ -1,6 +1,7 @@
-import { db, auth } from "../firebase/firebase.js";
-import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query} from 'firebase/firestore';
+import { db, auth, storage } from "../firebase/firebase.js";
+import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query, onSnapshot} from 'firebase/firestore';
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 /*
 Database operations for manipulating the clubber collection.
 */
@@ -72,6 +73,41 @@ export async function createClubber(clubber) {
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
+
+export async function uploadImage(imageData) {
+    return new Promise((resolve, reject) => {
+        console.log('upload Image function in clubber ops is hit');
+        const storageRef = ref(storage, "images/" + imageData.name);
+        const uploadTask = uploadBytesResumable(storageRef, imageData.blob);
+
+        // listen for events
+        uploadTask.on(
+            "state_changed",
+            // (snapshot) => {
+            //     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            //     console.log("Upload is ", progress + "% done");
+            // },
+            (error) => {
+                console.error("Error during upload:", error);
+                reject(error); // handle error
+            },
+            async () => {
+                try {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    console.log("File available at ", downloadURL);
+
+                    resolve(downloadURL); // resolve the promise with the download URL
+
+                } catch (error) {
+                    console.error("Error getting download URL:", error);
+                    reject(error); // handle error in getting download URL
+                }
+            }
+        );
+    });
+}
+
+
 //Update clubber.
 export async function updateClubber(clubber) {
     try {
