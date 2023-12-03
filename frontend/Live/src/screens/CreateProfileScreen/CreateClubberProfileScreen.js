@@ -11,6 +11,7 @@ const CreateProfileScreen = () => {
   const [bio, setBio] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
+  const [url, setUrl] = useState('')
 
   const handleImagePicker = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -28,14 +29,42 @@ const CreateProfileScreen = () => {
     });
 
     if (!result.canceled) {
-      console.log(JSON.stringify(result))
+      // console.log(JSON.stringify(result))
       setSelectedImage({ uri: result.assets[0].uri })
       setProfilePicture(result.assets[0].uri)
-      console.log(profilePicture)
+      //upload image 
+
+      // console.log(profilePicture)
     }
   };
 
-  const handleCreateProfile = () => {
+  async function uploadImage () {
+
+    const response = await fetch(profilePicture);
+    const blob = await response.blob();
+    console.log("the blob is: " + JSON.stringify(blob))
+    const imageData = {
+      "name": email, 
+      "blob": blob
+    }
+
+    fetch(`http://192.168.2.50:3000/clubber/imageUpload`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(imageData),
+      })
+        .then(async (res) => {
+          if (res.ok) {
+            console.log(`added to the storage successfully`);
+          } else {
+            console.log(`something went wrong ${JSON.stringify(res)}`);
+          }
+        })
+  }
+
+  const handleCreateProfile = async () => {
     if (!firstName || !email || !password || !dob || !bio) {
       Alert.alert('Incomplete profile!', 'Please fill in all fields to create a profile.');
       return;
@@ -69,10 +98,10 @@ const CreateProfileScreen = () => {
           }
         });
     };
-
+    uploadImage();
     updateDatabase();
-    console.log(profilePicture);
-    console.log('User Data:', userData);
+  
+    // console.log('User Data:', userData);
   };
 
   const dismissKeyboard = () => {
