@@ -80,10 +80,14 @@ export async function uploadImage(imageData) {
             'Content-type': 'image/jpeg',
         }
    
-        console.log('the data being sent is ', imageData );
+        //this line is showing 
+        console.log('the data being sent is ', imageData.blob._data );
         const storageRef = ref(storage, "images/" + imageData.name);
-        const uploadTask = uploadBytesResumable(storageRef, imageData.blob, metadata );
-
+        const uploadTask = uploadBytesResumable(storageRef, imageData.blob._data, metadata );
+        
+        //Ttrouble shooting 
+        // console.log(JSON.stringify(uploadTask.snapshot))
+        
         // listen for events
         uploadTask.on(
             "state_changed",

@@ -77,7 +77,6 @@ const CreateProfileScreen = () => {
       password,
       dob,
       bio,
-      profilePicture,
     };
 
     //should probably add something that catches when the email is already in the adatabse and makes an alert

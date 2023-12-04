@@ -1,0 +1,8 @@
+{
+    size: 56543,
+    offset: 0,
+    blobId: 'A68A540A-B2D6-408A-A513-4D2B32BC0DB3',
+    type: 'image/jpeg',
+    name: 'AEB891E9-3716-47E3-B933-C038B82D72F4.jpg',
+    __collector: {}
+  }

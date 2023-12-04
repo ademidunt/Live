@@ -1,0 +1,248 @@
+{
+    "bytesTransferred": 0,
+    "totalBytes": 0,
+    "state": "running",
+    "metadata": {
+        "Content-type": "image/jpeg"
+    },
+    "task": {
+        "_transferred": 0,
+        "_needToFetchStatus": false,
+        "_needToFetchMetadata": false,
+        "_observers": [],
+        "_chunkMultiplier": 1,
+        "_ref": {
+            "_service": {
+                "app": {
+                    "_isDeleted": false,
+                    "_options": {
+                        "apiKey": "AIzaSyDiK8PKFgMNHlz-wHHyDlmBiY-_EcTmhDo",
+                        "authDomain": "live-2024.firebaseapp.com",
+                        "projectId": "live-2024",
+                        "storageBucket": "live-2024.appspot.com",
+                        "messagingSenderId": "1025148808085",
+                        "appId": "1:1025148808085:web:7b5f6cf5e1ec5dd7e3e49c"
+                    },
+                    "_config": {
+                        "name": "[DEFAULT]",
+                        "automaticDataCollectionEnabled": false
+                    },
+                    "_name": "[DEFAULT]",
+                    "_automaticDataCollectionEnabled": false,
+                    "_container": {
+                        "name": "[DEFAULT]",
+                        "providers": {}
+                    }
+                },
+                "_authProvider": {
+                    "name": "auth-internal",
+                    "container": {
+                        "name": "[DEFAULT]",
+                        "providers": {}
+                    },
+                    "component": {
+                        "name": "auth-internal",
+                        "type": "PRIVATE",
+                        "multipleInstances": false,
+                        "serviceProps": {},
+                        "instantiationMode": "EXPLICIT",
+                        "onInstanceCreated": null
+                    },
+                    "instances": {},
+                    "instancesDeferred": {},
+                    "instancesOptions": {},
+                    "onInitCallbacks": {}
+                },
+                "_appCheckProvider": {
+                    "name": "app-check-internal",
+                    "container": {
+                        "name": "[DEFAULT]",
+                        "providers": {}
+                    },
+                    "component": null,
+                    "instances": {},
+                    "instancesDeferred": {},
+                    "instancesOptions": {},
+                    "onInitCallbacks": {}
+                },
+                "_firebaseVersion": "10.7.0",
+                "_bucket": {
+                    "bucket": "live-2024.appspot.com",
+                    "path_": ""
+                },
+                "_host": "firebasestorage.googleapis.com",
+                "_protocol": "https",
+                "_appId": null,
+                "_deleted": false,
+                "_maxOperationRetryTime": 120000,
+                "_maxUploadRetryTime": 600000,
+                "_requests": {}
+            },
+            "_location": {
+                "bucket": "live-2024.appspot.com",
+                "path_": "images/Joe@hotmail.com"
+            }
+        },
+        "_blob": {
+            "size_": 0,
+            "type_": ""
+        },
+        "_metadata": {
+            "Content-type": "image/jpeg"
+        },
+        "_mappings": [
+            {
+                "server": "bucket",
+                "local": "bucket",
+                "writable": false
+            },
+            {
+                "server": "generation",
+                "local": "generation",
+                "writable": false
+            },
+            {
+                "server": "metageneration",
+                "local": "metageneration",
+                "writable": false
+            },
+            {
+                "server": "name",
+                "local": "fullPath",
+                "writable": true
+            },
+            {
+                "server": "name",
+                "local": "name",
+                "writable": false
+            },
+            {
+                "server": "size",
+                "local": "size",
+                "writable": false
+            },
+            {
+                "server": "timeCreated",
+                "local": "timeCreated",
+                "writable": false
+            },
+            {
+                "server": "updated",
+                "local": "updated",
+                "writable": false
+            },
+            {
+                "server": "md5Hash",
+                "local": "md5Hash",
+                "writable": true
+            },
+            {
+                "server": "cacheControl",
+                "local": "cacheControl",
+                "writable": true
+            },
+            {
+                "server": "contentDisposition",
+                "local": "contentDisposition",
+                "writable": true
+            },
+            {
+                "server": "contentEncoding",
+                "local": "contentEncoding",
+                "writable": true
+            },
+            {
+                "server": "contentLanguage",
+                "local": "contentLanguage",
+                "writable": true
+            },
+            {
+                "server": "contentType",
+                "local": "contentType",
+                "writable": true
+            },
+            {
+                "server": "metadata",
+                "local": "customMetadata",
+                "writable": true
+            }
+        ],
+        "_resumable": false,
+        "_state": "running",
+        "sleepTime": 0,
+        "maxSleepTime": 600000,
+        "_promise": {}
+    },
+    "ref": {
+        "_service": {
+            "app": {
+                "_isDeleted": false,
+                "_options": {
+                    "apiKey": "AIzaSyDiK8PKFgMNHlz-wHHyDlmBiY-_EcTmhDo",
+                    "authDomain": "live-2024.firebaseapp.com",
+                    "projectId": "live-2024",
+                    "storageBucket": "live-2024.appspot.com",
+                    "messagingSenderId": "1025148808085",
+                    "appId": "1:1025148808085:web:7b5f6cf5e1ec5dd7e3e49c"
+                },
+                "_config": {
+                    "name": "[DEFAULT]",
+                    "automaticDataCollectionEnabled": false
+                },
+                "_name": "[DEFAULT]",
+                "_automaticDataCollectionEnabled": false,
+                "_container": {
+                    "name": "[DEFAULT]",
+                    "providers": {}
+                }
+            },
+            "_authProvider": {
+                "name": "auth-internal",
+                "container": {
+                    "name": "[DEFAULT]",
+                    "providers": {}
+                },
+                "component": {
+                    "name": "auth-internal",
+                    "type": "PRIVATE",
+                    "multipleInstances": false,
+                    "serviceProps": {},
+                    "instantiationMode": "EXPLICIT",
+                    "onInstanceCreated": null
+                },
+                "instances": {},
+                "instancesDeferred": {},
+                "instancesOptions": {},
+                "onInitCallbacks": {}
+            },
+            "_appCheckProvider": {
+                "name": "app-check-internal",
+                "container": {
+                    "name": "[DEFAULT]",
+                    "providers": {}
+                },
+                "component": null,
+                "instances": {},
+                "instancesDeferred": {},
+                "instancesOptions": {},
+                "onInitCallbacks": {}
+            },
+            "_firebaseVersion": "10.7.0",
+            "_bucket": {
+                "bucket": "live-2024.appspot.com",
+                "path_": ""
+            },
+            "_host": "firebasestorage.googleapis.com",
+            "_protocol": "https",
+            "_appId": null,
+            "_deleted": false,
+            "_maxOperationRetryTime": 120000,
+            "_maxUploadRetryTime": 600000,
+            "_requests": {}
+        },
+        "_location": {
+            "bucket": "live-2024.appspot.com",
+            "path_": "images/Joe@hotmail.com"
+        }
+    }
+}

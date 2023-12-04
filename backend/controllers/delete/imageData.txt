@@ -1,0 +1,13 @@
+{
+    name: 'Joe@hotmail.com',
+    blob: {
+      _data: {
+        size: 332329,
+        offset: 0,
+        blobId: '5EC61380-F62A-4A1E-A9F6-90D03FED11A8',
+        type: 'image/jpeg',
+        name: '66C46305-0FCA-4A10-BBDE-1A67F8337086.png',
+        __collector: {}
+      }
+    }
+  }
