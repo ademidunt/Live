@@ -11,7 +11,7 @@ const LoginScreen = () => {
   const handleClubberLogin = () => {
     navigation.navigate('ClubberLogin');
     console.log('Create Profile button pressed');
-  };
+  };  
 
   const handleClubLogin = () => {
 

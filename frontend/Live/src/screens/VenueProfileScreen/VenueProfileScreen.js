@@ -105,13 +105,6 @@ export default function ProfileScreen() {
           {
             isUser &&
           <View style={styles.logout}>
-          <Pressable
-           style={({pressed})=> [
-          {backgroundColor: pressed ? "#9166ED": "#4709CD"},
-          styles.logoutBtn, styles.btn ]}
-          >
-            <Text style={styles.text}>Logout</Text>
-          </Pressable>
         </View>
           }          
       </View>

@@ -13,7 +13,34 @@ const SignInScreen = () => {
       // Alert the user if fields are incomplete
       Alert.alert('Incomplete Information', 'Please enter email and password.');
       return;
+
+    
+      const userData = {
+        email,
+        password
+      };
+
+      const updateDatabase = async () => {
+        console.log(`new session`);
+        fetch(`http://192.168.2.50:3000/clubber/login`, {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        })
+          .then(async (res) => {
+            if (res.ok) {
+              console.log(`added to the database successfully`);
+            } else {
+              console.log(`something went wrong ${JSON.stringify(res)}`);
+            }
+          });
+      };
     }
+    updateDatabase();
+
+
 
     // Implement logic for authenticating user (communicate with backend, etc.)
     

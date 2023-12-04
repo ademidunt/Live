@@ -20,6 +20,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  logout:{
+    flex:1,
+    justifyContent: 'flex-end'
+  },
+
+  logoutBtn:{
+    //backgroundColor:'#1E1E1E',
+    //backgroundColor:'#4709CD',
+    paddingHorizontal: 30
+    //padding: 20
+  },
 });
 
 export default styles;
