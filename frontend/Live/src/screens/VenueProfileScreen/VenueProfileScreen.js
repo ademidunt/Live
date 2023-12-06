@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import { Modal, TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
 
-const ProfileHandler = require('../../handlers/ProfileHandler')
+const VenueProfileHandler = require('../../handlers/VenueProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
 
 var isUser = true;
@@ -14,26 +14,40 @@ export default function ProfileScreen() {
   const [editChange , setEditChange] = useState(false)
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [venueData, setVenueData] = useState(VenueProfileHandler.getVenueProfile('AsedlTwX2fdmuN0yWiM1k4BzKFb2'))
 
-  //const [aboutBioTxt, setBioTxt] = useState('Lolus in metus. Egestas maecenas pharetra convallis posuere morbi leo urna. Arcu vitae elementum curabitur vitae nunc. Scelerisque varius morbi enim nunc faucibus a pellentesque. Faucibus pulvinar elementum integer enim neque volutpat. Nibh tellus molestie nunc non blandit. Tellus orci ac auctor augue mauris augue neque gravida. Vitae nunc sed velit dignissim sodales ut eu sem. Gravida neque convallis')
-  const [aboutBioTxt, setBioTxt ] = useState({cur:"aboutBioTxt", new:''})
+  const [venueName, setVenueName] = useState ({cur: "venueName", new:'' })
+  const [aboutBioTxt, setBioTxt ] = useState({cur: "venueDesc" , new:''})
   const [venueWeb, setVenueWeb] = useState({cur:"venueWeb", new:''})
   const [venueNum, setVenueNum] = useState({cur:"venueNum", new:''})
   const [venueMail, setVenueMail] = useState({cur:"venueMail", new:''})
+  const [location, setLocation] =  useState({cur: venueData.location , new:''})
 
-  const handleVenueData= () => {
+  useEffect(()=>{
+    console.log( )
+    const json = VenueProfileHandler.getVenueProfile('AsedlTwX2fdmuN0yWiM1k4BzKFb2')
+    console.log(json)
+
+    //console.log(venueData)
+  }, []);
+
+  const handleVenueData = () => {
     const venueData ={
       aboutBioTxt,
       venueWeb,
       venueWeb,
       venueMail
     }
+
+    // setVenueName({cur: venueData.venueName, new:'' })
+    // setBioTxt({cur: venueData.description , new:''});
+    // setLocation({cur: venueData.location , new:''});
+    
   }
 
   const[savedData , setSavedData] = useState([])
   const saveData = () => {
     if(!editChange){
-      col
     }
   }
 
@@ -43,6 +57,8 @@ export default function ProfileScreen() {
     setVenueWeb({cur:"venueWeb", new:''})
     setVenueNum({cur:"venueNum", new:''})
     setVenueMail({cur:"venueMail", new:''})
+
+    console.log(venueData._j)
   }
 
   const EditTextInput = (newText, prop) => {
@@ -62,7 +78,7 @@ export default function ProfileScreen() {
       <View style={styles.container}>
 
         <View style={styles.header}>
-          <View style={[styles.headerCtnt, styles.venueName]}><Text style={[styles.text, styles.venueNameTxt]}>Venue Name</Text></View>
+          <View style={[styles.headerCtnt, styles.venueName]}><Text style={[styles.text, styles.venueNameTxt]}>{venueName.cur}</Text></View>
           {
             isUser &&
             <View style={[styles.headerCtnt, styles.edit]}>
@@ -94,7 +110,7 @@ export default function ProfileScreen() {
 
                       <Pressable
                         style={[styles.button, styles.buttonClose]}
-                        onPress={() => {setModalVisible(!modalVisible);discard()}}>
+                        onPress={() => {setModalVisible(!modalVisible);discard();}}>
                         <Text style={styles.textStyle}>Discard</Text>
                       </Pressable>
 
