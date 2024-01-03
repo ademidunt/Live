@@ -1,0 +1,38 @@
+{
+    "type": "default",
+    "status": 200,
+    "ok": true,
+    "statusText": "",
+    "headers": {
+        "map": {
+            "connection": "keep-alive",
+            "content-length": "0",
+            "date": "Sun, 03 Dec 2023 18:57:57 GMT",
+            "keep-alive": "timeout=5",
+            "x-powered-by": "Express",
+            "content-type": "text/plain"
+        }
+    },
+    "url": "http://192.168.2.50:3000/clubber/imageUpload",
+    "bodyUsed": false,
+    "_bodyInit": {
+        "_data": {
+            "size": 0,
+            "offset": 0,
+            "blobId": "182172CE-9CE6-429C-8060-0D7AE149F24F",
+            "type": "text/plain",
+            "name": "imageUpload.txt",
+            "__collector": {}
+        }
+    },
+    "_bodyBlob": {
+        "_data": {
+            "size": 0,
+            "offset": 0,
+            "blobId": "182172CE-9CE6-429C-8060-0D7AE149F24F",
+            "type": "text/plain",
+            "name": "imageUpload.txt",
+            "__collector": {}
+        }
+    }
+}
