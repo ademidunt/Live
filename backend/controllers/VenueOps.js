@@ -1,5 +1,5 @@
 import { db, auth } from "../firebase/firebase.js";
-import { collection, doc, getDoc, getDocs, addDoc, setDoc} from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc} from 'firebase/firestore';
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 
 /*
@@ -36,6 +36,7 @@ export async function getVenue(venueId) {
         if (docSnap.exists()) {
             console.log("Document data:", docSnap.data());
 
+            
             return(docSnap.data());
         } else {
             console.log("No such document");
@@ -77,6 +78,23 @@ export async function updateVenue(venue) {
     try {
         await setDoc(doc(db, "Venue", venue.venueId), venue);
         console.log("Updated venue " + venue.venueId);
+    } catch (error) {
+        console.error("Error updating venue:", error);
+        throw error; // Re-throw the error to be caught by the calling function
+    }
+}
+
+export async function updateVenueRatings(venueId, newList, newAvg) {
+    try {
+        const venueDocRef = doc(db, "Venue", venueId);
+        
+        // Update only one field
+        await updateDoc(venueDocRef, {
+            ratings: newList,
+            avgRating: newAvg
+        });
+
+        console.log("Updated rating for "+  venueId +  "has been updated to" + newAvg);
     } catch (error) {
         console.error("Error updating venue:", error);
         throw error; // Re-throw the error to be caught by the calling function

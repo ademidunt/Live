@@ -1,5 +1,6 @@
 import { db } from "../firebase/firebase.js";
 import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query} from 'firebase/firestore';
+import { getVenue, updateVenueRatings } from "./VenueOps.js";
 /*
 Database operations for manipulating the review collection.
 */
@@ -57,7 +58,14 @@ export async function createReview(review) {
             ...review,
             ...reviewId
         }
-        return review;//Return subscription object.
+
+        calc(review)
+        
+        return review
+      
+
+        
+
     } catch (error) {
         console.error("Error creating venue:", error);
         throw error; // Re-throw the error to be caught by the calling function
@@ -124,4 +132,33 @@ export async function getReviewsByVenueId(venueId) {
         console.error("Error getting review:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
+}
+
+export async function calc(review) {
+    try{
+    console.log(JSON.stringify(review.venueId))
+    const venue = await getVenue(review.venueId)
+    const newRatingsList = venue.ratings 
+    
+    newRatingsList.push(parseInt(review.rating))
+    let sum = 0
+
+    for ( let rating of newRatingsList){
+
+        rating
+        sum += rating
+
+    }
+    const avg = sum / newRatingsList.length 
+    console.log('the new rating for the venue should be', avg)
+    updateVenueRatings(review.venueId, newRatingsList, avg)
+    
+
+    }catch(error) {
+
+        console.error("there was an error calculating:", error);
+        throw error; // Re-throw the error to be caught by the calling function
+
+    }
+    
 }
