@@ -10,6 +10,7 @@ const LoginScreen = () => {
 
   const handleLogin = () => {
     // should take user to a log in page not yet created
+    navigation.navigate('ViewClubber')
     console.log('Login button pressed');
   };
 

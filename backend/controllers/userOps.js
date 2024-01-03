@@ -3,8 +3,7 @@ import { collection, doc, getDoc, getDocs, addDoc, setDoc, where } from 'firebas
 
 export async function getUser(userId) {
     try {
-        const docSnap = await getDoc(doc(db, "Users", userId));
-
+        const docSnap = await getDoc(doc(db, "Clubber", userId));
         if (docSnap.exists()) {
             console.log("Document data:", docSnap.data());
 
