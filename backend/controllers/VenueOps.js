@@ -84,22 +84,38 @@ export async function updateVenue(venue) {
     }
 }
 
-export async function updateVenueRatings(venueId, newList, newAvg) {
+export async function updateVenueRatingsList(venueId, newList) {
     try {
         const venueDocRef = doc(db, "Venue", venueId);
         
         // Update only one field
         await updateDoc(venueDocRef, {
-            ratings: newList,
-            avgRating: newAvg
+            ratings: newList
         });
 
-        console.log("Updated rating for "+  venueId +  "has been updated to" + newAvg);
+        console.log("Updated ratings list for "+  venueId +  "has been updated to" + newList);
     } catch (error) {
-        console.error("Error updating venue:", error);
+        console.error("Error updating venue ratings:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
+
+export async function updateVenueRatingsAvg(venueId,  newAvg) {
+    try {
+        const venueDocRef = doc(db, "Venue", venueId);
+        
+        // Update only one field
+        await updateDoc(venueDocRef, {
+            avgRating: newAvg
+        });
+
+        console.log("Updated rating avg for "+  venueId +  "has been updated to" + newAvg);
+    } catch (error) {
+        console.error("Error updating average ratings for venue:", error);
+        throw error; // Re-throw the error to be caught by the calling function
+    }
+}
+
 
 export async function loginVenue(email, password) {
     try{

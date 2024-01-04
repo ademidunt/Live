@@ -1,6 +1,6 @@
 import { db } from "../firebase/firebase.js";
-import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query} from 'firebase/firestore';
-import { getVenue, updateVenueRatings } from "./VenueOps.js";
+import { collection, doc, getDoc, getDocs, addDoc, setDoc, deleteDoc, where, query} from 'firebase/firestore';
+import { getVenue, updateVenueRatingsAvg, updateVenueRatingsList } from "./VenueOps.js";
 /*
 Database operations for manipulating the review collection.
 */
@@ -59,7 +59,7 @@ export async function createReview(review) {
             ...reviewId
         }
 
-        calc(review)
+        addRatingToVenueList(review)
         
         return review
       
@@ -134,26 +134,48 @@ export async function getReviewsByVenueId(venueId) {
     }
 }
 
-export async function calc(review) {
+export async function deleteReview(reviewId){
+
     try{
-    console.log(JSON.stringify(review.venueId))
+    
+            const review = await getReview(reviewId)
+            const venue = await getVenue(review.venueId)
+            const ratingToDelete = review.rating
+            const ratingsList = venue.ratings
+
+            for (let i = 0; i < ratingsList.length; i++) {
+                if (ratingsList[i] === ratingToDelete) {
+                  ratingsList.splice(i,1)
+                  break;
+                }
+            }
+
+            await removeRatingFromVenueList(review)
+            
+            deleteDoc(doc(db, "Review", reviewId))
+            console.log("rating has been deleted")
+            return review
+
+
+
+    }catch(error){
+        console.error("Error deleting review: ", error);
+        throw error; // Re-throw the error to be caught by the calling function
+
+    }
+}
+
+export async function addRatingToVenueList(review) {
+    try{
+
     const venue = await getVenue(review.venueId)
     const newRatingsList = venue.ratings 
     
     newRatingsList.push(parseInt(review.rating))
-    let sum = 0
 
-    for ( let rating of newRatingsList){
-
-        rating
-        sum += rating
-
-    }
-    const avg = sum / newRatingsList.length 
-    console.log('the new rating for the venue should be', avg)
-    updateVenueRatings(review.venueId, newRatingsList, avg)
-    
-
+    updateVenueRatingsList(review.venueId, newRatingsList)
+    updateRatingsAvg(review.venueId, newRatingsList)
+  
     }catch(error) {
 
         console.error("there was an error calculating:", error);
@@ -161,4 +183,48 @@ export async function calc(review) {
 
     }
     
+}
+
+export async function removeRatingFromVenueList(review) {
+    try{
+
+        const venue = await getVenue(review.venueId)
+        const ratingToDelete = review.rating
+        const ratingsList = venue.ratings
+
+        for (let i = 0; i < ratingsList.length; i++) {
+            
+            if ((ratingsList[i] / ratingToDelete) === 1) {
+              console.log("we need to delete", ratingsList[i] )
+              ratingsList.splice(i,1)
+              break;
+            }
+        }
+        
+        console.log(ratingsList)
+    await updateVenueRatingsList(review.venueId, ratingsList)
+    await updateRatingsAvg(review.venueId, ratingsList)
+  
+    }catch(error) {
+
+        console.error("there was an error calculating:", error);
+        throw error; // Re-throw the error to be caught by the calling function
+
+    }
+    
+}
+export async function updateRatingsAvg(venueId, newRatingsList){
+   let sum = 0
+
+   console.log("the new list to loop through for avg is", newRatingsList)
+    for ( let rating of newRatingsList){
+
+        sum += rating
+
+    }
+    const avg = sum / newRatingsList.length 
+    console.log('the new rating for the venue should be', avg)
+    updateVenueRatingsAvg(venueId, avg)
+
+
 }
