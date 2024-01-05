@@ -50,6 +50,11 @@ const CreateProfileScreen = () => {
         .then(async (res) => {
           if (res.ok) {
             console.log(`added to the databse successfully`)
+            //save the user token and user id in local stoarge 
+            let userData = await res.json()
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('clubberId', response.clubberId);
+
           }
           else{
             console.log(`something went wront ${JSON.stringify(res)}`)
@@ -61,6 +66,7 @@ const CreateProfileScreen = () => {
   // Print user data to the console for testing
   console.log(profilePicture)
   console.log('User Data:', userData);
+  navigation.navigate('ViewClubber')
   };
 
   const dismissKeyboard = () => {
