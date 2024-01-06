@@ -15,6 +15,7 @@ const LoginScreen = () => {
 
   const handleClubLogin = () => {
 
+    //navigation is JUST for testing, this part should be delted with merge if I forget
     navigation.navigate('ClubLogin');
     console.log('Create Profile button pressed');
   };

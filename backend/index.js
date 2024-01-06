@@ -1,17 +1,12 @@
-//express and port
+//import 
 import express from 'express';
-const app = express();
 import cors from 'cors';
+import ClubberProfiles from './routes/ClubberProfiles.js'
+import { Search } from './helpers/SearchBarHelper.js';
+
+//express and port 
+const app = express();
 const port = process.env.PORT || 4000;
-
-//import routes
-
-
-//middleware
-app.use(cors());
-
-
-//DB Connection
 
 
 app.listen(port, () => {

@@ -3,8 +3,7 @@ import { collection, doc, getDoc, getDocs, addDoc, setDoc, where } from 'firebas
 
 export async function getUser(userId) {
     try {
-        const docSnap = await getDoc(doc(db, "Users", userId));
-
+        const docSnap = await getDoc(doc(db, "Clubber", userId));
         if (docSnap.exists()) {
             console.log("Document data:", docSnap.data());
 
@@ -44,8 +43,8 @@ export async function getUsers() {
 
 export async function createUser(user) {
     try {
-        await addDoc(collection(db, "Users"), { email: user.email, name: user.name, status: "active", type: "user" });
-        console.log("User created successfully");
+        await addDoc(collection(db, "Users"), {  username: user.username, email: user.email, password: user.password, dob: user.dob, bio: user.bio, profilePicture : user.profilePicture });
+        // console.log(`user created succssfully `);
     } catch (error) {
         console.error("Error creating user:", error);
         throw error; // Re-throw the error to be caught by the calling function
@@ -61,6 +60,8 @@ export async function updateUser(user) {
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
+
+
 
 /* Login method. NOT IN USE NOW.
 export async function login(email, password) {

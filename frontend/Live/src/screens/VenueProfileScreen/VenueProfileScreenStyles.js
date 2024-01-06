@@ -249,6 +249,46 @@ const styles = StyleSheet.create({
       fontSize:20
     },
 
+    centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    }, 
+
+    modalView: {
+      margin: 20,
+      backgroundColor: 'white',
+      width: '105%',
+      padding: 35,
+      alignItems: 'center',
+      shadowColor: '#800',
+      shadowOffset: {
+        width: 0,
+        height: 2
+      }, 
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
+    },
+
+    customButton: {
+      alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white', // Button background color
+    borderColor: '#4709CD', // Border color
+    borderWidth: 3, // Border width
+    borderRadius: 5, // Border radius for a rounded look
+    paddingVertical: 10, // Vertical padding
+    paddingHorizontal: 20, // Horizontal padding
+    marginVertical: 10, // Vertical margin for the button
+    alignSelf: 'flex-start', // Align to the right
+    width: 120, // Adjusted width
+    },
+    buttonText: {
+      color: 'black', // Text color
+      fontSize: 12, // Font size
+    },
+
     doneTxt:{
       color:'#9166ED'
     },
@@ -296,8 +336,8 @@ const styles = StyleSheet.create({
     modalText: {
       marginBottom: 15,
       textAlign: 'center',
-    },
-
+    }
+      
   });
 
 module.exports = styles ;
