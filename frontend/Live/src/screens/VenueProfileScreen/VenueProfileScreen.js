@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
-import { TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
+import React, {useState, useRef, useEffect} from 'react';
+import { Modal, TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
 import CreateNewEvent from './NewEvent/NewEvent';
 
-const ProfileHandler = require('../../handlers/ProfileHandler')
+const VenueProfileHandler = require('../../handlers/VenueProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
 
 var isUser = true;
@@ -11,6 +11,64 @@ var isUser = true;
 export default function ProfileScreen() {
 
   const [btnPressed, setActiveBtn] = useState('active');
+  const [isEdit , setIsEdit] = useState(false);
+  const [editChange , setEditChange] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [venueData, setVenueData] = useState(VenueProfileHandler.getVenueProfile('AsedlTwX2fdmuN0yWiM1k4BzKFb2'))
+
+  const [venueName, setVenueName] = useState ({cur: "venueName", new:'' })
+  const [aboutBioTxt, setBioTxt ] = useState({cur: "venueDesc" , new:''})
+  const [venueWeb, setVenueWeb] = useState({cur:"venueWeb", new:''})
+  const [venueNum, setVenueNum] = useState({cur:"venueNum", new:''})
+  const [venueMail, setVenueMail] = useState({cur:"venueMail", new:''})
+  const [location, setLocation] =  useState({cur: venueData.location , new:''})
+
+  useEffect(()=>{
+    console.log( )
+    const json = VenueProfileHandler.getVenueProfile('AsedlTwX2fdmuN0yWiM1k4BzKFb2')
+    console.log(json)
+
+    //console.log(venueData)
+  }, []);
+
+  const handleVenueData = () => {
+    const venueData ={
+      aboutBioTxt,
+      venueWeb,
+      venueWeb,
+      venueMail
+    }
+
+    // setVenueName({cur: venueData.venueName, new:'' })
+    // setBioTxt({cur: venueData.description , new:''});
+    // setLocation({cur: venueData.location , new:''});
+    
+  }
+
+  const[savedData , setSavedData] = useState([])
+  const saveData = () => {
+    if(!editChange){
+    }
+  }
+
+  const discard = () => {
+    setEditChange(false)
+    setBioTxt({cur:"aboutBioTxt", new:''})
+    setVenueWeb({cur:"venueWeb", new:''})
+    setVenueNum({cur:"venueNum", new:''})
+    setVenueMail({cur:"venueMail", new:''})
+
+    console.log(venueData._j)
+  }
+
+  const EditTextInput = (newText, prop) => {
+    if(prop.cur != newText){
+      setEditChange(true);
+      prop.new = newText
+    }
+    return prop
+  }
 
   return (
     <View style={styles.ProfileScreen}>
@@ -21,10 +79,47 @@ export default function ProfileScreen() {
       <View style={styles.container}>
 
         <View style={styles.header}>
-          <View style={[styles.headerCtnt, styles.venueName]}><Text style={[styles.text, styles.venueNameTxt]}>Venue Name</Text></View>
+          <View style={[styles.headerCtnt, styles.venueName]}><Text style={[styles.text, styles.venueNameTxt]}>{venueName.cur}</Text></View>
           {
             isUser &&
-            <View style={[styles.headerCtnt, styles.edit]}><Text style={[styles.text, styles.editTxt,]}>Edit</Text></View>
+            <View style={[styles.headerCtnt, styles.edit]}>
+              <Pressable 
+              onPress={()=>{setIsEdit(!isEdit), isEdit && editChange ?setModalVisible(true):''}}
+              style={[]}>
+                { !isEdit &&
+                <Text style={[styles.text, styles.editTxt,]}>Edit</Text>
+                }
+                { isEdit &&
+                <Text style={[styles.text, styles.editTxt, styles.doneTxt]}>Done</Text>
+                }
+              </Pressable>
+
+              <Modal
+                animationType="slide"
+                visible={modalVisible}
+                transparent={true}
+                >
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <Text style={styles.text}>Save Changes?</Text>
+
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {setModalVisible(!modalVisible); saveData()}}>
+                        <Text style={styles.textStyle}>Save</Text>
+                      </Pressable>
+
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {setModalVisible(!modalVisible);discard();}}>
+                        <Text style={styles.textStyle}>Discard</Text>
+                      </Pressable>
+
+                    </View>
+                  </View>
+                </Modal>
+
+            </View>
           }
           {
             !isUser &&
@@ -76,30 +171,56 @@ export default function ProfileScreen() {
           {/* About section */}
           {btnPressed == 'active' &&
           <View style={styles.aboutSctn}>
-            <View style={[styles.aboutCtnt,styles.abouBio]}>
-              <Text style={[styles.text, styles.aboutBioTxt]}>Lolus in metus. Egestas maecenas pharetra convallis posuere morbi leo urna. Arcu vitae elementum curabitur vitae nunc. Scelerisque varius morbi enim nunc faucibus a pellentesque. Faucibus pulvinar elementum integer enim neque volutpat. Nibh tellus molestie nunc non blandit. Tellus orci ac auctor augue mauris augue neque gravida. Vitae nunc sed velit dignissim sodales ut eu sem. Gravida neque convallis</Text>
+            <View style={[styles.aboutCtnt, isEdit? styles.aboutEdit: '']}>
+              <TextInput 
+              style={[styles.text, styles.aboutBioTxt, ]}
+              editable = {isEdit}
+              multiline
+              defaultValue = {aboutBioTxt.new != '' && editChange ? aboutBioTxt.new : aboutBioTxt.cur}
+              onEndEditing={(val) =>{setBioTxt(EditTextInput(val.nativeEvent.text, aboutBioTxt));}}
+              >
+              </TextInput>
+              {/* <EditTextInput text={aboutBioTxt} fnctn={aboutBioTxtFnc}></EditTextInput> */}
             </View>
+            
             <View style={[styles.aboutCtnt,styles.aboutLctn]}>
               <Text>Location</Text>
             </View>
           </View>
           }
 
-
           {/* Contact section */}
           {btnPressed == 'contact' &&
           <View style={[styles.contactSctn]}>
             <View style={[styles.contactCtnt]}>
               <Text style={[styles.text]}>Website:</Text>
-              <View style={styles.contactCtntDsply}><Text style={[styles.text]}>www.Venue.com</Text></View>
+              <View style={[styles.contactCtntDsply, isEdit? styles.aboutEdit: '']}>
+                <TextInput defaultValue= {venueWeb.new != '' && editChange? venueWeb.new : venueWeb.cur} 
+                            onEndEditing={(val) =>{setVenueWeb(EditTextInput(val.nativeEvent.text, venueWeb));}}                           
+                            editable = {isEdit} 
+                            style={[styles.text]}>
+                </TextInput>
+              </View>
             </View>
             <View style={[styles.contactCtnt]}>
               <Text style={[styles.text]}>Number:</Text>
-              <View style={styles.contactCtntDsply}><Text style={[styles.text]}>1800-000-000</Text></View>
+              <View style={[styles.contactCtntDsply, isEdit? styles.aboutEdit: '']}>
+                <TextInput defaultValue= {venueNum.new != '' && editChange? venueNum.new : venueNum.cur} 
+                           onEndEditing={(val) =>{setVenueNum(EditTextInput(val.nativeEvent.text, venueNum));}}
+                           editable = {isEdit} 
+                           style={[styles.text]}>                         
+                </TextInput>
+              </View>
             </View>
             <View style={[styles.contactCtnt]}>
               <Text style={[styles.text]}>Email:</Text>
-              <View style={styles.contactCtntDsply}><Text style={[styles.text]}>mail@mail.com</Text></View>
+              <View style={[styles.contactCtntDsply, isEdit? styles.aboutEdit: '']}>
+                <TextInput defaultValue= {venueMail.new != '' && editChange? venueMail.new : venueMail.cur} 
+                            onEndEditing={(val) =>{setVenueMail(EditTextInput(val.nativeEvent.text, venueMail));}} 
+                            editable = {isEdit} 
+                            style={[styles.text]}>
+                </TextInput>
+              </View>
             </View>
             {/* <View style={[styles.contactCtnt]}>
               <Text style={[styles.text]}>Instagram:</Text>
