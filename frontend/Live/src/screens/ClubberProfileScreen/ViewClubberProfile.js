@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   ScrollView,
   View,
@@ -25,6 +26,7 @@ const UserProfile = () => {
     bio: '',
   });
   const [UID, setUID] = useState(null); // State to store the retrieved UID
+  const navigation = useNavigation();
 
   const placeholderPicture = 'https://via.placeholder.com/150';
 
@@ -116,6 +118,11 @@ const UserProfile = () => {
     setEditableFields((prevFields) => ({ ...prevFields, [field]: value }));
   };
 
+  const handleViewReviews = () => {
+    navigation.navigate('ClubberReviews');
+    console.log('view clubber reviws button pressed');
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -165,6 +172,11 @@ const UserProfile = () => {
         <TouchableOpacity style={styles.editButton} onPress={handleEditToggle}>
           <Text style={styles.editButtonText}>
             {editMode ? 'Save Changes' : 'Edit Profile'}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.editButton} onPress={handleViewReviews}>
+          <Text style={styles.editButtonText}> My Reviews
           </Text>
         </TouchableOpacity>
       </ScrollView>
