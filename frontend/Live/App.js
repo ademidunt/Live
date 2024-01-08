@@ -17,6 +17,7 @@ import CreateClubProfileScreen from "./src/screens/CreateProfileScreen/CreateClu
 import ViewClubberProfileScreen from "./src/screens/ClubberProfileScreen/ViewClubberProfile"
 import clubberLogin from "./src/screens/LoginScreens/clubberLogin"
 import venueLogin from "./src/screens/LoginScreens/venueLogin"
+import ViewClubberReviews from "./src/screens/ClubberProfileScreen/ViewClubberReviews"
 
 
 const Tab = createBottomTabNavigator();
@@ -46,6 +47,7 @@ const LoginStackNavigator = () => {
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="ViewClubber" component={ViewClubberProfileScreen} />
+      <Stack.Screen name="ClubberReviews" component={ViewClubberReviews}/>
       <Stack.Screen name="ClubberLogin" component={ClubberLoginScreen} />
       <Stack.Screen name="ClubLogin" component={ClubLoginScreen} />
       <Stack.Screen name="CreateClubberProfile" component={CreateClubberProfileScreen} />

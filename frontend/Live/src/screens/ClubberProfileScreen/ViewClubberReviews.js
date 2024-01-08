@@ -13,26 +13,14 @@ import {
 import { retrieveUID, clearToken } from '../../handlers/authService';
 
 const UserProfile = () => {
-  const [editMode, setEditMode] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [bio, setBio] = useState('');
-  const [dob, setDob] = useState('');
-  const [email, setEmail] = useState('');
-  const [editableFields, setEditableFields] = useState({
-    firstName: '',
-    lastName: '',
-    bio: '',
-  });
+  const [clubberReviewList, setClubberReviewList] = useState([])
   const [UID, setUID] = useState(null); // State to store the retrieved UID
-
-  const placeholderPicture = 'https://via.placeholder.com/150';
 
   useEffect(() => {
     const fetchUID = async () => {
       const uid = await retrieveUID();
       setUID(uid);
-      getUserData(uid);
+      getClubberReviews(uid);
     };
 
     fetchUID();
@@ -40,7 +28,7 @@ const UserProfile = () => {
 
   const getUserData = async (uid) => {
     try {
-      const response = await fetch(`http:/192.168.86.25:3000/clubber/${uid}`, {
+      const response = await fetch(`http:/192.168.86.25:3000/review/clubber/${uid}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',
@@ -48,17 +36,8 @@ const UserProfile = () => {
       });
 
       if (response.ok) {
-        const userData = await response.json();
-        setFirstName(userData.firstName);
-        setLastName(userData.lastName);
-        setEmail(userData.email);
-        setBio(userData.bio);
-        setDob(userData.DOB);
-        setEditableFields({
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          bio: userData.bio,
-        });
+        const clubberReviews = await response.json();
+        setClubberReviewList(clubberReviews)
       } else {
         console.log(`Something went wrong: ${JSON.stringify(response)}`);
       }
@@ -67,54 +46,8 @@ const UserProfile = () => {
     }
   };
 
-  const handleEditToggle = async () => {
-    if (editMode) {
-      // Ensure UID is available before attempting to update
-      if (UID) {
-        try {
-          const response = await fetch(`http:/192.168.86.25:3000/clubber/update/${UID}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              // Include any additional headers or authentication tokens as needed
-            },
-            body: JSON.stringify({
-              email: email,
-              dob: dob,
-              bio: editableFields.bio,
-              firstName: editableFields.firstName,
-              lastName: editableFields.lastName,
-              // Add other fields as needed
-            }),
-          });
-  
-          if (response.ok) {
-            console.log('Changes saved successfully');
-            // You may want to update local state or perform additional actions here
-          } else {
-            console.error('Failed to save changes:', await response.text());
-            // Handle the error, show a message to the user, etc.
-          }
-        } catch (error) {
-          console.error('Network error:', error.message);
-          // Handle network errors, show a message to the user, etc.
-        }
-  
-        // Fetch user data after updating to reflect changes
-        getUserData(UID);
-  
-        console.log('Updated fields:', editableFields);
-      } else {
-        console.error('UID not available for editing');
-      }
-    }
-  
-    setEditMode(!editMode);
-  };
 
-  const handleFieldChange = (field, value) => {
-    setEditableFields((prevFields) => ({ ...prevFields, [field]: value }));
-  };
+
 
   return (
     <KeyboardAvoidingView
