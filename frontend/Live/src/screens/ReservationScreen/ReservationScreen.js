@@ -31,6 +31,7 @@ export default function ReservationScreen() {
      
       {/* Conditionally render ManageReservation based on userType */}
       {userType === 'venue' && <ManageReservation />}
+      {userType === 'clubber'}
       
       {/* Your other components */}
       <Button title="Click me" onPress={() => console.log('Button clicked')} />
