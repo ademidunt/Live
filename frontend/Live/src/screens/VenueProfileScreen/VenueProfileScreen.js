@@ -6,7 +6,7 @@ import CreateNewEvent from './NewEvent/NewEvent';
 const VenueProfileHandler = require('../../handlers/VenueProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
 
-var isUser = true;
+var isUser = false;
 
 export default function ProfileScreen() {
 
