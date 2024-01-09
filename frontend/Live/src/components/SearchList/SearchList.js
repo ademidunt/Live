@@ -6,8 +6,6 @@ import FilterPill from '../FilterPills/FilterPill';
 //const styles = require('./SearchListStyles')
 
 const SearchList = (demoData) => {
-  
-    console.log(demoData);
 
     const renderItem = ({ item }) => (
       <View style={{alignSelf: 'flex-start', padding: 15}}>

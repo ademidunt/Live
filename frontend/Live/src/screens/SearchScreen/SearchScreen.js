@@ -13,6 +13,7 @@ export default SearchScreen = ({ onSearch }) => {
 
   const [search, setSearch] = useState('');
   const [data, setData] = useState([]);
+  const [unfilteredData, setUnfilteredData] = useState([]);
 
   const getVenues = async () => {
     fetch(`http://192.168.0.116:3000/Venue`,
@@ -24,10 +25,10 @@ export default SearchScreen = ({ onSearch }) => {
     })
     .then(async (res) => {
       if (res.ok) {
-        let venueData = await res.json()
-        console.log(venueData);
+        let venueData = await res.json();
+        setUnfilteredData(venueData);
         setData(venueData);
-        demoData = venueData;
+        
       }
       else{
         console.log(`something went wrong ${JSON.stringify(res)}`)
@@ -39,23 +40,28 @@ export default SearchScreen = ({ onSearch }) => {
   getVenues();
  }, []);
 
- function onSearchClick(search) {
-  //WIP
-  // setSearch(search);
+ function onSearchClick(s) {
+  console.log("Search " + s);
+// console.log("At this point in search this is the searchable data: " + JSON.stringify(unfilteredData) + " Search " + s);
+  // //WIP
+   setSearch(search);
 
-  // // Filter the demoData based on the search term
-  // const filteredData = demoData.filter((venue) =>
-  //   venue.venueName.toLowerCase().includes(search.toLowerCase())
-  // );
+  // Filter the demoData based on the search term
+  const filteredData = unfilteredData.filter((venue) =>
+    venue.venueName.toLowerCase().includes(s.toLowerCase())
+  );
 
-  // // Update the state with the filtered data
-  // setData(filteredData);
+  console.log("Filtered Data " + JSON.stringify(filteredData));
+
+
+   // Update the state with the filtered data
+   setData(filteredData);
 }
 
   return (
     <View style={styles.container1}>
       <View style={styles.spacer}/>
-      <SearchBar onSearch={(search)=>onSearchClick(search)}/>
+      <SearchBar onSearch={(search) => onSearchClick(search)}/>
       <SearchList demoData={data}/>
     </View>
   );
