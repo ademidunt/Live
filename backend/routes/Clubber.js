@@ -1,5 +1,5 @@
 import express from 'express';
-import { getClubbers, getClubber, createClubber, updateClubber, getClubberByToken, loginClubber, uploadImage } from '../controllers/clubberOps.js';
+import { getClubbers, getClubber, createClubber, updateClubber, getClubberByToken, loginClubber} from '../controllers/clubberOps.js';
 
 const app = express();
 
@@ -22,13 +22,6 @@ app.post('/', async (req, res) => {
 
     res.send(await createClubber(clubber));
 });
-app.post('/imageUpload', async (req, res) => {
-    const imageData = req.body;
-    res.send(await uploadImage(imageData))
-    
-    // res.send(await createClubber(clubber));
-});
-
 //Update a clubber
 app.post('/update/:clubberId', async (req, res) => {
     const clubber = {

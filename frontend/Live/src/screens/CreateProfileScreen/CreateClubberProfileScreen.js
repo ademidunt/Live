@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, Button, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
+import { View, ScrollView, Image, Button, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage'
+import { storage } from "../../firebase/firebase.js"
+import * as FileSystem from 'expo-file-system';
 
 const CreateProfileScreen = () => {
   const [firstName, setFirstName] = useState('');
@@ -9,9 +12,16 @@ const CreateProfileScreen = () => {
   const [password, setpassword] = useState('');
   const [dob, setDob] = useState('');
   const [bio, setBio] = useState('');
-  const [profilePicture, setProfilePicture] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [url, setUrl] = useState('')
+
+  // useEffect(() => {
+  //   // Call updateDatabase when url changes
+  //   if (url !== '') {
+  //     updateDatabase();
+  //   }
+  // }, [url]);
+  
 
   const handleImagePicker = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -22,46 +32,81 @@ const CreateProfileScreen = () => {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // here it is where we specify the allow format
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [3, 4],
       quality: 1,
     });
 
     if (!result.canceled) {
       // console.log(JSON.stringify(result))
       setSelectedImage({ uri: result.assets[0].uri })
-      setProfilePicture(result.assets[0].uri)
+
+      // console.log("image uri is", result.assets[0].uri )
+      // await uploadImage(result.assets[0].uri, "image");
+
       //upload image 
 
       // console.log(profilePicture)
     }
   };
 
-  async function uploadImage () {
+  const updateDatabase = async () => {
+    console.log(`uploading clubber info to database with url`, url);
+    const userData = {
+      firstName,
+      lastName,
+      email,
+      password,
+      dob,
+      bio,
+      url,
+    };
+  
+    fetch(`http://192.168.86.25:3000/clubber/`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          console.log(`clubber added to the database successfully`);
+        } else {
+          console.log(`something went wrong ${JSON.stringify(res)}`);
+        }
+      });
+  };
 
-    const response = await fetch(profilePicture);
+  async function uploadImage (uri, fileType) {
+    const response = await fetch(uri);
     const blob = await response.blob();
-    console.log("the blob is: " + JSON.stringify(blob))
-    const imageData = {
-      "name": email, 
-      "blob": blob
-    }
-
-    fetch(`http://192.168.2.50:3000/clubber/imageUpload`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify(imageData),
-      })
-        .then(async (res) => {
-          if (res.ok) {
-            console.log(`added to the storage successfully`);
-          } else {
-            console.log(`something went wrong ${JSON.stringify(res)}`);
-          }
-        })
+    const storageRef = ref(storage, "Stuff/" + new Date().getTime());
+   
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+   
+    // listen for events
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        // setProgress(progress.toFixed());
+      },
+      (error) => {
+        // handle error
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          // console.log("File available at", downloadURL);
+          setUrl(downloadURL)
+          // save record
+          await updateDatabase()
+        });
+      },
+    );
+  
   }
 
   const handleCreateProfile = async () => {
@@ -70,36 +115,10 @@ const CreateProfileScreen = () => {
       return;
     }
 
-    const userData = {
-      firstName,
-      lastName,
-      email,
-      password,
-      dob,
-      bio,
-      profilePicture,
-    };
-
     //should probably add something that catches when the email is already in the adatabse and makes an alert
-    const updateDatabase = async () => {
-      console.log(`new session`);
-      fetch(`http://192.168.2.50:3000/clubber/`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      })
-        .then(async (res) => {
-          if (res.ok) {
-            console.log(`added to the database successfully`);
-          } else {
-            console.log(`something went wrong ${JSON.stringify(res)}`);
-          }
-        });
-    };
-    uploadImage();
-    updateDatabase();
+   
+    console.log("selected image is", selectedImage.uri)
+    await uploadImage(selectedImage.uri, 'image')
   
     // console.log('User Data:', userData);
   };
@@ -110,6 +129,7 @@ const CreateProfileScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
+      <ScrollView>
       <View style={styles.container}>
         <Text>First Name:</Text>
         <TextInput
@@ -167,6 +187,7 @@ const CreateProfileScreen = () => {
           <Text style={styles.buttonText}>Create Profile</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 };
