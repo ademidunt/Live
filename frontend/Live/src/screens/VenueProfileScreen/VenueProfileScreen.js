@@ -140,12 +140,12 @@ export default function ProfileScreen() {
               </Pressable>
             </View>
             <View style={styles.reviewBtn}>
-              <Pressable  onPress={()=>{setActiveBtn('review')}} 
-              style={({pressed})=> [
-              {backgroundColor: pressed || btnPressed == 'review' ? "#9166ED": "#4709CD"},
-              styles.btn ]}>
-                  <Text style={styles.text}>Reviews</Text>
-              </Pressable>
+            <Pressable onPress={()=>{setActiveBtn('newRating')}} 
+            style={({pressed})=> [
+            {backgroundColor: pressed || btnPressed == 'newRating' ? "#9166ED": "#4709CD"},
+            styles.btn ]}>
+              <Text style={styles.text}>Rating/Review</Text>
+            </Pressable>
             </View>
           </View>
           <View style={[styles.btnPnlRow, styles.btnPnlRow2]}>
