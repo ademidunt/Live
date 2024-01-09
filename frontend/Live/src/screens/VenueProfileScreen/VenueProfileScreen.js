@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useState, useRef, useEffect} from 'react';
 import { Modal, TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
 import CreateNewEvent from './NewEvent/NewEvent';
+import CreateNewRating from './NewRating/NewRating';
+
 
 const VenueProfileHandler = require('../../handlers/VenueProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
@@ -232,6 +234,10 @@ export default function ProfileScreen() {
               </View>
             </View> */}
           </View>
+          }
+
+          {btnPressed == 'newRating' &&
+            <CreateNewRating/>
           }
 
           {btnPressed == 'newEvent' &&
