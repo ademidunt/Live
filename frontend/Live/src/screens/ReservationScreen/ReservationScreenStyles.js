@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#1E1E1E',
+      backgroundColor: '#FFFFFF',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 
     scrollview:{
       flex: 0.5,
-      backgroundColor:'red',
+      backgroundColor:'white',
       padding: 20
     },
 

@@ -89,16 +89,33 @@ export async function getReviewsByClubberId(clubberId) {
         const querySnap = await getDocs(q);
 
         let dataArr = []
-        querySnap.forEach((doc) => {
-            let docId = {
+        async function processQuerySnap(querySnapShot) {
+            
+          
+            for (const doc of querySnapShot.docs) {
+              let docId = {
                 "reviewId": doc.id
-            }
-            let data = {
+              };
+          
+              let venueData = await getVenue(doc.data().venueId);
+          
+              let venueName = {
+                "reviewedVenue": venueData.venueName
+              };
+          
+              let data = {
                 ...docId,
+                ...venueName,
                 ...doc.data()
+              };
+          
+              dataArr.push(data);
             }
-            dataArr.push(data);
-        });
+          
+            // Now dataArr contains the processed data from each document in querySnap
+            return dataArr;
+          }
+        await processQuerySnap(querySnap)
         console.log(dataArr);
     
         return(dataArr);

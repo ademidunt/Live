@@ -5,6 +5,12 @@ const app = express();
 
 app.use(express.json());
 
+//Get bookings with venueId
+app.get('/venue/:venueId', async (req, res) => {
+    res.send(await getBookingsByVenueId(req.params.venueId));
+});
+
+
 //Get all bookings
 app.get('/', async (req, res) => {
     res.send(await getBookings());
@@ -38,9 +44,5 @@ app.get('/clubber/:clubberId', async (req, res) => {
     res.send(await getBookingsByClubberId(req.params.clubberId));
 });
 
-//Get bookings with venueId
-app.get('/venue/:venueId', async (req, res) => {
-    res.send(await getBookingsByVenueId(req.params.venueId));
-});
 
 export default app;
