@@ -97,29 +97,38 @@ const CreateProfileScreen = () => {
       (error) => {
         // handle error
       },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+      async () => {
+        await getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
           // console.log("File available at", downloadURL);
-          setUrl(downloadURL)
+         setUrl(downloadURL)
           // save record
-          await updateDatabase()
+        
         });
       },
     );
   
   }
-
-  const handleCreateProfile = async () => {
-    if (!firstName || !email || !password || !dob || !bio) {
-      Alert.alert('Incomplete profile!', 'Please fill in all fields to create a profile.');
-      return;
-    }
-
-    //should probably add something that catches when the email is already in the adatabse and makes an alert
-   
-    console.log("selected image is", selectedImage.uri)
-    await uploadImage(selectedImage.uri, 'image')
   
+
+
+  const handleCreateProfile =() => {
+    try{
+
+      if (!firstName || !email || !password || !dob || !bio) {
+        Alert.alert('Incomplete profile!', 'Please fill in all fields to create a profile.');
+        return;
+      }
+      
+      uploadImage(selectedImage.uri, 'image')
+      //this is only going to run after new url has be set....allegedly
+      console.log("selected image is", selectedImage.uri)
+      updateDatabase()
+
+    }catch(error){
+      console.error("error uploading image: ", error )
+    }
+   
+
     // console.log('User Data:', userData);
   };
 
