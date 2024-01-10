@@ -30,7 +30,24 @@ const CreateNewRating = () => {
     // Logic to create a new rating with the selected value (rating) and review text
     console.log(`New Rating: ${rating}`);
     console.log(`Review Text: ${text}`);
+
+    // Sending data to the backend API using fetch
+    fetch('http://192.168.0.87', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(ratingData),
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          console.log(`added to the storage successfully`);
+        } else {
+          console.log(`something went wrong ${JSON.stringify(res)}`);
+        }
+      })
   };
+
 
   return (
     <View style={styles.contactSctn}>
@@ -91,7 +108,7 @@ const pickerSelectStyles = {
 // Component styles
 const styles = {
   contactSctn: {
-    // Your existing styles...
+   
   },
   ratingContainer: {
     marginVertical: 10,
