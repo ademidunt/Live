@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 import { View, Text, Pressable, TextInput, Alert } from 'react-native';
+import { retrieveUID } from '../../../handlers/authService';
 
 const CreateNewRating = () => {
   const [ratingData, setRatingData] = useState({
     rating: '1', // Initial rating value
     text: '', // State to hold the review text
   });
+
+  const [clubberId, setClubberId] = useState('');
+
+  useEffect(() => {
+    const getClubberId = async () => {
+      try {
+        const id = await retrieveUID();
+        setClubberId(id);
+      } catch (error) {
+        console.error('Error fetching clubber ID:', error);
+      }
+    };
+
+    getClubberId();
+  }, []);
 
   const handleRatingChange = (rating) => {
     setRatingData({ ...ratingData, rating });
@@ -37,15 +53,18 @@ const CreateNewRating = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(ratingData),
+      body: JSON.stringify({ ...ratingData, clubberId }),
     })
       .then(async (res) => {
         if (res.ok) {
-          console.log(`added to the storage successfully`);
+          console.log(`Added to the storage successfully`);
         } else {
-          console.log(`something went wrong ${JSON.stringify(res)}`);
+          console.log(`Something went wrong ${JSON.stringify(res)}`);
         }
       })
+      .catch((error) => {
+        console.error(`Error occurred: ${error}`);
+      });
   };
 
 

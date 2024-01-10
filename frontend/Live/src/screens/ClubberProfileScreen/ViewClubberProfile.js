@@ -42,7 +42,7 @@ const UserProfile = () => {
 
   const getUserData = async (uid) => {
     try {
-      const response = await fetch(`http:/192.168.1.119:3000/clubber/${uid}`, {
+      const response = await fetch(`http:/192.168.0.87:3000/clubber/${uid}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',
@@ -74,7 +74,7 @@ const UserProfile = () => {
       // Ensure UID is available before attempting to update
       if (UID) {
         try {
-          const response = await fetch(`http:/192.168.1.119:3000/clubber/update/${UID}`, {
+          const response = await fetch(`http:/192.168.0.87:3000/clubber/update/${UID}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
