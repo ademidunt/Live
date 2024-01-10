@@ -1,25 +1,43 @@
 import React, { useState } from 'react';
 import RNPickerSelect from 'react-native-picker-select';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, TextInput, Alert } from 'react-native';
 
 const CreateNewRating = () => {
-  const [selectedRating, setSelectedRating] = useState('1'); // Initial rating value
+  const [ratingData, setRatingData] = useState({
+    rating: '1', // Initial rating value
+    text: '', // State to hold the review text
+  });
 
   const handleRatingChange = (rating) => {
-    setSelectedRating(rating);
+    setRatingData({ ...ratingData, rating });
+  };
+
+  const handleReviewChange = (text) => {
+    setRatingData({ ...ratingData, text });
   };
 
   const createRating = () => {
-    // Logic to create a new rating with the selected value (selectedRating)
-    console.log(`New Rating: ${selectedRating}`);
-    // Perform actions here, such as API calls to save the rating, etc.
+    const { rating, text } = ratingData;
+
+    // Check if the rating is within the range of 1 to 5
+    const isValidRating = ['1', '2', '3', '4', '5'].includes(rating);
+
+    if (!isValidRating) {
+      Alert.alert('Error', 'Rating should be between 1 and 5');
+      return;
+    }
+
+    // Logic to create a new rating with the selected value (rating) and review text
+    console.log(`New Rating: ${rating}`);
+    console.log(`Review Text: ${text}`);
   };
 
   return (
     <View style={styles.contactSctn}>
-      <View style={styles.contactCtnt}>
+      {/* Select Rating Section */}
+      <View style={styles.ratingContainer}>
         <Text style={styles.text}>Select Rating:</Text>
-        <View style={styles.contactCtntDsply}>
+        <View style={styles.ratingBox}>
           <RNPickerSelect
             onValueChange={handleRatingChange}
             items={[
@@ -29,11 +47,26 @@ const CreateNewRating = () => {
               { label: '4', value: '4' },
               { label: '5', value: '5' },
             ]}
-            value={selectedRating}
+            value={ratingData.rating}
             style={pickerSelectStyles}
           />
         </View>
       </View>
+
+      {/* Text Input for Review */}
+      <View style={styles.reviewContainer}>
+        <Text style={styles.text}>Enter Review:</Text>
+        <TextInput
+          style={styles.reviewInput}
+          onChangeText={handleReviewChange}
+          value={ratingData.text}
+          placeholder="Type your review here..."
+          placeholderTextColor="white"
+          multiline={true}
+        />
+      </View>
+
+      {/* Create Rating Button */}
       <View style={styles.logout}>
         <Pressable
           style={({ pressed }) => [
@@ -50,49 +83,44 @@ const CreateNewRating = () => {
   );
 };
 
+// Styles for the picker select
 const pickerSelectStyles = {
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
-    color: 'black', // text color
-    paddingRight: 30, // to ensure the text is never behind the icon
-    backgroundColor: 'lightgray',
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: 'gray',
-    borderRadius: 8,
-    color: 'black', // text color
-    paddingRight: 30, // to ensure the text is never behind the icon
-    backgroundColor: 'lightgray',
-  },
+  // Styles for iOS and Android inputs (same as before)
 };
+
+// Component styles
 const styles = {
-  
-  
-  input: {
-    // Your styles for the text input
-    height: 40,
+  contactSctn: {
+    // Your existing styles...
+  },
+  ratingContainer: {
+    marginVertical: 10,
+  },
+  ratingBox: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    backgroundColor: 'lightgrey'
+  },
+  reviewContainer: {
+    marginVertical: 10,
+  },
+  reviewInput: {
+    height: 100,
     borderColor: 'gray',
     borderWidth: 1,
     paddingHorizontal: 10,
-    backgroundColor: 'lightgray'
+    backgroundColor: 'lightgray',
+    color: 'black',
   },
 
   btn: {
-    // Your shared styles for buttons
     minWidth: 150,
     alignItems: 'center',
   },
   text: {
-    // Your styles for text elements
     color: 'white',
   },
 };
