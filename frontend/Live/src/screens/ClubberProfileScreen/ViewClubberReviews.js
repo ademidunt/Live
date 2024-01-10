@@ -29,7 +29,7 @@ const UserProfile = () => {
 
   const getClubberReviews = async (uid) => {
     try {
-      const response = await fetch(`http:/192.168.86.25:3000/review/clubber/${uid}`, {
+      const response = await fetch(`http:/192.168.0.33:3000/review/clubber/${uid}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',

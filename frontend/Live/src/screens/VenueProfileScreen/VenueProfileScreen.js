@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useState, useRef, useEffect} from 'react';
 import { Modal, TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
 import CreateNewEvent from './NewEvent/NewEvent';
+import { retrieveUID, clearToken } from '../../handlers/authService';
 
 const VenueProfileHandler = require('../../handlers/VenueProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
@@ -24,13 +25,15 @@ export default function ProfileScreen() {
   const [venueMail, setVenueMail] = useState({cur:"venueMail", new:''})
   const [location, setLocation] =  useState({cur: venueData.location , new:''})
 
-  useEffect(()=>{
-    console.log( )
-    const json = VenueProfileHandler.getVenueProfile('AsedlTwX2fdmuN0yWiM1k4BzKFb2')
-    console.log(json)
+  useEffect(() => {
+    const fetchUID = async () => {
+      const uid = await retrieveUID();
+      setUID(uid);
+      getClubberReviews(uid);
+    };
 
-    //console.log(venueData)
-  }, []);
+    fetchUID();
+  }, []); // Empty dependency array ensures it runs once when the component mounts
 
   const handleVenueData = () => {
     const venueData ={
