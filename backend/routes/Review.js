@@ -18,9 +18,9 @@ app.get('/:reviewId', async (req, res) => {
 
 //Create a new review
 app.post('/', async (req, res) => {
-    const review = req.body;
+    const ratingData = req.body;
 
-    res.send(await createReview(review));
+    res.send(await createReview(ratingData));
 });
 
 //Update a review
