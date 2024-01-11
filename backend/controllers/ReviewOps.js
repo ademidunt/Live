@@ -1,6 +1,7 @@
 import { db } from "../firebase/firebase.js";
 import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query} from 'firebase/firestore';
 import { getVenue, updateVenueRatings } from "./VenueOps.js";
+import { getClubber } from "./clubberOps.js"
 /*
 Database operations for manipulating the review collection.
 */
@@ -46,17 +47,22 @@ export async function getReview(reviewId) {
 }
 //Create review.
 export async function createReview(review) {
+    
+    
     try {
         let reviewId = null;
+        
         await addDoc(collection(db, "Review"), review)
             .then(function(docRef){//Get new document id.
                 console.log("Created review with ID: " + docRef.id);
                 reviewId = {"reviewId": docRef.id}
             });
-
+        const clubberData = await getClubber(review.clubberId)
+        const name = clubberData.firstName + " " + clubberData.lastName
         review = {//Create review object with new id.
             ...review,
-            ...reviewId
+            ...reviewId,
+            name : name,
         }
 
         calc(review)
