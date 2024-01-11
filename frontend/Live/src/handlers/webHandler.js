@@ -1,4 +1,4 @@
-const APIURL = 'http://192.168.0.27:3000/'
+// const APIURL = 'http://192.168.0.27:3000/'
 
 const get = async (url)=> {
     
@@ -10,7 +10,7 @@ const get = async (url)=> {
     // });
 
     try {
-        const res = await fetch(`${APIURL}${url}`)
+        const res = await fetch(`${apiUrl}/${url}`)
         const json = await res.json();
         return json
     }

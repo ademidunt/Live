@@ -17,7 +17,7 @@ const VenueReview = ({ id }) => {
 
   const getVenueReviews = async () => {
     try {
-      const response = await fetch(`http://192.168.1.65:3000/review/venue/${id}`, {
+      const response = await fetch(`${apiUrl}/review/venue/${id}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',

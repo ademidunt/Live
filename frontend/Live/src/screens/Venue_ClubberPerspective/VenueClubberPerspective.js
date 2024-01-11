@@ -18,7 +18,7 @@ const VenueClubberPerspective = ({ route, navigation }) => {
 
   const getVenueData = async () => {
     try {
-      const response = await fetch(`http://192.168.1.65:3000/venue/${route.params.id}`, {
+      const response = await fetch(`${apiUrl}/venue/${route.params.id}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',
