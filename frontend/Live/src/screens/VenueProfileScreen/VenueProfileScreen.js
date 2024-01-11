@@ -7,7 +7,7 @@ import { retrieveUID, clearToken } from '../../handlers/authService';
 const VenueProfileHandler = require('../../handlers/VenueProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
 
-var isUser = true;
+var isUser = false;
 
 export default function VenueProfileScreen() {
 
@@ -23,6 +23,7 @@ export default function VenueProfileScreen() {
   const [venueWeb, setVenueWeb] = useState({cur:"venueWeb", new:''})
   const [venueNum, setVenueNum] = useState({cur:"venueNum", new:''})
   const [venueMail, setVenueMail] = useState({cur:"venueMail", new:''})
+  const [venueRating, setVenueRating] = useState(5)
   const [location, setLocation] =  useState({cur: venueData.location , new:''})
   const[savedData , setSavedData] = useState([])
 
@@ -55,13 +56,9 @@ export default function VenueProfileScreen() {
         setVenueWeb({cur: userData.website, new:'' });
         setVenueNum({cur: userData.phoneNumber, new:'' });
         setVenueMail({cur: userData.email, new:'' });
+        setVenueRating(userData.avgRating)
         setSavedData(userData)
         console.log(userData.venueName)
-        // setEditableFields({
-        //   firstName: userData.firstName,
-        //   lastName: userData.lastName,
-        //   bio: userData.bio,
-        // });
       } else {
         console.log(`Something went wrong: ${JSON.stringify(response)}`);
       }
@@ -76,24 +73,6 @@ export default function VenueProfileScreen() {
     savedData.website = venueWeb.new !== '' ? venueWeb.new : venueWeb.cur,
     savedData.description = aboutBioTxt.new !== '' ? aboutBioTxt.new : aboutBioTxt.cur,
     savedData.phoneNumber = venueNum.new !== '' ? venueNum.new : venueNum.cur,
-
-    // savedData.venueName='Juliet'
-    // savedData.email= 'Callherjuliet@gmail.com',
-    // savedData.tags= [ 'Hip hop ', 'Pop', 'Club' ],
-    // savedData.addressLine2= '123 king street ',
-    // savedData.city= 4.333333333333333,
-    // savedData.description= 'Fun club in London ',
-    // savedData.venueId= 'AsedlTwX2fdmuN0yWiM1k4BzKFb2',
-    // savedData.country= 'Canada ',
-    // savedData.province= 'Ontario',
-    // savedData.password= 'callherjuliet',
-    // savedData.phoneNumber= '416-000-0000',
-    // savedData.addressLine1= '123 king street ',
-    // savedData.website= 'www.testweb.com',
-    // savedData.postalCode= '12456',
-    //   savedData.ratings= [ 5, 4, 4 ],
-    //   savedData.avgRating= 4.333333333333333
-    //   setSavedData(savedData)
 
     console.log(editChange)
     if(!editChange){
@@ -221,7 +200,7 @@ export default function VenueProfileScreen() {
           }
           {
             !isUser &&
-            <View style={[styles.headerCtnt, styles.starRating]}><Text style={[styles.text]}>3.5</Text><Image source={require('../../../assets/ratingStar.png')}></Image></View>
+            <View style={[styles.headerCtnt, styles.starRating]}><Text style={[styles.text]}>{venueRating.toFixed(2)}</Text><Image source={require('../../../assets/ratingStar.png')}></Image></View>
           }
         </View>
 
