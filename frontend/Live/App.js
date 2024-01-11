@@ -19,6 +19,7 @@ import clubberLogin from "./src/screens/LoginScreens/clubberLogin"
 import venueLogin from "./src/screens/LoginScreens/venueLogin"
 import ViewClubberReviews from "./src/screens/ClubberProfileScreen/ViewClubberReviews"
 import VenueClubberPerspective from './src/screens/Venue_ClubberPerspective/VenueClubberPerspective';
+import createClubberProfileLogin from "./src/screens/LoginScreens/clubberSuccessfulProfileLogin"
 
 
 const Tab = createBottomTabNavigator();
@@ -56,6 +57,7 @@ const LoginStackNavigator = () => {
       <Stack.Screen name="clubberLogin" component={clubberLogin} />
       <Stack.Screen name="venueLogin" component={venueLogin} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="Relogin" component={createClubberProfileLogin} />
 
 
       

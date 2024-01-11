@@ -2,11 +2,13 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useState, useRef, useEffect} from 'react';
 import { Modal, TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
 import CreateNewEvent from './NewEvent/NewEvent';
+import CreateNewRating from './NewRating/NewRating';
+
 
 const VenueProfileHandler = require('../../handlers/VenueProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
 
-var isUser = true;
+var isUser = false;
 
 export default function ProfileScreen() {
 
@@ -138,12 +140,12 @@ export default function ProfileScreen() {
               </Pressable>
             </View>
             <View style={styles.reviewBtn}>
-              <Pressable  onPress={()=>{setActiveBtn('review')}} 
-              style={({pressed})=> [
-              {backgroundColor: pressed || btnPressed == 'review' ? "#9166ED": "#4709CD"},
-              styles.btn ]}>
-                  <Text style={styles.text}>Reviews</Text>
-              </Pressable>
+            <Pressable onPress={()=>{setActiveBtn('newRating')}} 
+            style={({pressed})=> [
+            {backgroundColor: pressed || btnPressed == 'newRating' ? "#9166ED": "#4709CD"},
+            styles.btn ]}>
+              <Text style={styles.text}>Rating/Review</Text>
+            </Pressable>
             </View>
           </View>
           <View style={[styles.btnPnlRow, styles.btnPnlRow2]}>
@@ -232,6 +234,10 @@ export default function ProfileScreen() {
               </View>
             </View> */}
           </View>
+          }
+
+          {btnPressed == 'newRating' &&
+            <CreateNewRating/>
           }
 
           {btnPressed == 'newEvent' &&

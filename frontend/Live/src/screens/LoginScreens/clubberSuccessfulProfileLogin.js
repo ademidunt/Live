@@ -11,7 +11,7 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://192.168.86.25:3000/clubber/login', {
+      const response = await fetch('http:/192.168.86.25:3000/clubber/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ const LoginScreen = () => {
   
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Live! Let's get started!</Text>
+      <Text style={styles.title}>Profile Creation Complete! Login to continue</Text>
 
       <TextInput
         style={styles.input}
