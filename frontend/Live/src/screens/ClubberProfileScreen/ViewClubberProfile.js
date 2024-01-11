@@ -74,7 +74,7 @@ const UserProfile = () => {
       // Ensure UID is available before attempting to update
       if (UID) {
         try {
-          const response = await fetch(`http:/192.168.0.90:3000/clubber/update/${UID}`, {
+          const response = await fetch(`http://192.168.86.25:3000/clubber/update/${UID}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
