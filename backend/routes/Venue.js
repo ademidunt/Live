@@ -30,7 +30,7 @@ app.post('/', async (req, res) => {
 });
 
 //Update a venue
-app.put('/update/:venueId', async (req, res) => {
+app.post('/update/:venueId', async (req, res) => {
     const venue = {
         ...req.body,
         ...{venueId: req.params.venueId}

@@ -49,31 +49,16 @@ export default function App() {
       <Stack.Screen name="CreateClubProfile" component={CreateClubProfileScreen} />
       <Stack.Screen name="clubberLogin" component={clubberLogin} />
       <Stack.Screen name="venueLogin" component={venueLogin} />
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="ClubberHome" component={ClubberHome} />
+      <Stack.Screen name="VenueHome" component={VenueHome} />
     </Stack.Navigator>
 
   </NavigationContainer>
   );
 };
 
-const Home = () => {
+const ClubberHome = () => {
   return (
-    // <Stack.Navigator initialRouteName="Login">
-    //   <Stack.Screen name="Login" component={LoginScreen} />
-    //   <Stack.Screen name="ViewClubber" component={ViewClubberProfileScreen} />
-    //   <Stack.Screen name="ClubberReviews" component={ViewClubberReviews}/>
-    //   <Stack.Screen name="ClubberLogin" component={ClubberLoginScreen} />
-    //   <Stack.Screen name="ClubLogin" component={ClubLoginScreen} />
-    //   <Stack.Screen name="CreateClubberProfile" component={CreateClubberProfileScreen} />
-    //   <Stack.Screen name="CreateClubProfile" component={CreateClubProfileScreen} />
-    //   <Stack.Screen name="clubberLogin" component={clubberLogin} />
-    //   <Stack.Screen name="venueLogin" component={venueLogin} />
-    //   <Stack.Screen name="Profile" component={ProfileScreen} />
-
-
-      
-
-    // </Stack.Navigator>
     <Tab.Navigator 
     initialRouteName={tabNavigator.initialRouteName}
     screenOptions={tabNavigator.screenOptions}
@@ -81,7 +66,22 @@ const Home = () => {
       <Tab.Screen name="Search" component={SearchScreen}/>
       {/* <Tab.Screen name="LoginScreen" component={LoginStackNavigator} /> */}
       <Tab.Screen name="Reservation" component={ReservationScreen} />
-      <Tab.Screen name="Profile" component={ ProfileScreen} />
+      <Tab.Screen name="Profile" component={ ViewClubberProfileScreen} />
+
+    </Tab.Navigator>
+  );
+};
+
+const VenueHome = () => {
+  return (
+    <Tab.Navigator 
+    initialRouteName={tabNavigator.initialRouteName}
+    screenOptions={tabNavigator.screenOptions}
+    >
+      <Tab.Screen name="Search" component={SearchScreen}/>
+      {/* <Tab.Screen name="LoginScreen" component={LoginStackNavigator} /> */}
+      <Tab.Screen name="Reservation" component={ReservationScreen} />
+      <Tab.Screen name="Profile" options={{headerShown:false}}component={ ProfileScreen } />
 
     </Tab.Navigator>
   );

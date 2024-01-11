@@ -9,7 +9,7 @@ const styles = require('./VenueProfileScreenStyles')
 
 var isUser = true;
 
-export default function ProfileScreen() {
+export default function VenueProfileScreen() {
 
   const [btnPressed, setActiveBtn] = useState('active');
   const [isEdit , setIsEdit] = useState(false);
@@ -24,45 +24,140 @@ export default function ProfileScreen() {
   const [venueNum, setVenueNum] = useState({cur:"venueNum", new:''})
   const [venueMail, setVenueMail] = useState({cur:"venueMail", new:''})
   const [location, setLocation] =  useState({cur: venueData.location , new:''})
+  const[savedData , setSavedData] = useState([])
+
+  const [UID, setUID] = useState(null); // State to store the retrieved UID
 
   useEffect(() => {
     const fetchUID = async () => {
       const uid = await retrieveUID();
+      console.log(1,uid)
       setUID(uid);
-      getClubberReviews(uid);
+      getUserData(uid);
     };
 
     fetchUID();
   }, []); // Empty dependency array ensures it runs once when the component mounts
 
-  const handleVenueData = () => {
-    const venueData ={
-      aboutBioTxt,
-      venueWeb,
-      venueWeb,
-      venueMail
+  const getUserData = async (uid) => {
+    try {
+      const response = await fetch(`http:/192.168.0.33:3000/venue/${uid}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        setVenueName({cur: userData.venueName, new:'' });
+        setBioTxt({cur: userData.description, new:'' });
+        setVenueWeb({cur: userData.website, new:'' });
+        setVenueNum({cur: userData.phoneNumber, new:'' });
+        setVenueMail({cur: userData.email, new:'' });
+        setSavedData(userData)
+        console.log(userData.venueName)
+        // setEditableFields({
+        //   firstName: userData.firstName,
+        //   lastName: userData.lastName,
+        //   bio: userData.bio,
+        // });
+      } else {
+        console.log(`Something went wrong: ${JSON.stringify(response)}`);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error.message);
     }
+  };
 
-    // setVenueName({cur: venueData.venueName, new:'' })
-    // setBioTxt({cur: venueData.description , new:''});
-    // setLocation({cur: venueData.location , new:''});
-    
-  }
+  const saveData = async () => {
 
-  const[savedData , setSavedData] = useState([])
-  const saveData = () => {
+    savedData.email =  venueMail.new !== '' ? venueMail.new : venueMail.cur,
+    savedData.website = venueWeb.new !== '' ? venueWeb.new : venueWeb.cur,
+    savedData.description = aboutBioTxt.new !== '' ? aboutBioTxt.new : aboutBioTxt.cur,
+    savedData.phoneNumber = venueNum.new !== '' ? venueNum.new : venueNum.cur,
+
+    // savedData.venueName='Juliet'
+    // savedData.email= 'Callherjuliet@gmail.com',
+    // savedData.tags= [ 'Hip hop ', 'Pop', 'Club' ],
+    // savedData.addressLine2= '123 king street ',
+    // savedData.city= 4.333333333333333,
+    // savedData.description= 'Fun club in London ',
+    // savedData.venueId= 'AsedlTwX2fdmuN0yWiM1k4BzKFb2',
+    // savedData.country= 'Canada ',
+    // savedData.province= 'Ontario',
+    // savedData.password= 'callherjuliet',
+    // savedData.phoneNumber= '416-000-0000',
+    // savedData.addressLine1= '123 king street ',
+    // savedData.website= 'www.testweb.com',
+    // savedData.postalCode= '12456',
+    //   savedData.ratings= [ 5, 4, 4 ],
+    //   savedData.avgRating= 4.333333333333333
+    //   setSavedData(savedData)
+
+    console.log(editChange)
     if(!editChange){
+      console.log("no edits have been made")
+    }
+    else if(!UID){
+      console.log("no uid for page found")
+    }
+    else{
+      try {
+        const response = await fetch(`http:/192.168.0.33:3000/venue/update/${UID}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Include any additional headers or authentication tokens as needed
+          },
+          body: 
+          JSON.stringify({
+            addressLine1: savedData.addressLine1,
+            addressLine2: savedData.addressLine1,
+            avgRating: savedData.avgRating,
+            city: savedData.avgRating,
+            country: savedData.country,
+            description: savedData.description, 
+            email: savedData.email, 
+            password: savedData.password, 
+            phoneNumber: savedData.phoneNumber, 
+            postalCode: savedData.postalCode, 
+            province: savedData.province, 
+            ratings: savedData.ratings, 
+            tags: savedData.tags, 
+            venueName: savedData.venueName, 
+            website: savedData.website}),
+        });
+
+        if (response.ok) {
+          console.log('Changes saved successfully');
+          // You may want to update local state or perform additional actions here
+          setEditChange(!editChange)
+        } else {
+          console.error('Failed to save changes:', await response.text());
+          // Handle the error, show a message to the user, etc.
+          console.log('error', response.status)
+        }
+      } catch (error) {
+        console.error('Network error:', error.message);
+        // Handle network errors, show a message to the user, etc.
+        console.log('error',savedData)
+      }
+
+      // Fetch user data after updating to reflect changes
+      getUserData(UID);
+
+      console.log('Updated fields:');
+    
     }
   }
 
   const discard = () => {
     setEditChange(false)
-    setBioTxt({cur:"aboutBioTxt", new:''})
-    setVenueWeb({cur:"venueWeb", new:''})
-    setVenueNum({cur:"venueNum", new:''})
-    setVenueMail({cur:"venueMail", new:''})
-
-    console.log(venueData._j)
+    setBioTxt({cur:aboutBioTxt.cur, new:''})
+    setVenueWeb({cur:venueWeb.cur, new:''})
+    setVenueNum({cur:venueNum.cur, new:''})
+    setVenueMail({cur:venueMail.cur, new:''})
   }
 
   const EditTextInput = (newText, prop) => {

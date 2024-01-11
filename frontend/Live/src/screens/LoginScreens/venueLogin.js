@@ -37,7 +37,7 @@ const LoginScreen = () => {
         storeUserType(userType);
   
         // Navigate to the appropriate screen after login
-        navigation.navigate('Home', {screen:'Search'});
+        navigation.navigate('VenueHome', {screen:'Search'});
       } else {
         // Failed login
         // Log the error and full error response
