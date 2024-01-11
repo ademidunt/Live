@@ -16,7 +16,7 @@ export default SearchScreen = ({ onSearch }) => {
   const [unfilteredData, setUnfilteredData] = useState([]);
 
   const getVenues = async () => {
-    fetch(`http://192.168.0.116:3000/Venue`,
+    fetch(`http://192.168.1.65:3000/Venue`,
     {
       method: 'GET',
       headers: {
