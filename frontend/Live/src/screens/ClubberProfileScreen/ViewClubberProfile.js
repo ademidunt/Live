@@ -55,7 +55,7 @@ const UserProfile = () => {
         setEmail(userData.email);
         setBio(userData.bio);
         setDob(userData.DOB);
-        setProfilePicture(userData.url)
+        setProfilePicture(userData.newURL)
         setEditableFields({
           firstName: userData.firstName,
           lastName: userData.lastName,

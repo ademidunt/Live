@@ -4,8 +4,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage'
 import { storage } from "../../firebase/firebase.js"
 import * as FileSystem from 'expo-file-system';
+import { useNavigation } from '@react-navigation/native';
 
 const CreateProfileScreen = () => {
+  const navigation = useNavigation();
   const [firstName, setFirstName] = useState('');
   const [lastName, SetLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -51,8 +53,8 @@ const CreateProfileScreen = () => {
     }
   };
 
-  const updateDatabase = async () => {
-    console.log(`uploading clubber info to database with url`, url);
+  const updateDatabase = async (newURL) => {
+    console.log(`uploading clubber info to database with url`, newURL);
     const userData = {
       firstName,
       lastName,
@@ -60,7 +62,7 @@ const CreateProfileScreen = () => {
       password,
       dob,
       bio,
-      url,
+      newURL,
     };
   
     fetch(`http://192.168.86.25:3000/clubber/`, {
@@ -73,6 +75,7 @@ const CreateProfileScreen = () => {
       .then(async (res) => {
         if (res.ok) {
           console.log(`clubber added to the database successfully`);
+          navigation.navigate('Relogin');
         } else {
           console.log(`something went wrong ${JSON.stringify(res)}`);
         }
@@ -82,7 +85,7 @@ const CreateProfileScreen = () => {
   async function uploadImage (uri, fileType) {
     const response = await fetch(uri);
     const blob = await response.blob();
-    const storageRef = ref(storage, "Stuff/" + new Date().getTime());
+    const storageRef = ref(storage, "images/" + new Date().getTime());
    
     const uploadTask = uploadBytesResumable(storageRef, blob);
    
@@ -97,10 +100,11 @@ const CreateProfileScreen = () => {
       (error) => {
         // handle error
       },
-      async () => {
-        await getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          // console.log("File available at", downloadURL);
-         setUrl(downloadURL)
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+         await updateDatabase(downloadURL)
+         console.log("File available at", downloadURL);      
+         return url
           // save record
         
         });
@@ -111,7 +115,7 @@ const CreateProfileScreen = () => {
   
 
 
-  const handleCreateProfile =() => {
+  const handleCreateProfile = async () => {
     try{
 
       if (!firstName || !email || !password || !dob || !bio) {
@@ -119,10 +123,13 @@ const CreateProfileScreen = () => {
         return;
       }
       
-      uploadImage(selectedImage.uri, 'image')
+      const newURL = await uploadImage(selectedImage.uri, 'image')
+
+      //await updateDatabase(newURL)
+      
       //this is only going to run after new url has be set....allegedly
-      console.log("selected image is", selectedImage.uri)
-      updateDatabase()
+      // console.log("selected image is", selectedImage.uri)
+      
 
     }catch(error){
       console.error("error uploading image: ", error )
