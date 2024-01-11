@@ -25,6 +25,7 @@
     "react": "18.2.0",
     "react-native": "0.72.6",
     "react-native-calendar-picker": "^7.1.4",
+    "react-native-config": "^1.5.1",
     "react-native-image-picker": "^7.0.2",
     "react-native-modern-datepicker": "^1.0.0-beta.91",
     "react-native-picker-select": "^9.0.0",

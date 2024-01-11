@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { storeToken, storeUID, retrieveToken, clearToken, storeUserType } from '../../handlers/authService';
 
 
+
 const LoginScreen = () => {
   const navigation = useNavigation();
   const [username, setUsername] = React.useState('');
@@ -11,7 +12,7 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://192.168.0.87:3000/venue/login', {
+      const response = await fetch(`${apiUrl}/venue/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

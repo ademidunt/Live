@@ -3,21 +3,22 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { useNavigation } from '@react-navigation/native';
 import { storeToken, storeUID, retrieveToken, clearToken, storeUserType } from '../../handlers/authService';
 
-
 const LoginScreen = () => {
+
   const navigation = useNavigation();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://192.168.86.25:3000/clubber/login', {
+      const response = await fetch(`${apiUrl}/clubber/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email: username, password: password }),
-      });
+      })
+      .catch( error => console.log('Error:', error));
   
       // Log the full response
       console.log('Full response:', response);

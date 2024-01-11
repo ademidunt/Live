@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View,  ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
 
+
 const CreateProfileScreen = () => {
   const [venueName, setVenueName] = useState('');
   const [addressLine1, setAddressLine1] = useState('');
@@ -36,7 +37,7 @@ const CreateProfileScreen = () => {
     //should probably add something that catches when the email is already in the adatabse and makes an alert
     const updateDatabase = async () => {
       console.log(`new session`);
-      fetch(`http://192.168.2.50:3000/venue/`, {
+      fetch(`${apiUrl}/venue/`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',

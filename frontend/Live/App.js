@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import './global.js'
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -33,7 +34,7 @@ export default function App() {
     initialRouteName={tabNavigator.initialRouteName}
     screenOptions={tabNavigator.screenOptions}
     >
-      <Tab.Screen name="Search" component={SearchScreen}/>
+      <Tab.Screen name="Explore" component={SearchScreen}/>
       <Tab.Screen name="LoginScreen" component={LoginStackNavigator} />
       <Tab.Screen name="Reservation" component={ReservationScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />

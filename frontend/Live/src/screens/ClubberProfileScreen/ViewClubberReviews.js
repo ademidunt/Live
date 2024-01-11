@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { retrieveUID, clearToken } from '../../handlers/authService';
 
+
 const UserProfile = () => {
   const [clubberReviewList, setClubberReviewList] = useState([])
   const [UID, setUID] = useState(null); // State to store the retrieved UID
@@ -29,7 +30,7 @@ const UserProfile = () => {
 
   const getClubberReviews = async (uid) => {
     try {
-      const response = await fetch(`http://192.168.86.25:3000/review/clubber/${uid}`, {
+      const response = await fetch(`${apiUrl}/review/clubber/${uid}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',

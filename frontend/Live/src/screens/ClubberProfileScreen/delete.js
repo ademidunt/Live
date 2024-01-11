@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   ScrollView,
   View,
@@ -10,16 +11,12 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { retrieveUID, clearToken } from '../../handlers/authService';
 
-
 const UserProfile = () => {
-  const navigation = useNavigation();
   const [editMode, setEditMode] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [profilePic, setProfilePicture] = useState(null)
   const [bio, setBio] = useState('');
   const [dob, setDob] = useState('');
   const [email, setEmail] = useState('');
@@ -29,6 +26,7 @@ const UserProfile = () => {
     bio: '',
   });
   const [UID, setUID] = useState(null); // State to store the retrieved UID
+  const navigation = useNavigation();
 
   const placeholderPicture = 'https://via.placeholder.com/150';
 
@@ -42,14 +40,9 @@ const UserProfile = () => {
     fetchUID();
   }, []); // Empty dependency array ensures it runs once when the component mounts
 
-  const handleViewReviews = () => {
-    navigation.navigate('ClubberReviews');
-    console.log('view clubber reviws button pressed');
-  };
-
   const getUserData = async (uid) => {
     try {
-      const response = await fetch(`${apiUrl}/clubber/${uid}`, {
+      const response = await fetch(`http:/192.168.86.25:3000/clubber/${uid}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',
@@ -63,7 +56,6 @@ const UserProfile = () => {
         setEmail(userData.email);
         setBio(userData.bio);
         setDob(userData.DOB);
-        setProfilePicture(userData.newURL)
         setEditableFields({
           firstName: userData.firstName,
           lastName: userData.lastName,
@@ -82,7 +74,7 @@ const UserProfile = () => {
       // Ensure UID is available before attempting to update
       if (UID) {
         try {
-          const response = await fetch(`${apiUrl}/clubber/update/${UID}`, {
+          const response = await fetch(`http:/192.168.86.25:3000/clubber/update/${UID}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -94,7 +86,6 @@ const UserProfile = () => {
               bio: editableFields.bio,
               firstName: editableFields.firstName,
               lastName: editableFields.lastName,
-              newURL: profilePic
               // Add other fields as needed
             }),
           });
@@ -127,6 +118,11 @@ const UserProfile = () => {
     setEditableFields((prevFields) => ({ ...prevFields, [field]: value }));
   };
 
+  const handleViewReviews = () => {
+    navigation.navigate('ClubberReviews');
+    console.log('view clubber reviws button pressed');
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -136,7 +132,7 @@ const UserProfile = () => {
         contentContainerStyle={styles.scrollView}
         showsVerticalScrollIndicator={false} // Hide the vertical scrollbar
       >
-        <Image style={styles.profilePicture} source={{ uri: profilePic }} />
+        <Image style={styles.profilePicture} source={{ uri: placeholderPicture }} />
 
         {/* Display labels for the fields under "Edit Profile" */}
         <Text style={styles.username}>Profile</Text>

@@ -6,6 +6,7 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'rea
 import SearchBar from '../../components/SearchBar/SearchBar';
 import SearchList from '../../components/SearchList/SearchList';
 
+
 const styles = require('./SearchScreenStyles')
 
 export default SearchScreen = ({ onSearch }) => {
@@ -16,7 +17,7 @@ export default SearchScreen = ({ onSearch }) => {
   const [unfilteredData, setUnfilteredData] = useState([]);
 
   const getVenues = async () => {
-    fetch(`http://192.168.0.116:3000/Venue`,
+    fetch(`${apiUrl}/Venue`,
     {
       method: 'GET',
       headers: {

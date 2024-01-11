@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
 import { retrieveUID, retrieveUserType } from '../../handlers/authService';
 
+
 const ReservationManagement = () => {
   const [reservationRequests, setReservationRequests] = useState([]);
   const [userType, setUserType] = useState('');
@@ -20,7 +21,7 @@ const ReservationManagement = () => {
         console.log('UID retrieved successfully:', retrievedUID);
   
         // Fetch reservation requests from the server using fetch API
-        const response = await fetch(`http://192.168.0.90:3000/booking/venue/${retrievedUID}`);
+        const response = await fetch(`${apiUrl}/venue/${retrievedUID}`);
         const data = await response.json();
   
         console.log('Server response:', data); // Log the response
@@ -44,7 +45,7 @@ const ReservationManagement = () => {
       };
   
       // Send a request to the server to update the reservation status
-      const updateResponse = await fetch(`http://192.168.0.90:3000/booking/${reservationId}`, {
+      const updateResponse = await fetch(`${apiUrl}/booking/${reservationId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

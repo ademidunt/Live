@@ -6,6 +6,7 @@ import { storage } from "../../firebase/firebase.js"
 import * as FileSystem from 'expo-file-system';
 import { useNavigation } from '@react-navigation/native';
 
+
 const CreateProfileScreen = () => {
   const navigation = useNavigation();
   const [firstName, setFirstName] = useState('');
@@ -65,7 +66,7 @@ const CreateProfileScreen = () => {
       newURL,
     };
   
-    fetch(`http://192.168.86.25:3000/clubber/`, {
+    fetch(`${apiUrl}/clubber/`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',

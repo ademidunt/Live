@@ -3,6 +3,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { View, Text, Pressable, TextInput, Alert } from 'react-native';
 import { retrieveUID } from '../../../handlers/authService';
 
+
 const CreateNewRating = () => {
   const [ratingData, setRatingData] = useState({
     rating: '1', // Initial rating value
@@ -48,7 +49,7 @@ const CreateNewRating = () => {
     console.log(`Review Text: ${text}`);
 
     // Sending data to the backend API using fetch
-    fetch('http://192.168.0.87:3000/review', {
+    fetch(`${apiUrl}/review`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
