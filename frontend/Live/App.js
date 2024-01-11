@@ -19,6 +19,7 @@ import ViewClubberProfileScreen from "./src/screens/ClubberProfileScreen/ViewClu
 import clubberLogin from "./src/screens/LoginScreens/clubberLogin"
 import venueLogin from "./src/screens/LoginScreens/venueLogin"
 import ViewClubberReviews from "./src/screens/ClubberProfileScreen/ViewClubberReviews"
+import VenueClubberPerspective from './src/screens/Venue_ClubberPerspective/VenueClubberPerspective';
 import createClubberProfileLogin from "./src/screens/LoginScreens/clubberSuccessfulProfileLogin"
 
 
@@ -34,7 +35,7 @@ export default function App() {
     initialRouteName={tabNavigator.initialRouteName}
     screenOptions={tabNavigator.screenOptions}
     >
-      <Tab.Screen name="Explore" component={SearchScreen}/>
+      <Tab.Screen name="Search" component={SearchScreen}/>
       <Tab.Screen name="LoginScreen" component={LoginStackNavigator} />
       <Tab.Screen name="Reservation" component={ReservationScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
@@ -65,5 +66,14 @@ const LoginStackNavigator = () => {
     </Stack.Navigator>
   );
 };
+
+const SearchStackNavigator = () => {
+  return(
+  <Stack.Navigator initialRouteName='Search'>
+    <Stack.Screen name="Search" component={SearchScreen}/>
+    <Stack.Screen name="VenueClubberPerspective" component={VenueClubberPerspective}/>
+  </Stack.Navigator>
+  );
+}
 
 
