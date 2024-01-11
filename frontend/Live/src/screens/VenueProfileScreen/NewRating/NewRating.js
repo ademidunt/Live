@@ -7,6 +7,7 @@ const CreateNewRating = () => {
   const [ratingData, setRatingData] = useState({
     rating: '1', // Initial rating value
     text: '', // State to hold the review text
+    name: '',
   });
 
   const [clubberId, setClubberId] = useState('');
