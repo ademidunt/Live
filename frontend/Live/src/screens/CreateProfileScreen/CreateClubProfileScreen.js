@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View,  ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
+import { View,  Button, ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
 
 
 const CreateProfileScreen = () => {
@@ -13,6 +13,8 @@ const CreateProfileScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setpassword] = useState('');
   const [description, setDescription] = useState('');
+  const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState('');
 
 
   const handleCreateProfile = () => {
@@ -32,6 +34,7 @@ const CreateProfileScreen = () => {
       email,
       password,
       description,
+      tags,
     };
 
     //should probably add something that catches when the email is already in the adatabse and makes an alert
@@ -55,6 +58,13 @@ const CreateProfileScreen = () => {
 
     updateDatabase();
     console.log('User Data:', userData);
+  };
+
+  const handleAddTag = () => {
+    if (tagInput.trim() !== '') {
+      setTags([...tags, tagInput]);
+      setTagInput('');
+    }
   };
 
   const dismissKeyboard = () => {
@@ -142,6 +152,22 @@ const CreateProfileScreen = () => {
           onChangeText={(text) => setDescription(text)}
           multiline
         />
+
+    <Text>Tags:</Text>
+      <View style={styles.tagContainer}>
+        {tags.map((tag, index) => (
+          <View key={index} style={styles.tag}>
+            <Text>{tag}</Text>
+          </View>
+        ))}
+      </View>
+      <TextInput
+        style={styles.input}
+        value={tagInput}
+        onChangeText={(text) => setTagInput(text)}
+        placeholder="Add tags (music, age demographic, etc) one by one"
+      />
+      <Button title="Save Tags" onPress={handleAddTag} />
 
         <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
           <Text style={styles.buttonText}>Create Profile</Text>
