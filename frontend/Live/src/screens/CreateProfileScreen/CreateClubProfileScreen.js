@@ -166,7 +166,7 @@ const CreateProfileScreen = () => {
         onChangeText={(text) => setTagInput(text)}
         placeholder="Add tags (music, age demographic, etc) one by one"
       />
-      <Button title="Add Tag" onPress={handleAddTag} />
+      <Button title="Save Tags" onPress={handleAddTag} />
 
         <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
           <Text style={styles.buttonText}>Create Profile</Text>
