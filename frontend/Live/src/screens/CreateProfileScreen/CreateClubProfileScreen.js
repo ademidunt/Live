@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View,  Button, ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
 
 const CreateProfileScreen = () => {
+  const navigation = useNavigation();
   const [venueName, setVenueName] = useState('');
   const [addressLine1, setAddressLine1] = useState('');
   const [addressLine2, setAddressLine2] = useState('');
@@ -50,6 +51,7 @@ const CreateProfileScreen = () => {
         .then(async (res) => {
           if (res.ok) {
             console.log(`added to the database successfully`);
+            navigation.navigate('ReloginClub');
           } else {
             console.log(`something went wrong ${JSON.stringify(res)}`);
           }
@@ -165,9 +167,9 @@ const CreateProfileScreen = () => {
         style={styles.input}
         value={tagInput}
         onChangeText={(text) => setTagInput(text)}
-        placeholder="Add tags (music, age demographic, etc) one by one"
+        placeholder="Add tags one by one"
       />
-      <Button title="Save Tags" onPress={handleAddTag} />
+      <Button title="Add Tag" onPress={handleAddTag} />
 
         <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
           <Text style={styles.buttonText}>Create Profile</Text>
