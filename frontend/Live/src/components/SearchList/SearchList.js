@@ -13,8 +13,6 @@ const SearchList = (demoData) => {
     const navigation = useNavigation();
 
     const renderItem = ({ item }) => (
-
-      <Pressable onPress={()=>{navigateToVenuePage(item.venueId, item.venueName)}}>
       <View style={{alignSelf: 'flex-start', padding: 15}}>
         <TouchableOpacity
           onPress={()=>{navigation.navigate('Profile', {venueId:item.venueId}); console.log("club selected", item.venueId)}}>
@@ -32,7 +30,6 @@ const SearchList = (demoData) => {
           </View>
         </TouchableOpacity>
       </View>
-      </Pressable>
     );
 
     const navigateToVenuePage = (venueId, venueName) => {     
