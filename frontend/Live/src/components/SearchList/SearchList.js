@@ -31,10 +31,6 @@ const SearchList = (demoData) => {
         </TouchableOpacity>
       </View>
     );
-
-    const navigateToVenuePage = (venueId, venueName) => {     
-       navigation.navigate('VenueClubberPerspective', {id: venueId, headerTitle: venueName})
-    }
   
     return (
       <View style={{width: "100%", flex: 1}}>
