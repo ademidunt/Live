@@ -4,9 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import FilterPill from '../FilterPills/FilterPill';
-import VenueClubberPerspective from '../../screens/Venue_ClubberPerspective/VenueClubberPerspective';
-
-const Stack = createStackNavigator();
+import { useNavigation } from '@react-navigation/native';
 
 //const styles = require('./SearchListStyles')
 
@@ -18,17 +16,21 @@ const SearchList = (demoData) => {
 
       <Pressable onPress={()=>{navigateToVenuePage(item.venueId, item.venueName)}}>
       <View style={{alignSelf: 'flex-start', padding: 15}}>
-        <Text style={{fontSize: 20, fontWeight: 'light', color: "#000"}}>{item.venueName}</Text>
-        <Text style={{fontSize: 15, fontWeight: 'bold', color: '#000', marginTop: 5}}>{item.description}</Text>
-        <View style={{flexDirection: 'row'}}>
-        {item.tags !== undefined ? (
-          item.tags.map((tag, index)=> (
-            <FilterPill tag={tag}/>
-          ))
-        ) : (
-            <View/>
-        )}
-        </View>
+        <TouchableOpacity
+          onPress={()=>{navigation.navigate('Profile', {venueId:item.venueId}); console.log("club selected", item.venueId)}}>
+          <Text style={{fontSize: 20, fontWeight: 'light', color: "#000"}}>{item.venueName}</Text>
+          <Text style={{fontSize: 15, fontWeight: 'bold', color: '#000', marginTop: 5}}>{item.description}</Text>
+          <View style={{flexDirection: 'row'}}>
+          {item.tags !== undefined ? (
+            item.tags.map((tag, index)=> (
+              <FilterPill tag={tag}/>
+            ))
+          ) : (
+              <View/>
+          )}
+          
+          </View>
+        </TouchableOpacity>
       </View>
       </Pressable>
     );
