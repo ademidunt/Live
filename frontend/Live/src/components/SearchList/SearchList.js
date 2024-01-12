@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import FilterPill from '../FilterPills/FilterPill';
-import { useNavigation } from '@react-navigation/native';
 
 //const styles = require('./SearchListStyles')
 
