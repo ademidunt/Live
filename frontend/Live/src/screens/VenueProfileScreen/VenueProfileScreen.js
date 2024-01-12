@@ -2,15 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useState, useRef, useEffect} from 'react';
 import { Modal, TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
 import CreateNewEvent from './NewEvent/NewEvent';
+import { retrieveUID, clearToken } from '../../handlers/authService';
 import CreateNewRating from './NewRating/NewRating';
 
 
 const VenueProfileHandler = require('../../handlers/VenueProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
 
-var isUser = false;
+var isUser = true;
 
-export default function ProfileScreen() {
+export default function VenueProfileScreen() {
 
   const [btnPressed, setActiveBtn] = useState('active');
   const [isEdit , setIsEdit] = useState(false);
@@ -24,44 +25,120 @@ export default function ProfileScreen() {
   const [venueWeb, setVenueWeb] = useState({cur:"venueWeb", new:''})
   const [venueNum, setVenueNum] = useState({cur:"venueNum", new:''})
   const [venueMail, setVenueMail] = useState({cur:"venueMail", new:''})
+  const [venueRating, setVenueRating] = useState(5)
   const [location, setLocation] =  useState({cur: venueData.location , new:''})
-
-  useEffect(()=>{
-    console.log( )
-    const json = VenueProfileHandler.getVenueProfile('AsedlTwX2fdmuN0yWiM1k4BzKFb2')
-    console.log(json)
-
-    //console.log(venueData)
-  }, []);
-
-  const handleVenueData = () => {
-    const venueData ={
-      aboutBioTxt,
-      venueWeb,
-      venueWeb,
-      venueMail
-    }
-
-    // setVenueName({cur: venueData.venueName, new:'' })
-    // setBioTxt({cur: venueData.description , new:''});
-    // setLocation({cur: venueData.location , new:''});
-    
-  }
-
   const[savedData , setSavedData] = useState([])
-  const saveData = () => {
+
+  const [UID, setUID] = useState(null); // State to store the retrieved UID
+
+  useEffect(() => {
+    const fetchUID = async () => {
+      const uid = await retrieveUID();
+      console.log(1,uid)
+      setUID(uid);
+      getUserData(uid);
+    };
+
+    fetchUID();
+  }, []); // Empty dependency array ensures it runs once when the component mounts
+
+  const getUserData = async (uid) => {
+    try {
+      const response = await fetch(`http:/192.168.0.33:3000/venue/${uid}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        setVenueName({cur: userData.venueName, new:'' });
+        setBioTxt({cur: userData.description, new:'' });
+        setVenueWeb({cur: userData.website, new:'' });
+        setVenueNum({cur: userData.phoneNumber, new:'' });
+        setVenueMail({cur: userData.email, new:'' });
+        setVenueRating(userData.avgRating)
+        setSavedData(userData)
+        console.log(userData.venueName)
+      } else {
+        console.log(`Something went wrong: ${JSON.stringify(response)}`);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error.message);
+    }
+  };
+
+  const saveData = async () => {
+
+    savedData.email =  venueMail.new !== '' ? venueMail.new : venueMail.cur,
+    savedData.website = venueWeb.new !== '' ? venueWeb.new : venueWeb.cur,
+    savedData.description = aboutBioTxt.new !== '' ? aboutBioTxt.new : aboutBioTxt.cur,
+    savedData.phoneNumber = venueNum.new !== '' ? venueNum.new : venueNum.cur,
+
+    console.log(editChange)
     if(!editChange){
+      console.log("no edits have been made")
+    }
+    else if(!UID){
+      console.log("no uid for page found")
+    }
+    else{
+      try {
+        const response = await fetch(`http:/192.168.0.33:3000/venue/update/${UID}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Include any additional headers or authentication tokens as needed
+          },
+          body: 
+          JSON.stringify({
+            addressLine1: savedData.addressLine1,
+            addressLine2: savedData.addressLine1,
+            avgRating: savedData.avgRating,
+            city: savedData.avgRating,
+            country: savedData.country,
+            description: savedData.description, 
+            email: savedData.email, 
+            password: savedData.password, 
+            phoneNumber: savedData.phoneNumber, 
+            postalCode: savedData.postalCode, 
+            province: savedData.province, 
+            ratings: savedData.ratings, 
+            tags: savedData.tags, 
+            venueName: savedData.venueName, 
+            website: savedData.website}),
+        });
+
+        if (response.ok) {
+          console.log('Changes saved successfully');
+          // You may want to update local state or perform additional actions here
+          setEditChange(!editChange)
+        } else {
+          console.error('Failed to save changes:', await response.text());
+          // Handle the error, show a message to the user, etc.
+          console.log('error', response.status)
+        }
+      } catch (error) {
+        console.error('Network error:', error.message);
+        // Handle network errors, show a message to the user, etc.
+        console.log('error',savedData)
+      }
+
+      // Fetch user data after updating to reflect changes
+      getUserData(UID);
+
+      console.log('Updated fields:');
+    
     }
   }
 
   const discard = () => {
     setEditChange(false)
-    setBioTxt({cur:"aboutBioTxt", new:''})
-    setVenueWeb({cur:"venueWeb", new:''})
-    setVenueNum({cur:"venueNum", new:''})
-    setVenueMail({cur:"venueMail", new:''})
-
-    console.log(venueData._j)
+    setBioTxt({cur:aboutBioTxt.cur, new:''})
+    setVenueWeb({cur:venueWeb.cur, new:''})
+    setVenueNum({cur:venueNum.cur, new:''})
+    setVenueMail({cur:venueMail.cur, new:''})
   }
 
   const EditTextInput = (newText, prop) => {
@@ -125,7 +202,7 @@ export default function ProfileScreen() {
           }
           {
             !isUser &&
-            <View style={[styles.headerCtnt, styles.starRating]}><Text style={[styles.text]}>3.5</Text><Image source={require('../../../assets/ratingStar.png')}></Image></View>
+            <View style={[styles.headerCtnt, styles.starRating]}><Text style={[styles.text]}>{venueRating.toFixed(2)}</Text><Image source={require('../../../assets/ratingStar.png')}></Image></View>
           }
         </View>
 

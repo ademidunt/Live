@@ -42,7 +42,7 @@ const UserProfile = () => {
 
   const getUserData = async (uid) => {
     try {
-      const response = await fetch(`http:/192.168.0.87:3000/clubber/${uid}`, {
+      const response = await fetch(`http:/192.168.0.33:3000/clubber/${uid}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { retrieveUID, retrieveUserType } from '../../handlers/authService';
 import { ScrollView, Text, View, Button, StatusBar } from 'react-native';
 import ManageReservation from '../ManageReservations/ManageReservation';
+import ClubberReservationScreen from '../ClubberReservationScreen/ClubberReservationScreen';
 
 const styles = require('./ReservationScreenStyles');
 
@@ -31,10 +32,10 @@ export default function ReservationScreen() {
      
       {/* Conditionally render ManageReservation based on userType */}
       {userType === 'venue' && <ManageReservation />}
-      {userType === 'clubber'}
+      {userType === 'clubber' && <ClubberReservationScreen/>}
       
       {/* Your other components */}
-      <Button title="Click me" onPress={() => console.log('Button clicked')} />
+      {/* // <Button title="Click me" onPress={() => console.log('Button clicked')} /> */}
 
       {/* StatusBar component */}
       <StatusBar style="auto" />

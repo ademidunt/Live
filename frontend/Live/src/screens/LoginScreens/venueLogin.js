@@ -11,7 +11,7 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://192.168.0.87:3000/venue/login', {
+      const response = await fetch('http://192.168.0.33:3000/venue/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const LoginScreen = () => {
         storeUserType(userType);
   
         // Navigate to the appropriate screen after login
-        navigation.navigate('Profile');
+        navigation.navigate('VenueHome', {screen:'Search'});
       } else {
         // Failed login
         // Log the error and full error response
