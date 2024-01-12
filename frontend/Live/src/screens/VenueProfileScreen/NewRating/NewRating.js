@@ -48,7 +48,7 @@ const CreateNewRating = () => {
     console.log(`Review Text: ${text}`);
 
     // Sending data to the backend API using fetch
-    fetch('http://192.168.0.87:3000/review', {
+    fetch('http://192.168.0.33:3000/review', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

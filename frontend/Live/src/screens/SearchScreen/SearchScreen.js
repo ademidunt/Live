@@ -28,7 +28,6 @@ export default SearchScreen = ({ onSearch }) => {
         let venueData = await res.json();
         setUnfilteredData(venueData);
         setData(venueData);
-        
       }
       else{
         console.log(`something went wrong ${JSON.stringify(res)}`)

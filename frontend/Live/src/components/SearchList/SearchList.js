@@ -12,7 +12,7 @@ const SearchList = (demoData) => {
     const renderItem = ({ item }) => (
       <View style={{alignSelf: 'flex-start', padding: 15}}>
         <TouchableOpacity
-          onPress={()=>{navigation.navigate('VenueHome', {screen:'Profile', venueId:item.venueId}); console.log("club selected", item.venueId)}}>
+          onPress={()=>{navigation.navigate('VenueHome', {screen:'Profile', params:{venueId:item.venueId}}); console.log("club selected", item.venueId)}}>
           <Text style={{fontSize: 20, fontWeight: 'light', color: "#000"}}>{item.venueName}</Text>
           <Text style={{fontSize: 15, fontWeight: 'bold', color: '#000', marginTop: 5}}>{item.description}</Text>
           <View style={{flexDirection: 'row'}}>

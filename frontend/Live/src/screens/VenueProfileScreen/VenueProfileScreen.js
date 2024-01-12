@@ -2,17 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useState, useRef, useEffect} from 'react';
 import { Modal, TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
 import CreateNewEvent from './NewEvent/NewEvent';
-import { retrieveUID, clearToken } from '../../handlers/authService';
+import { retrieveUserType, retrieveUID, clearToken } from '../../handlers/authService';
 import CreateNewRating from './NewRating/NewRating';
-
 
 const VenueProfileHandler = require('../../handlers/VenueProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
 
-var isUser = true;
 
-export default function VenueProfileScreen() {
-
+export default function VenueProfileScreen({ route, navigation }) {
+  
+  const [isUser, setIsUser] = useState(null);
   const [btnPressed, setActiveBtn] = useState('active');
   const [isEdit , setIsEdit] = useState(false);
   const [editChange , setEditChange] = useState(false)
@@ -20,6 +19,7 @@ export default function VenueProfileScreen() {
 
   const [venueData, setVenueData] = useState(VenueProfileHandler.getVenueProfile('AsedlTwX2fdmuN0yWiM1k4BzKFb2'))
 
+  const [venueId, setVenueId] = useState(null)
   const [venueName, setVenueName] = useState ({cur: "venueName", new:'' })
   const [aboutBioTxt, setBioTxt ] = useState({cur: "venueDesc" , new:''})
   const [venueWeb, setVenueWeb] = useState({cur:"venueWeb", new:''})
@@ -27,19 +27,96 @@ export default function VenueProfileScreen() {
   const [venueMail, setVenueMail] = useState({cur:"venueMail", new:''})
   const [venueRating, setVenueRating] = useState(5)
   const [location, setLocation] =  useState({cur: venueData.location , new:''})
-  const[savedData , setSavedData] = useState([])
 
-  const [UID, setUID] = useState(null); // State to store the retrieved UID
+
+  const[savedData , setSavedData] = useState([])
+  const [UID, setUID] = useState(false); // State to store the retrieved UID
 
   useEffect(() => {
+
+    // const fetchUID =  (uid) => {
+    //   console.log(2,uid)
+    //   setVenueId(uid);
+    //   getUserData(uid);
+    // };
+
+    // //see who looking at page
+    // const getUserType = async () => {
+    //   const userType = await retrieveUserType()
+    //   console.log(1,userType)
+    //   setIsUser('venue' == userType)
+
+    //   const loggedInUID = await retrieveUID()
+    //   setVenueId(loggedInUID)
+    //   console.log(7,venueId)
+    // }; 
+    // console.log(4,route.params.venueId)
+
+    // getUserType();
+
+    // console.log( 0, isUser, venueId )
+    // //if the venue owner display own page
+    // if(!isUser && venueId !== null ) {
+    //   // setVenueId(loggedInUID);
+    //   fetchUID(venueId);
+    // }
+    // //if clubber display 
+    // else{
+    //   setUID(route.params.venueId);
+    //   console.log(route.params.venueId)
+    //   fetchUID(route.params.venueId)
+    // }
+
+    
     const fetchUID = async () => {
-      const uid = await retrieveUID();
-      console.log(1,uid)
-      setUID(uid);
-      getUserData(uid);
+      const loggedInUID = await retrieveUID()
+      setVenueId(loggedInUID); 
+      
+      const getUserType = async () => {
+       const userType = await retrieveUserType()
+       var newpage = loggedInUID
+        console.log(1,loggedInUID, UID, isUser)
+        try{
+          console.log("try")
+          route.params.venueId? newpage = route.params.venueId : null
+          console.log(newpage,loggedInUID, UID, isUser)
+        }catch(error){
+          console.log('cathc')
+          //newpage = loggedInUID
+          setUID(true)
+        }
+
+        if(((userType == "venue") && (newpage !== loggedInUID ) ) || userType == 'clubber' ){
+          getUserData(route.params.venueId);
+        }
+        else{
+          getUserData(await retrieveUID());
+        }
+        setIsUser((userType == 'venue' && (newpage == loggedInUID ))) 
+
+        // else if(UID == true){
+        //   getUserData(route.params.venueId);
+        // }
+        // else if(userType && (UID == venueId)){
+        //   console.log(3)
+        //   getUserData(await retrieveUserType());
+        // }
+        // else{
+        //   getUserData(route.params.venueId);
+        // }
+      }; 
+  
+      getUserType();
+
     };
 
     fetchUID();
+
+    // const loggedInUID = await retrieveUID()
+    // setVenueId(loggedInUID)
+    // console.log(7,venueId)
+
+
   }, []); // Empty dependency array ensures it runs once when the component mounts
 
   const getUserData = async (uid) => {
@@ -80,12 +157,12 @@ export default function VenueProfileScreen() {
     if(!editChange){
       console.log("no edits have been made")
     }
-    else if(!UID){
+    else if(!venueId){
       console.log("no uid for page found")
     }
     else{
       try {
-        const response = await fetch(`http:/192.168.0.33:3000/venue/update/${UID}`, {
+        const response = await fetch(`http:/192.168.0.33:3000/venue/update/${venueId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -126,7 +203,7 @@ export default function VenueProfileScreen() {
       }
 
       // Fetch user data after updating to reflect changes
-      getUserData(UID);
+      getUserData(venueId);
 
       console.log('Updated fields:');
     
