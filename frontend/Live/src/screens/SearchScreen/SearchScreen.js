@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text,FlatList, TextInput, Button, StyleSheet, TouchableOpacity, RefreshControl, ScrollView } from 'react-native';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import FilterPill from '../../components/FilterPills/FilterPill';
+import { useFocusEffect } from '@react-navigation/native';
 
 const styles = require('./SearchScreenStyles');
 
@@ -45,6 +46,18 @@ export default SearchScreen = ({ onSearch }) => {
  useEffect(() => {
   getVenues();
  }, []);
+ 
+//Refresh when focus is put on search screen.
+ useFocusEffect(
+  React.useCallback(() => {
+    getVenues();
+    return () => {
+      // Do something when the screen is unfocused
+      // Useful for cleanup functions
+    };
+  }, [])
+);
+
 //When someone presses the search button
  function onSearchClick(s) {
   setSearch(search);
