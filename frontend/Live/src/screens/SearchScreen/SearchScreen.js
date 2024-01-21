@@ -10,7 +10,6 @@ import SearchList from '../../components/SearchList/SearchList';
 const styles = require('./SearchScreenStyles')
 
 export default SearchScreen = ({ onSearch }) => {
-  let demoData = [];
 
   const [search, setSearch] = useState('');
   const [data, setData] = useState([]);
@@ -43,8 +42,6 @@ export default SearchScreen = ({ onSearch }) => {
 
  function onSearchClick(s) {
   console.log("Search " + s);
-// console.log("At this point in search this is the searchable data: " + JSON.stringify(unfilteredData) + " Search " + s);
-  // //WIP
    setSearch(search);
 
   // Filter the demoData based on the search term
