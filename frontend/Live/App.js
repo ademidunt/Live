@@ -68,7 +68,16 @@ const LoginStackNavigator = () => {
 
 const SearchStackNavigator = () => {
   return(
-  <Stack.Navigator initialRouteName='Search'>
+  <Stack.Navigator initialRouteName='Search Stack' 
+  screenOptions={{
+    headerStyle: {
+      backgroundColor: '#4709CD',
+    },
+    headerTintColor: '#FFFFFF',
+    headerTitleStyle: {
+      color: '#FFFFFF',
+    },
+  }}>
     <Stack.Screen name="Search" component={SearchScreen}/>
     <Stack.Screen name="VenueClubberPerspective" component={VenueClubberPerspective}/>
   </Stack.Navigator>

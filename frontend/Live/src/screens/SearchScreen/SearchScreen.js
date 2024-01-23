@@ -1,11 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
 import EventPost from '../../components/EventPost';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { View, Text,FlatList, TextInput, Button, StyleSheet, TouchableOpacity, RefreshControl, ScrollView } from 'react-native';
+import { View, Text,FlatList, TouchableOpacity, RefreshControl, StatusBar } from 'react-native';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import FilterPill from '../../components/FilterPills/FilterPill';
 import { useFocusEffect } from '@react-navigation/native';
+import FilterDropdown from '../../components/FilterDropdown/FilterDropdown';
 
 const styles = require('./SearchScreenStyles');
 
@@ -61,13 +61,16 @@ export default SearchScreen = ({ onSearch }) => {
 //When someone presses the search button
  function onSearchClick(s) {
   setSearch(search);
-  //Search and filter data
-  const filteredData = unfilteredData.filter((venue) =>
-    venue.venueName.toLowerCase().includes(s.toLowerCase())
-  );
 
-  console.log("Filtered Data " + JSON.stringify(filteredData));
-   setData(filteredData);
+  if (s !== undefined) {
+    //Search and filter data
+    const filteredData = unfilteredData.filter((venue) =>
+      venue.venueName.toLowerCase().includes(s.toLowerCase())
+    );
+
+    console.log("Filtered Data " + JSON.stringify(filteredData));
+    setData(filteredData);
+  }
 }
 //Render filter search list item.
 const renderItem = ({ item }) => (
@@ -92,9 +95,15 @@ const renderItem = ({ item }) => (
 //Render search list.
 return (
     <View style={styles.container1}>
-      <SearchBar onSearch={(search) => onSearchClick(search)}/>
+      <StatusBar barStyle="light-content" />
+      <View style={{width: "100%", marginTop: 15}}> 
+        <SearchBar onSearch={(search) => onSearchClick(search)}/>
+      </View>
+      <View style={{height: 0.5, backgroundColor: "gray", marginTop: 15}}/>
+      <FilterDropdown items={["E", "R", "I", "C"]}/>
       <View style={{width: "100%", flex: 1}}>
       <FlatList
+        style={{backgroundColor: "#ffffff"}}
         data={data}
         renderItem={renderItem}
         keyExtractor={item => item.venueId} 
