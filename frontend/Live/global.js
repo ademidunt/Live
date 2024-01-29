@@ -1,1 +1,1 @@
-global.apiUrl = 'http://192.168.86.25:3000'
+global.apiUrl = 'http://158.162.200.243:3000'
