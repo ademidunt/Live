@@ -59,15 +59,15 @@ export async function createReview(review) {
                 reviewId = {"reviewId": docRef.id}
             });
         const clubberData = await getClubber(review.clubberId)
-        const name = clubberData.firstName + " " + clubberData.lastName        let userInfo = await getUser(review.clubberId)
+        const name = clubberData.firstName + " " + clubberData.lastName        
+        
         
 
         review = {//Create review object with new id.
             
             ...review,
             ...reviewId,
-            name : name,,
-            name : userInfo.firstName + " " + userInfo.lastName
+            name : name,
         }
 
         addRatingToVenueList(review)
