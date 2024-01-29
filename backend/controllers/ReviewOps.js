@@ -1,6 +1,7 @@
 import { db } from "../firebase/firebase.js";
 import { collection, doc, getDoc, getDocs, addDoc, setDoc, deleteDoc, where, query} from 'firebase/firestore';
 import { getVenue, updateVenueRatingsAvg, updateVenueRatingsList } from "./VenueOps.js";
+import { getUser } from "./userOps.js";
 /*
 Database operations for manipulating the review collection.
 */
@@ -53,9 +54,13 @@ export async function createReview(review) {
                 console.log("Created review with ID: " + docRef.id);
                 reviewId = {"reviewId": docRef.id}
             });
+        let userInfo = await getUser(review.clubberId)
+        
 
         review = {//Create review object with new id.
+            
             ...review,
+            name : userInfo.firstName + " " + userInfo.lastName,
             ...reviewId
         }
 
