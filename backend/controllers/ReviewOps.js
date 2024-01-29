@@ -60,8 +60,8 @@ export async function createReview(review) {
         review = {//Create review object with new id.
             
             ...review,
-            name : userInfo.firstName + " " + userInfo.lastName,
-            ...reviewId
+            ...reviewId,
+            name : userInfo.firstName + " " + userInfo.lastName
         }
 
         addRatingToVenueList(review)
@@ -144,7 +144,11 @@ export async function deleteReview(reviewId){
     try{
     
             const review = await getReview(reviewId)
-            const venue = await getVenue(review.venueId)
+
+            console.log(review)
+            if (review){
+
+                const venue = await getVenue(review.venueId)
             const ratingToDelete = review.rating
             const ratingsList = venue.ratings
 
@@ -160,6 +164,9 @@ export async function deleteReview(reviewId){
             deleteDoc(doc(db, "Review", reviewId))
             console.log("rating has been deleted")
             return review
+
+            }
+            
 
 
 
