@@ -52,30 +52,33 @@ export async function createReview(review) {
     
     try {
         let reviewId = null;
+        const clubberData = await getClubber(review.clubberId)
+        const fullName = clubberData.firstName + " " + clubberData.lastName  
+
+        review = {
+            ...review, 
+            fullName
+        }
         
         await addDoc(collection(db, "Review"), review)
             .then(function(docRef){//Get new document id.
-                console.log("Created review with ID: " + docRef.id);
                 reviewId = {"reviewId": docRef.id}
+                console.log("Created review with ID: " + reviewId.reviewId);
             });
-        const clubberData = await getClubber(review.clubberId)
-        const name = clubberData.firstName + " " + clubberData.lastName        
         
-        
+              
+
 
         review = {//Create review object with new id.
             
             ...review,
-            ...reviewId,
-            name : name,
+            ...reviewId
+            
+            
         }
 
-        addRatingToVenueList(review)
-        
-        return review
-      
-
-        
+        addRatingToVenueList(review)  
+        return review   
 
     } catch (error) {
         console.error("Error creating venue:", error);
@@ -104,7 +107,7 @@ export async function getReviewsByClubberId(clubberId) {
             
           
             for (const doc of querySnapShot.docs) {
-              let docId = {
+              let reviewId = {
                 "reviewId": doc.id
               };
           
@@ -115,11 +118,12 @@ export async function getReviewsByClubberId(clubberId) {
               };
           
               let data = {
-                ...docId,
+                ...reviewId,
                 ...venueName,
                 ...doc.data()
               };
           
+              console.log(JSON.stringify(reviewId))
               dataArr.push(data);
             }
           
@@ -171,7 +175,7 @@ export async function deleteReview(reviewId){
             console.log(review)
             if (review){
 
-                const venue = await getVenue(review.venueId)
+            const venue = await getVenue(review.venueId)
             const ratingToDelete = review.rating
             const ratingsList = venue.ratings
 
@@ -185,9 +189,8 @@ export async function deleteReview(reviewId){
             await removeRatingFromVenueList(review)
             
             deleteDoc(doc(db, "Review", reviewId))
-            console.log("rating has been deleted")
-            return review
-
+            console.log("rating " + reviewId + " has been deleted")
+            return reviewId
             }
             
 
@@ -237,8 +240,8 @@ export async function removeRatingFromVenueList(review) {
         }
         
         console.log(ratingsList)
-    await updateVenueRatingsList(review.venueId, ratingsList)
-    await updateRatingsAvg(review.venueId, ratingsList)
+        await updateVenueRatingsList(review.venueId, ratingsList)
+        await updateRatingsAvg(review.venueId, ratingsList)
   
     }catch(error) {
 
