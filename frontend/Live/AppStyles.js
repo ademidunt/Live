@@ -2,7 +2,7 @@ const tabNavigator={
     initialRouteName:'./src/screens/SearchScreen/SearchScreen',
     screenOptions:{
         headerShown: false,
-        headerTintColor: '#FFFFFF',
+        headerTintColor: '#4709CD',
         headerStyle: {
         backgroundColor: "#4709CD",
         },

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View,  ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
+import { View,  Button, ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const CreateProfileScreen = () => {
+  const navigation = useNavigation();
   const [venueName, setVenueName] = useState('');
   const [addressLine1, setAddressLine1] = useState('');
   const [addressLine2, setAddressLine2] = useState('');
@@ -12,6 +14,8 @@ const CreateProfileScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setpassword] = useState('');
   const [description, setDescription] = useState('');
+  const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState('');
 
 
   const handleCreateProfile = () => {
@@ -31,12 +35,13 @@ const CreateProfileScreen = () => {
       email,
       password,
       description,
+      tags,
     };
 
     //should probably add something that catches when the email is already in the adatabse and makes an alert
     const updateDatabase = async () => {
       console.log(`new session`);
-      fetch(`http://192.168.2.50:3000/venue/`, {
+      fetch(`${apiUrl}/venue/`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
@@ -46,6 +51,7 @@ const CreateProfileScreen = () => {
         .then(async (res) => {
           if (res.ok) {
             console.log(`added to the database successfully`);
+            navigation.navigate('ReloginClub');
           } else {
             console.log(`something went wrong ${JSON.stringify(res)}`);
           }
@@ -54,6 +60,13 @@ const CreateProfileScreen = () => {
 
     updateDatabase();
     console.log('User Data:', userData);
+  };
+
+  const handleAddTag = () => {
+    if (tagInput.trim() !== '') {
+      setTags([...tags, tagInput]);
+      setTagInput('');
+    }
   };
 
   const dismissKeyboard = () => {
@@ -141,6 +154,22 @@ const CreateProfileScreen = () => {
           onChangeText={(text) => setDescription(text)}
           multiline
         />
+
+    <Text>Tags:</Text>
+      <View style={styles.tagContainer}>
+        {tags.map((tag, index) => (
+          <View key={index} style={styles.tag}>
+            <Text>{tag}</Text>
+          </View>
+        ))}
+      </View>
+      <TextInput
+        style={styles.input}
+        value={tagInput}
+        onChangeText={(text) => setTagInput(text)}
+        placeholder="Add tags one by one"
+      />
+      <Button title="Add Tag" onPress={handleAddTag} />
 
         <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
           <Text style={styles.buttonText}>Create Profile</Text>

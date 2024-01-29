@@ -1,6 +1,7 @@
 import { db } from "../firebase/firebase.js";
 import { collection, doc, getDoc, getDocs, addDoc, setDoc, deleteDoc, where, query} from 'firebase/firestore';
 import { getVenue, updateVenueRatingsAvg, updateVenueRatingsList } from "./VenueOps.js";
+import { getClubber } from "./clubberOps.js"
 import { getUser } from "./userOps.js";
 /*
 Database operations for manipulating the review collection.
@@ -47,20 +48,25 @@ export async function getReview(reviewId) {
 }
 //Create review.
 export async function createReview(review) {
+    
+    
     try {
         let reviewId = null;
+        
         await addDoc(collection(db, "Review"), review)
             .then(function(docRef){//Get new document id.
                 console.log("Created review with ID: " + docRef.id);
                 reviewId = {"reviewId": docRef.id}
             });
-        let userInfo = await getUser(review.clubberId)
+        const clubberData = await getClubber(review.clubberId)
+        const name = clubberData.firstName + " " + clubberData.lastName        let userInfo = await getUser(review.clubberId)
         
 
         review = {//Create review object with new id.
             
             ...review,
             ...reviewId,
+            name : name,,
             name : userInfo.firstName + " " + userInfo.lastName
         }
 
@@ -94,16 +100,33 @@ export async function getReviewsByClubberId(clubberId) {
         const querySnap = await getDocs(q);
 
         let dataArr = []
-        querySnap.forEach((doc) => {
-            let docId = {
+        async function processQuerySnap(querySnapShot) {
+            
+          
+            for (const doc of querySnapShot.docs) {
+              let docId = {
                 "reviewId": doc.id
-            }
-            let data = {
+              };
+          
+              let venueData = await getVenue(doc.data().venueId);
+          
+              let venueName = {
+                "reviewedVenue": venueData.venueName
+              };
+          
+              let data = {
                 ...docId,
+                ...venueName,
                 ...doc.data()
+              };
+          
+              dataArr.push(data);
             }
-            dataArr.push(data);
-        });
+          
+            // Now dataArr contains the processed data from each document in querySnap
+            return dataArr;
+          }
+        await processQuerySnap(querySnap)
         console.log(dataArr);
     
         return(dataArr);

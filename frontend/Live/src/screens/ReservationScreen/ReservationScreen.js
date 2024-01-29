@@ -1,13 +1,43 @@
-import { StatusBar } from 'expo-status-bar';
-import { Button } from 'react-native';
-import { ScrollView, Text, View } from 'react-native';
+// ReservationScreen.js
+import React, { useState, useEffect } from 'react';
+import { retrieveUID, retrieveUserType } from '../../handlers/authService';
+import { ScrollView, Text, View, Button, StatusBar } from 'react-native';
+import ManageReservation from '../ManageReservations/ManageReservation';
 
-const styles = require('./ReservationScreenStyles')
+const styles = require('./ReservationScreenStyles');
 
 export default function ReservationScreen() {
+  const [userType, setUserType] = useState('');
+  const [UID, setUID] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const retrievedUserType = await retrieveUserType();
+        const retrievedUID = await retrieveUID();
+
+        setUserType(retrievedUserType);
+        setUID(retrievedUID);
+      } catch (error) {
+        console.error('Error retrieving user type and UID:', error);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array ensures this runs only once on component mount
+
   return (
-      <ScrollView style={styles.scrollview}>
-      </ScrollView>
+    <View style={styles.container}>
+     
+      {/* Conditionally render ManageReservation based on userType */}
+      {userType === 'venue' && <ManageReservation />}
+      {userType === 'clubber'}
+      
+      {/* Your other components */}
+      <Button title="Click me" onPress={() => console.log('Button clicked')} />
+
+      {/* StatusBar component */}
+      <StatusBar style="auto" />
+    </View>
   );
 }
-

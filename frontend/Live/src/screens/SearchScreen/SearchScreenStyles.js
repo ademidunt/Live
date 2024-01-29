@@ -1,17 +1,13 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#1E1E1E',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderTopColor: '#4709CD'
+    container1: {
+      flex: 1, 
+      flexDirection: 'column',
     },
-  
-    text:{
-      color: '#FFFFFF',
-    }
+    spacer: {
+      height: 60
+    },
   });
 
 module.exports = styles ;

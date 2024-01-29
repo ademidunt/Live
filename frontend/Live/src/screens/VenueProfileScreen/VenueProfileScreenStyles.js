@@ -135,12 +135,21 @@ const styles = StyleSheet.create({
 
     aboutSctn:{
       flex:1,
-      rowGap: 20
+      rowGap: 20,
+      alignSelf:'stretch'
       //flexDirection:'row'
     },
 
     aboutCtnt:{
 
+    },
+
+    aboutEdit:{
+      borderWidth:2,
+      borderColor:'#6A2EEB',
+      borderRadius:8,
+      padding:5,
+      backgroundColor:'#404040'
     },
 
     aboutBioTxt:{
@@ -278,7 +287,57 @@ const styles = StyleSheet.create({
     buttonText: {
       color: 'black', // Text color
       fontSize: 12, // Font size
-    }    
+    },
+
+    doneTxt:{
+      color:'#9166ED'
+    },
+
+    
+    centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 22,
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: '#9166ED',
+      borderWidth:4,
+      borderColor:'#6A2EEB',
+      borderRadius: 20,
+      padding: 35,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    button: {
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2,
+    },
+    buttonOpen: {
+      backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+      backgroundColor: '#4709CD',
+    },
+    textStyle: {
+      color: 'white',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: 'center',
+    }
+      
   });
 
 module.exports = styles ;
