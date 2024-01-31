@@ -8,30 +8,28 @@ const ReservationManagement = () => {
   const [userType, setUserType] = useState('');
   const [UID, setUID] = useState('');
 
+  const fetchData = async () => {
+    try {
+      const retrievedUserType = await retrieveUserType();
+      const retrievedUID = await retrieveUID();
+
+      setUserType(retrievedUserType);
+      setUID(retrievedUID);
+
+      console.log('User type retrieved successfully:', retrievedUserType);
+      console.log('UID retrieved successfully:', retrievedUID);
+
+      // Fetch reservation requests from the server using fetch API
+      const response = await fetch(`${apiUrl}/booking/venue/${retrievedUID}`);
+      const data = await response.json();
+  
+      setReservationRequests(data);
+      console.log(data)
+    } catch (error) {
+      console.error('Error retrieving user type and UID:', error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const retrievedUserType = await retrieveUserType();
-        const retrievedUID = await retrieveUID();
-  
-        setUserType(retrievedUserType);
-        setUID(retrievedUID);
-  
-        console.log('User type retrieved successfully:', retrievedUserType);
-        console.log('UID retrieved successfully:', retrievedUID);
-  
-        // Fetch reservation requests from the server using fetch API
-        const response = await fetch(`${apiUrl}/venue/${retrievedUID}`);
-        const data = await response.json();
-  
-        console.log('Server response:', data); // Log the response
-  
-        setReservationRequests(data);
-        console.log(data)
-      } catch (error) {
-        console.error('Error retrieving user type and UID:', error);
-      }
-    };
   
     fetchData();
   }, []);
@@ -53,24 +51,16 @@ const ReservationManagement = () => {
         body: JSON.stringify(updatedItem),
       });
   
-      console.log('Raw server response:', updateResponse);
-
-      // Check if the response has a valid JSON structure
-      const responseJson = await updateResponse.json();
-      if (!responseJson) {
-        console.error('Invalid JSON structure in the response:', responseJson);
-        return;
-      }
-  
+      console.log('Raw server response:'+ JSON.stringify(updateResponse));
       // Check if the update was successful
-      if (responseJson.success) {
-        console.log(`Reservation ${reservationId} ${action}ed successfully`);
-        // Optionally, you can update the local state after performing the action
-        // For example, fetch updated reservation data
-        fetchData();
-      } else {
-        console.error(`Error ${action}ing reservation:`, responseJson.error);
-      }
+      if (updateResponse.ok) {
+      console.log(`Reservation ${reservationId} ${action}ed successfully`);
+      // Fetch the updated reservation requests after the action is completed
+      fetchData();
+    } else {
+      console.error(`Error ${action}ing reservation. Status: ${updateResponse.status}`);
+    }
+
     } catch (error) {
       console.error(`Error ${action}ing reservation:`, error);
     }
