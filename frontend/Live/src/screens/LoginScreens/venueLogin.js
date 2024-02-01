@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { storeToken, storeUID, retrieveToken, clearToken, storeUserType } from '../../handlers/authService';
 
@@ -44,6 +44,8 @@ const LoginScreen = () => {
         // Log the error and full error response
         const errorText = await response.text();
         console.error('Login failed:', errorText);
+        Alert.alert('Login failed. Username or password is invalid.',
+        )
       }
     } catch (error) {
       // Handle any network or unexpected errors
