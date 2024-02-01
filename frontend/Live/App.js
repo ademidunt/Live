@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import './global.js'
+import { retrieveUserType } from './src/handlers/authService.js';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -23,28 +24,10 @@ import VenueClubberPerspective from './src/screens/Venue_ClubberPerspective/Venu
 import createClubberProfileLogin from "./src/screens/LoginScreens/clubberSuccessfulProfileLogin"
 import createClubProfileLogin from "./src/screens/LoginScreens/CreateClubSuccessProfileLogin.js"
 
-
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const tabNavigator = require('./AppStyles')
-
-export default function App() {
-  return(
-  <NavigationContainer>
-    <Tab.Navigator 
-    initialRouteName={tabNavigator.initialRouteName}
-    screenOptions={tabNavigator.screenOptions}
-    >
-      <Tab.Screen name="Search" component={SearchStackNavigator}/>
-      <Tab.Screen name="LoginScreen" component={LoginStackNavigator} />
-      <Tab.Screen name="Reservation" component={ReservationScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-
-    </Tab.Navigator>
-  </NavigationContainer>
-  );
-};
 
 const LoginStackNavigator = () => {
   return (
@@ -61,27 +44,23 @@ const LoginStackNavigator = () => {
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Relogin" component={createClubberProfileLogin} />
       <Stack.Screen name="ReloginClub" component={createClubProfileLogin} />
-
+      <Stack.Screen name="Search" component={SearchScreen} />
     </Stack.Navigator>
   );
 };
 
-const SearchStackNavigator = () => {
-  return(
-  <Stack.Navigator initialRouteName='Search Stack' 
-  screenOptions={{
-    headerStyle: {
-      backgroundColor: '#4709CD',
-    },
-    headerTintColor: '#FFFFFF',
-    headerTitleStyle: {
-      color: '#FFFFFF',
-    },
-  }}>
-    <Stack.Screen name="Search" component={SearchScreen}/>
-    <Stack.Screen name="VenueClubberPerspective" component={VenueClubberPerspective}/>
-  </Stack.Navigator>
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator 
+        initialRouteName="LoginScreen"
+        screenOptions={tabNavigator.screenOptions}
+      >
+        <Tab.Screen name="LoginScreen" component={LoginStackNavigator} />
+        <Tab.Screen name="Search" component={SearchScreen} />
+        <Tab.Screen name="Reservation" component={ReservationScreen} />
+        <Tab.Screen name="Profile" component={ProfileScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
-}
-
-
+};
