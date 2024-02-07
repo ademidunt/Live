@@ -5,7 +5,6 @@ import { View, Text,FlatList, TouchableOpacity, RefreshControl, StatusBar } from
 import SearchBar from '../../components/SearchBar/SearchBar';
 import FilterPill from '../../components/FilterPills/FilterPill';
 import { useFocusEffect } from '@react-navigation/native';
-import FilterDropdown from '../../components/FilterDropdown/FilterDropdown';
 
 const styles = require('./SearchScreenStyles');
 

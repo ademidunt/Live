@@ -5,6 +5,7 @@ import { ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage'
 import { storage } from "../../firebase/firebase.js"
 import * as FileSystem from 'expo-file-system';
 import { useNavigation } from '@react-navigation/native';
+import { ButtonDark } from '../../components/Buttons/Button.js';
 
 
 const CreateProfileScreen = () => {
@@ -199,10 +200,7 @@ const CreateProfileScreen = () => {
           )}
           <Button title="Select Image" onPress={() => { handleImagePicker(); }} />
         </View>
-
-        <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
-          <Text style={styles.buttonText}>Create Profile</Text>
-        </TouchableOpacity>
+        <ButtonDark title={"Create Profile"} onPress={handleCreateProfile} style={{marginBottom: 5, width: 200, alignSelf: 'center'}}/>
       </View>
       </ScrollView>
     </TouchableWithoutFeedback>
@@ -212,6 +210,7 @@ const CreateProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    flexDirection: 'column'
   },
   input: {
     height: 40,

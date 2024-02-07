@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { storeToken, storeUID, retrieveToken, clearToken, storeUserType } from '../../handlers/authService';
+import { ButtonDark } from '../../components/Buttons/Button';
 
 const LoginScreen = () => {
 
@@ -73,9 +74,7 @@ const LoginScreen = () => {
         onChangeText={(text) => setPassword(text)}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+      <ButtonDark title={"Login"} onPress={handleLogin} style={{marginBottom: 5, width: 200}}/>
     </View>
   );
 };
