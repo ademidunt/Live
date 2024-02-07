@@ -65,8 +65,9 @@ export default SearchScreen = ({ onSearch }) => {
   if (s !== undefined) {
     //Search and filter data
     const filteredData = unfilteredData.filter((venue) =>
-      venue.venueName.toLowerCase().includes(s.toLowerCase())
-    );
+      venue.venueName.toLowerCase().includes(s.toLowerCase()) || (venue.description && venue.description.toLowerCase().includes(s.toLowerCase()) ||
+      (venue.tags && venue.tags.includes(s))
+    ));
 
     console.log("Filtered Data " + JSON.stringify(filteredData));
     setData(filteredData);
@@ -100,7 +101,6 @@ return (
         <SearchBar onSearch={(search) => onSearchClick(search)}/>
       </View>
       <View style={{height: 0.5, backgroundColor: "gray", marginTop: 15}}/>
-      <FilterDropdown items={["E", "R", "I", "C"]}/>
       <View style={{width: "100%", flex: 1}}>
       <FlatList
         style={{backgroundColor: "#ffffff"}}
