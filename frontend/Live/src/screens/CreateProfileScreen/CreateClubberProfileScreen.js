@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Image, Button, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage'
-import { storage } from "../../firebase/firebase.js"
+import { storage, } from "../../firebase/firebase.js"
 import * as FileSystem from 'expo-file-system';
 import { useNavigation } from '@react-navigation/native';
 
