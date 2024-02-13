@@ -33,9 +33,6 @@ export default function ReservationScreen() {
       {userType === 'venue' && <ManageReservation />}
       {userType === 'clubber'}
       
-      {/* Your other components */}
-      <Button title="Click me" onPress={() => console.log('Button clicked')} />
-
       {/* StatusBar component */}
       <StatusBar style="auto" />
     </View>

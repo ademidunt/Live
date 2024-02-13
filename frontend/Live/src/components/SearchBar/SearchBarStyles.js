@@ -5,16 +5,19 @@ const styles = StyleSheet.create({
         height:  50, 
         marginHorizontal: 20, 
         flexDirection: 'row', 
-        borderWidth: 1.5, 
+        borderWidth: 0.25, 
         borderColor: 'gray', 
-        borderRadius: 15
+        backgroundColor: "#ffffff"
     },
     touchableOpacity: {
       alignSelf: 'center', 
       marginHorizontal: 5
     },
     textInput: {
-      height: 50
+      height: 50,
+      fontSize: 15,
+      width: "100%",
+      flexShrink: 1
     },
   });
 

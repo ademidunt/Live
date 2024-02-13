@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import './global.js'
+import './global.js';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -34,7 +35,24 @@ export default function App() {
   <NavigationContainer>
     <Tab.Navigator 
     initialRouteName={tabNavigator.initialRouteName}
-    screenOptions={tabNavigator.screenOptions}
+    screenOptions={({ route }) => ({
+      ...tabNavigator.screenOptions,
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName;
+
+        if (route.name === 'Search') {
+          iconName = focused ? 'search' : 'search-outline';
+        } else if (route.name === 'LoginScreen') {
+          iconName = focused ? 'log-in' : 'log-in-outline';
+        } else if (route.name === 'Reservation') {
+          iconName = focused ? 'calendar' : 'calendar-outline';
+        } else if (route.name === 'Profile') {
+          iconName = focused ? 'person' : 'person-outline';
+        }
+
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+    })}
     >
       <Tab.Screen name="Search" component={SearchStackNavigator}/>
       <Tab.Screen name="LoginScreen" component={LoginStackNavigator} />
@@ -68,7 +86,16 @@ const LoginStackNavigator = () => {
 
 const SearchStackNavigator = () => {
   return(
-  <Stack.Navigator initialRouteName='Search'>
+  <Stack.Navigator initialRouteName='Search Stack' 
+  screenOptions={{
+    headerStyle: {
+      backgroundColor: '#4709CD',
+    },
+    headerTintColor: '#FFFFFF',
+    headerTitleStyle: {
+      color: '#FFFFFF',
+    },
+  }}>
     <Stack.Screen name="Search" component={SearchScreen}/>
     <Stack.Screen name="VenueProfile" component={ProfileScreen}/>
   </Stack.Navigator>

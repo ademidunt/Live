@@ -1,5 +1,5 @@
 import express from 'express';
-import { getReviews, getReview, createReview, updateReview, getReviewsByClubberId, getReviewsByVenueId } from '../controllers/ReviewOps.js';
+import { getReviews, getReview, createReview, updateReview, getReviewsByClubberId, getReviewsByVenueId, deleteReview } from '../controllers/ReviewOps.js';
 
 const app = express();
 
@@ -42,5 +42,9 @@ app.get('/clubber/:clubberId', async (req, res) => {
 app.get('/venue/:venueId', async (req, res) => {
     res.send(await getReviewsByVenueId(req.params.venueId));
 });
+
+app.delete('/:reviewId', async (req, res) => {
+    res.send(await deleteReview(req.params.reviewId));
+})
 
 export default app;

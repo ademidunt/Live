@@ -1,5 +1,5 @@
 import { db, auth, storage } from "../firebase/firebase.js";
-import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query, onSnapshot} from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query, onSnapshot, updateDoc} from 'firebase/firestore';
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 import { ref, uploadBytesResumable, uploadBytes, getDownloadURL } from 'firebase/storage'
 /*
@@ -76,10 +76,30 @@ export async function createClubber(clubber) {
 
 
 //Update clubber.
-export async function updateClubber(clubber) {
+export async function updateClubberWithPhoto(clubber) {
     try {
+        const clubberDocRef = doc(db, "Clubber", clubber.clubberId);
+
+        //update everything 
         await setDoc(doc(db, "Clubber", clubber.clubberId), clubber);
         console.log("Updated user " + clubber.clubberId);
+    } catch (error) {
+        console.error("Error creating user:", error);
+        throw error; // Re-throw the error to be caught by the calling function
+    }
+}
+
+export async function updateClubberWithoutPhoto(clubber) {
+    try {
+        const clubberDocRef = doc(db, "Clubber", clubber.clubberId);
+
+        //update everything besides photo
+        await updateDoc(clubberDocRef, {
+          email: clubber.email,
+          bio: clubber.bio,
+          firstName: clubber.firstName,
+          lastName: clubber.lastName
+        });
     } catch (error) {
         console.error("Error creating user:", error);
         throw error; // Re-throw the error to be caught by the calling function

@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     container1: {
       flex: 1, 
-      flexDirection: 'column'
+      flexDirection: 'column',
     },
     spacer: {
       height: 60

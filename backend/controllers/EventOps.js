@@ -1,16 +1,16 @@
 import { db } from "../firebase/firebase.js";
 import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query} from 'firebase/firestore';
 /*
-Database operations for manipulating the promotion collection.
+Database operations for manipulating the event collection.
 */
-export async function getPromotions() {
+export async function getEvents() {
     try {
-        const querySnapshot = await getDocs(collection(db, "Promotion"));
+        const querySnapshot = await getDocs(collection(db, "Event"));
         let dataArr = []
         querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         let docId = {
-            "promotionId": doc.id
+            "eventId": doc.id
         }
         let data = {
             ...docId,
@@ -22,14 +22,14 @@ export async function getPromotions() {
 
         return(dataArr);
     } catch (error) {
-        console.error("Error getting promotion:", error);
+        console.error("Error getting event:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
-//Get a single promotion based on promotionId.
-export async function getPromotion(promotionId) {
+//Get a single event based on eventId.
+export async function getEvent(eventId) {
     try {
-        const docSnap = await getDoc(doc(db, "Promotion", promotionId));
+        const docSnap = await getDoc(doc(db, "Event", eventId));
 
         if (docSnap.exists()) {
             console.log("Document data:", docSnap.data());
@@ -39,51 +39,51 @@ export async function getPromotion(promotionId) {
             console.log("No such document");
         }
     } catch (error) {
-        console.error("Error getting promotion:", error);
+        console.error("Error getting event:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
-//Create promotion.
-export async function createPromotion(promotion) {
+//Create event.
+export async function createEvent(event) {
     try {
-        let promotionId = null;
-        await addDoc(collection(db, "Promotion"), promotion)
+        let eventId = null;
+        await addDoc(collection(db, "Event"), event)
             .then(function(docRef){//Get new document id.
-                console.log("Created promotion with ID: " + docRef.id);
-                promotionId = {"promotionId": docRef.id}
+                console.log("Created event with ID: " + docRef.id);
+                eventId = {"eventId": docRef.id}
             });
 
-        promotion = {//Create promotion object with new id.
-            ...promotion,
-            ...promotionId
+        event = {//Create event object with new id.
+            ...event,
+            ...eventId
         }
-        return promotion;//Return promotion object.
+        return event;//Return event object.
     } catch (error) {
-        console.error("Error creating promotion:", error);
+        console.error("Error creating event:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
-//Update promotion.
-export async function updatePromotion(promotion) {
+//Update event.
+export async function updateEvent(event) {
     try {
-        await setDoc(doc(db, "Promotion", promotion.promotionId), promotion);
-        console.log("Updated promotion " + promotion.promotionId);
+        await setDoc(doc(db, "Event", event.eventId), event);
+        console.log("Updated event " + event.eventId);
     } catch (error) {
-        console.error("Error updating promotion:", error);
+        console.error("Error updating event:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
-//Get promotion by venueId
-export async function getPromotionByVenueId(venueId) {
+//Get event by venueId
+export async function getEventByVenueId(venueId) {
     try {
-        const promotionRef = collection(db, "Promotion");
-        const q = query(promotionRef, where("venueId", "==", venueId));
+        const eventRef = collection(db, "Event");
+        const q = query(eventRef, where("venueId", "==", venueId));
         const querySnap = await getDocs(q);
 
         let dataArr = []
         querySnap.forEach((doc) => {
             let docId = {
-                "promotionId": doc.id
+                "eventId": doc.id
             }
             let data = {
                 ...docId,
@@ -95,7 +95,7 @@ export async function getPromotionByVenueId(venueId) {
     
         return(dataArr);
     } catch (error) {
-        console.error("Error getting promotion:", error);
+        console.error("Error getting event:", error);
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
