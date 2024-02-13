@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, Modal, Button, StyleSheet } from 'react-native';
 import ReviewItem from './ReviewItem';
+import CreateNewRating from '../NewRating/NewRating';
 
 const VenueReview = ({ id }) => {
   const [reviews, setReviews] = useState([]);
@@ -26,6 +27,7 @@ const VenueReview = ({ id }) => {
 
       if (response.ok) {
         const reviewData = await response.json();
+        console.log(reviewData)
         setReviews(reviewData);
       } else {
         console.log(`Something went wrong: ${JSON.stringify(response)}`);
@@ -68,7 +70,7 @@ const VenueReview = ({ id }) => {
           onRequestClose={() => setShowAddReviewModal(false)}
         >
           <View style={styles.modalContainer}>
-            <Text>Add Review Modal</Text>
+            <CreateNewRating venueID={id}/>
             <Button title="Close Modal" onPress={() => setShowAddReviewModal(false)} />
           </View>
         </Modal>

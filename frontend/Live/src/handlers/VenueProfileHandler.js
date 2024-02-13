@@ -26,9 +26,20 @@ const getVenueProfile = async (id) =>{
     
 }
 
+const getVenueReviews = async (id) => {
+    try {
+        const json =  await webHandler.get(`review/venue/${id}`);
+        return json;
+    }
+    catch(err){
+
+    }
+}
+
 module.exports = {
     getVenueProfile,
     getVenueProfiles,
+    getVenueReviews
 
 }
 

@@ -70,7 +70,7 @@ const SearchStackNavigator = () => {
   return(
   <Stack.Navigator initialRouteName='Search'>
     <Stack.Screen name="Search" component={SearchScreen}/>
-    <Stack.Screen name="VenueClubberPerspective" component={VenueClubberPerspective}/>
+    <Stack.Screen name="VenueProfile" component={ProfileScreen}/>
   </Stack.Navigator>
   );
 }
