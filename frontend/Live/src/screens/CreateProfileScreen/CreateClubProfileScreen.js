@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View,  Button, ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ButtonDark } from '../../components/Buttons/Button';
+import MapComponent from '../../components/Map/MapComponent';
 
 const CreateProfileScreen = () => {
   const navigation = useNavigation();
@@ -90,50 +91,8 @@ const CreateProfileScreen = () => {
           value={venueName}
           onChangeText={(text) => setVenueName(text)}
         />
-  
-      <Text>Address Line 1</Text>
-        <TextInput
-          style={styles.input}
-          value={addressLine1}
-          onChangeText={(text) => setAddressLine1(text)}
-        />
-      <Text>Address Line 2</Text>
-        <TextInput
-          style={styles.input}
-          value={addressLine2}
-          onChangeText={(text) => setAddressLine2(text)}
-        />
 
-      <Text>Postal Code</Text>
-        <TextInput
-          style={styles.input}
-          value={postalCode}
-          onChangeText={(text) => setPostalCode(text)}
-        />
- 
-      <Text>City </Text>
-        <TextInput
-          style={styles.input}
-          value={city}
-          onChangeText={(text) => setCity(text)}
-        />
-
-      <Text>Province/State </Text>
-        <TextInput
-          style={styles.input}
-          value={province}
-          onChangeText={(text) => setProvince(text)}
-        />
-
-      <Text>Country </Text>
-        <TextInput
-          style={styles.input}
-          value={country}
-          onChangeText={(text) => setCountry(text)}
-        />
-
-
-        <Text>Email:</Text>
+<Text>Email:</Text>
         <TextInput
           style={styles.input}
           value={email}
@@ -156,6 +115,16 @@ const CreateProfileScreen = () => {
           multiline
         />
 
+  
+      <Text>Address</Text>
+        <TextInput
+          style={styles.input}
+          value={addressLine1}
+          onChangeText={(text) => setAddressLine1(text)}
+        />
+
+    <MapComponent></MapComponent>
+     
     <Text>Tags:</Text>
       <View style={styles.tagContainer}>
         {tags.map((tag, index) => (
@@ -183,6 +152,13 @@ const CreateProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+  },
+  mapcontainer: {
+    flex: 1,
+  },
+  map: {
+    width: '100%',
+    height: 300, // Adjust the height as per your requirement
   },
   input: {
     height: 40,

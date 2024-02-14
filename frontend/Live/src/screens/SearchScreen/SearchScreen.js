@@ -21,7 +21,7 @@ export default SearchScreen = ({ onSearch }) => {
   //Get data for raw data
   const getVenues = async () => {
     setRefreshing(true);
-    fetch(`http://192.168.0.116:3000/Venue`,
+    fetch(`${apiUrl}/Venue`,
     {
       method: 'GET',
       headers: {
