@@ -42,7 +42,7 @@ export default function App() {
 
         if (route.name === 'Search') {
           iconName = focused ? 'search' : 'search-outline';
-        } else if (route.name === 'LoginScreen') {
+        } else if (route.name === 'Login') {
           iconName = focused ? 'log-in' : 'log-in-outline';
         } else if (route.name === 'Reservation') {
           iconName = focused ? 'calendar' : 'calendar-outline';
@@ -55,9 +55,9 @@ export default function App() {
     })}
     >
       <Tab.Screen name="Search" component={SearchStackNavigator}/>
-      <Tab.Screen name="LoginScreen" component={LoginStackNavigator} />
-      <Tab.Screen name="Reservation" component={ReservationScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Login" component={LoginStackNavigator} />
+      <Tab.Screen name="Reservation" component={ReservationStackNavigator} />
+      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
 
     </Tab.Navigator>
   </NavigationContainer>
@@ -66,8 +66,17 @@ export default function App() {
 
 const LoginStackNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen name="Login" component={LoginScreen} />
+    <Stack.Navigator initialRouteName="Login"
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#4709CD',
+      },
+      headerTintColor: '#FFFFFF',
+      headerTitleStyle: {
+        color: '#FFFFFF',
+      },
+    }}>
+      <Stack.Screen name="Welcome" component={LoginScreen} />
       <Stack.Screen name="ViewClubber" component={ViewClubberProfileScreen} />
       <Stack.Screen name="ClubberReviews" component={ViewClubberReviews}/>
       <Stack.Screen name="ClubberLogin" component={ClubberLoginScreen} />
@@ -102,4 +111,34 @@ const SearchStackNavigator = () => {
   );
 }
 
+const ReservationStackNavigator = () => {
+  return(
+    <Stack.Navigator initialRouteName='Reservation Stack' screenOptions={{
+      headerStyle: {
+        backgroundColor: '#4709CD',
+      },
+      headerTintColor: '#FFFFFF',
+      headerTitleStyle: {
+        color: '#FFFFFF',
+      },
+    }}>
+      <Stack.Screen name="Reservations" component={ReservationScreen}/>
+    </Stack.Navigator>
+  )
+}
 
+const ProfileStackNavigator = () => {
+  return(
+    <Stack.Navigator initialRouteName='Profile Stack' screenOptions={{
+      headerStyle: {
+        backgroundColor: '#4709CD',
+      },
+      headerTintColor: '#FFFFFF',
+      headerTitleStyle: {
+        color: '#FFFFFF',
+      },
+    }}>
+      <Stack.Screen name="Your Profile" component={ProfileScreen}/>
+    </Stack.Navigator>
+  )
+}
