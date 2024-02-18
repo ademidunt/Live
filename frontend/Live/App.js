@@ -106,7 +106,7 @@ const SearchStackNavigator = () => {
     },
   }}>
     <Stack.Screen name="Search Venues" component={SearchScreen}/>
-    <Stack.Screen name="VenueClubberPerspective" component={VenueClubberPerspective}/>
+    <Stack.Screen name="VenueProfile" component={ProfileScreen}/>
   </Stack.Navigator>
   );
 }

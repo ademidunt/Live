@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, Modal, Button, StyleSheet } from 'react-native';
-import VenueReview from './Reviews/VenueReview';
+import VenueReview from '../VenueProfileScreen/Reviews/VenueReview';
 
 const VenueClubberPerspective = ({ route, navigation }) => {
   navigation.setOptions({title: route.params.headerTitle})

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, Modal, Button, StyleSheet } from 'react-native';
 import ReviewItem from './ReviewItem';
+import CreateNewRating from '../NewRating/NewRating';
 
 const VenueReview = ({ id }) => {
   const [reviews, setReviews] = useState([]);
@@ -26,6 +27,7 @@ const VenueReview = ({ id }) => {
 
       if (response.ok) {
         const reviewData = await response.json();
+        console.log(reviewData)
         setReviews(reviewData);
       } else {
         console.log(`Something went wrong: ${JSON.stringify(response)}`);
@@ -42,6 +44,11 @@ const VenueReview = ({ id }) => {
   const handleAddReview = () => {
     setShowAddReviewModal(true);
   };
+
+  const modalClosed = () => {
+    setShowAddReviewModal(false)
+    getVenueReviews()
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -68,8 +75,8 @@ const VenueReview = ({ id }) => {
           onRequestClose={() => setShowAddReviewModal(false)}
         >
           <View style={styles.modalContainer}>
-            <Text>Add Review Modal</Text>
-            <Button title="Close Modal" onPress={() => setShowAddReviewModal(false)} />
+            <CreateNewRating venueId={id}/>
+            <Button title="Close Modal" onPress={() => modalClosed()} />
           </View>
         </Modal>
       </ScrollView>
@@ -81,6 +88,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff', // Background color
+    width: '97%'
   },
   scrollView: {
     padding: 20,
