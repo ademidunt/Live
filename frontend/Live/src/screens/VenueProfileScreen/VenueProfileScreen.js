@@ -238,7 +238,7 @@ const ProfileScreen = ({ route}) => {
           }
 
           {btnPressed == 'newRating' &&
-      <VenueReview id={route.params.venueId} />
+       <VenueReview id={route.params.venueId} />
           }
 
           {btnPressed == 'newEvent' &&

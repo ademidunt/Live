@@ -4,7 +4,7 @@ import { View, Text, Pressable, TextInput, Alert } from 'react-native';
 import { retrieveUID } from '../../../handlers/authService';
 
 
-const CreateNewRating = ({venueID}) => {
+const CreateNewRating = ({venueId}) => {
   const [ratingData, setRatingData] = useState({
     rating: '1', // Initial rating value
     text: '', // State to hold the review text
@@ -12,6 +12,7 @@ const CreateNewRating = ({venueID}) => {
   });
 
   const [clubberId, setClubberId] = useState('');
+  const [ratingCreated, setRatingCreated] = useState(false)
 
   useEffect(() => {
     const getClubberId = async () => {
@@ -28,9 +29,11 @@ const CreateNewRating = ({venueID}) => {
 
   const handleRatingChange = (rating) => {
     setRatingData({ ...ratingData, rating });
+    setRatingCreated(false)
   };
 
   const handleReviewChange = (text) => {
+    setRatingCreated(false)
     setRatingData({ ...ratingData, text });
   };
 
@@ -55,7 +58,7 @@ const CreateNewRating = ({venueID}) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ...ratingData, clubberId, venueID }),
+      body: JSON.stringify({ ...ratingData, clubberId, venueId }),
     })
       .then(async (res) => {
         if (res.ok) {
@@ -67,6 +70,7 @@ const CreateNewRating = ({venueID}) => {
       .catch((error) => {
         console.error(`Error occurred: ${error}`);
       });
+      setRatingCreated(true)
   };
 
 
@@ -99,7 +103,7 @@ const CreateNewRating = ({venueID}) => {
           onChangeText={handleReviewChange}
           value={ratingData.text}
           placeholder="Type your review here..."
-          placeholderTextColor="white"
+          placeholderTextColor="black"
           multiline={true}
         />
       </View>
@@ -117,6 +121,10 @@ const CreateNewRating = ({venueID}) => {
           <Text style={styles.text}>Create Rating</Text>
         </Pressable>
       </View>
+      {ratingCreated==true &&  <View>
+      <Text>Rating Added!</Text>
+    </View>
+      }
     </View>
   );
 };
@@ -135,31 +143,39 @@ const styles = {
     marginVertical: 10,
   },
   ratingBox: {
-    borderWidth: 1,
-    borderColor: '#ccc',
+    borderWidth: 2,
+    borderColor: '#9166ED',
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: 'lightgrey'
+    backgroundColor: '#F5F0F8'
   },
   reviewContainer: {
     marginVertical: 10,
   },
   reviewInput: {
     height: 100,
-    borderColor: 'gray',
-    borderWidth: 1,
+    width: 250,
+    borderColor: '#9166ED',
+    borderWidth: 2,
+    borderRadius: 5,
     paddingHorizontal: 10,
-    backgroundColor: 'lightgray',
+    backgroundColor: '#F5F0F8',
     color: 'black',
   },
 
   btn: {
     minWidth: 150,
+    height: 40,
     alignItems: 'center',
+    marginVertical: 10,
+    textAlign: 'center',
+    borderRadius: 5,
+    justifyContent: 'center',
   },
   text: {
     color: 'white',
+    fontSize: 18
   },
 };
 

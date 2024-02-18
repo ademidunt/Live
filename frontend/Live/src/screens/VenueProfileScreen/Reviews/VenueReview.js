@@ -45,6 +45,11 @@ const VenueReview = ({ id }) => {
     setShowAddReviewModal(true);
   };
 
+  const modalClosed = () => {
+    setShowAddReviewModal(false)
+    getVenueReviews()
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -70,8 +75,8 @@ const VenueReview = ({ id }) => {
           onRequestClose={() => setShowAddReviewModal(false)}
         >
           <View style={styles.modalContainer}>
-            <CreateNewRating venueID={id}/>
-            <Button title="Close Modal" onPress={() => setShowAddReviewModal(false)} />
+            <CreateNewRating venueId={id}/>
+            <Button title="Close Modal" onPress={() => modalClosed()} />
           </View>
         </Modal>
       </ScrollView>
@@ -83,6 +88,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff', // Background color
+    width: '97%'
   },
   scrollView: {
     padding: 20,

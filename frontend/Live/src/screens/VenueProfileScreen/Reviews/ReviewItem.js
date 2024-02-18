@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome icons for stars
 
 const ReviewItem = ({ review }) => {
-  const { text, name, rating } = review;
+  const { text, fullName, rating } = review;
 
   // Function to render stars based on the rating
   const renderStars = (rating) => {
@@ -34,7 +34,7 @@ const ReviewItem = ({ review }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.description}>{name}</Text>
+      <Text style={styles.description}>{fullName}</Text>
       <Text style={styles.date}>{text}</Text>
       <View style={styles.ratingContainer}>{renderStars(rating)}</View>
     </View>

@@ -11,7 +11,7 @@ const styles = require('./SearchScreenStyles');
 /**
  * Controls all operations on the search screen.
  */
-export default SearchScreen = ({ onSearch }) => {
+export default SearchScreen = ({ navigation }) => {
 
   const [search, setSearch] = useState('');//The search value
   const [data, setData] = useState([]);//Manages the data displayed during the search
@@ -21,7 +21,7 @@ export default SearchScreen = ({ onSearch }) => {
   //Get data for raw data
   const getVenues = async () => {
     setRefreshing(true);
-    fetch(`http://192.168.0.116:3000/Venue`,
+    fetch(`${apiUrl}/Venue`,
     {
       method: 'GET',
       headers: {
@@ -76,7 +76,7 @@ export default SearchScreen = ({ onSearch }) => {
 const renderItem = ({ item }) => (
   <View style={{alignSelf: 'flex-start', padding: 15}}>
     <TouchableOpacity
-      onPress={()=>{navigation.navigate('Profile', {venueId:item.venueId}); console.log("club selected", item.venueId)}}>
+      onPress={()=>{navigation.navigate('VenueProfile', {venueId:item.venueId}); }}>
       <Text style={{fontSize: 20, fontWeight: 'light', color: "#000"}}>{item.venueName}</Text>
       <Text style={{fontSize: 15, fontWeight: 'bold', color: '#000', marginTop: 5}}>{item.description}</Text>
       <View style={{flexDirection: 'row'}}>
