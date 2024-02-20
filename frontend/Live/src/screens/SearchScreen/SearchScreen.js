@@ -131,7 +131,7 @@ function deg2rad(deg) {
 const renderItem = ({ item }) => (
   <View style={{alignSelf: 'flex-start', padding: 15}}>
     <TouchableOpacity
-      onPress={()=>{navigation.navigate('VenueProfile', {venueId:item.venueId}); }}>
+      onPress={()=>{navigation.navigate('VenueClubberPerspective', {venueId: item.venueId})}}>
       <Text style={{fontSize: 20, fontWeight: 'light', color: "#000"}}>{item.venueName}</Text>
       <Text style={{fontSize: 15, fontWeight: 'bold', color: '#000', marginTop: 5}}>{item.description}</Text>
       {item.lat !== undefined && item.lon !== undefined && location !== null ? (
