@@ -140,10 +140,6 @@ const styles = StyleSheet.create({
       //flexDirection:'row'
     },
 
-    aboutCtnt:{
-
-    },
-
     aboutEdit:{
       borderWidth:2,
       borderColor:'#6A2EEB',
@@ -181,7 +177,7 @@ const styles = StyleSheet.create({
       borderWidth:2,
       borderColor:'#6A2EEB',
       borderRadius:8,
-      padding:5
+      padding:5,
     },
     instagramDsply:{
       flex:1,
@@ -248,29 +244,6 @@ const styles = StyleSheet.create({
     reservationTxt:{
       fontSize:20
     },
-
-    centeredView: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    }, 
-
-    modalView: {
-      margin: 20,
-      backgroundColor: 'white',
-      width: '105%',
-      padding: 35,
-      alignItems: 'center',
-      shadowColor: '#800',
-      shadowOffset: {
-        width: 0,
-        height: 2
-      }, 
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5
-    },
-
     customButton: {
       alignItems: 'center',
     justifyContent: 'center',
@@ -301,12 +274,13 @@ const styles = StyleSheet.create({
       marginTop: 22,
     },
     modalView: {
+      width: '95%',
       margin: 20,
       backgroundColor: '#9166ED',
       borderWidth:4,
       borderColor:'#6A2EEB',
       borderRadius: 20,
-      padding: 35,
+      padding: 20,
       alignItems: 'center',
       shadowColor: '#000',
       shadowOffset: {
@@ -336,6 +310,20 @@ const styles = StyleSheet.create({
     modalText: {
       marginBottom: 15,
       textAlign: 'center',
+    },
+    eventCreatedContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    checkmarkContainer: {
+      backgroundColor: '#4CAF50', // Green background color for the checkmark container
+      borderRadius: 50, // Adjust the border radius as needed
+      padding: 10, // Adjust padding as needed
+      marginVertical: 10, // Adjust margin as needed
+    },
+    checkmark: {
+      color: '#FFFFFF', // White color for the checkmark
+      fontSize: 20, // Adjust font size as needed
     }
       
   });

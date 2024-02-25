@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, Modal, Button, StyleSheet } from 'react-native';
 import ReviewItem from './ReviewItem';
-import CreateNewRating from '../NewRating/NewRating';
+import NewRating from '../NewRating/NewRating';
 
 const VenueReview = ({ id }) => {
   const [reviews, setReviews] = useState([]);
@@ -65,7 +65,7 @@ const VenueReview = ({ id }) => {
           onRequestClose={() => setShowAddReviewModal(false)}
         >
           <View style={styles.modalContainer}>
-            <CreateNewRating venueId={id} />
+            <NewRating venueId={id} />
             <Button title="Close Modal" onPress={() => modalClosed()} />
           </View>
         </Modal>

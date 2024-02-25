@@ -3,6 +3,7 @@ import { View, Text, Image, ScrollView, TouchableOpacity, Button, StyleSheet } f
 import VenueReview from '../VenueProfileScreen/Reviews/VenueReview';
 import VenueClubberDetails from './VenueClubberDetails';
 import VenueClubberContact from './VenueClubberContact'
+import VenueClubberEvents from './VenueClubberEvents';
 
 const VenueClubberPerspective = ({ route, navigation }) => {
   const [showEvents, setShowEvents] = useState(false);
@@ -45,28 +46,11 @@ const VenueClubberPerspective = ({ route, navigation }) => {
   const renderComponent = () => {
     switch (selectedComponent) {
       case 'details':
-        return (
-          <VenueClubberDetails info={venueInfo}/>
-        );
+        return <VenueClubberDetails info={venueInfo}/>
       case 'contact':
-        return (
-          <VenueClubberContact info={venueInfo}/>
-        );
+        return <VenueClubberContact info={venueInfo}/>
       case 'events':
-        return (
-          <View>
-            {/* Display upcoming events */}
-            {venueInfo.upcomingEvents.map((event) => (
-              <View key={event.id} style={styles.eventItem}>
-                <Text style={styles.eventName}>{event.name}</Text>
-                <Text style={styles.eventDate}>{event.date}</Text>
-                <Text style={styles.eventDescription}>{event.description}</Text>
-                <Text style={styles.eventSpotsLeft}>Spots left: {event.spotsLeft}</Text>
-                <Button disabled={true} title="Register for Event" onPress={() => handleEventRegistration(event.id)} />
-              </View>
-            ))}
-          </View>
-        );
+        return <VenueClubberEvents id={route.params.venueId}/>
       case 'reviews':
         return <VenueReview id={route.params.venueId} />;
       default:

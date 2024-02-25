@@ -138,7 +138,8 @@ const ProfileStackNavigator = () => {
         color: '#FFFFFF',
       },
     }}>
-      <Stack.Screen name="Your Profile" component={ProfileScreen}/>
+      {/*Static venue ID for now to implement event functionality*/}
+      <Stack.Screen name="Your Profile" component={ProfileScreen} initialParams={{venueId: 'AsedlTwX2fdmuN0yWiM1k4BzKFb2'}}/> 
     </Stack.Navigator>
   )
 }
