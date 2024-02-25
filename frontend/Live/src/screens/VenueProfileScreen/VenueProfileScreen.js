@@ -11,7 +11,7 @@ const styles = require('./VenueProfileScreenStyles')
 
 var isUser = false;
  
-const ProfileScreen = ({ route}) => {
+const ProfileScreen = ({ route }) => {
 
   const [btnPressed, setActiveBtn] = useState('active');
   const [isEdit , setIsEdit] = useState(false);
@@ -242,7 +242,7 @@ const ProfileScreen = ({ route}) => {
           }
 
           {btnPressed == 'newEvent' &&
-            <CreateNewEvent/>
+            <CreateNewEvent _venueId_={route.params.venueId}/>
           }
 
           {
