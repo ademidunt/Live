@@ -3,21 +3,22 @@ import React, {useState, useRef, useEffect} from 'react';
 import { Modal, TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
 import CreateNewEvent from './NewEvent/NewEvent';
 import CreateNewRating from './NewRating/NewRating';
+import VenueReview from './Reviews/VenueReview';
 
 
 const VenueProfileHandler = require('../../handlers/VenueProfileHandler')
 const styles = require('./VenueProfileScreenStyles')
 
 var isUser = false;
-
-export default function ProfileScreen() {
+ 
+const ProfileScreen = ({ route }) => {
 
   const [btnPressed, setActiveBtn] = useState('active');
   const [isEdit , setIsEdit] = useState(false);
   const [editChange , setEditChange] = useState(false)
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [venueData, setVenueData] = useState(VenueProfileHandler.getVenueProfile('AsedlTwX2fdmuN0yWiM1k4BzKFb2'))
+  const [venueData, setVenueData] = useState(VenueProfileHandler.getVenueProfile(`${route.params.id}`))
 
   const [venueName, setVenueName] = useState ({cur: "venueName", new:'' })
   const [aboutBioTxt, setBioTxt ] = useState({cur: "venueDesc" , new:''})
@@ -28,7 +29,7 @@ export default function ProfileScreen() {
 
   useEffect(()=>{
     console.log( )
-    const json = VenueProfileHandler.getVenueProfile('AsedlTwX2fdmuN0yWiM1k4BzKFb2')
+    const json = VenueProfileHandler.getVenueProfile(`${route.params.id}`)
     console.log(json)
 
     //console.log(venueData)
@@ -237,11 +238,11 @@ export default function ProfileScreen() {
           }
 
           {btnPressed == 'newRating' &&
-            <CreateNewRating/>
+       <VenueReview id={route.params.venueId} />
           }
 
           {btnPressed == 'newEvent' &&
-            <CreateNewEvent/>
+            <CreateNewEvent _venueId_={route.params.venueId}/>
           }
 
           {
@@ -284,4 +285,6 @@ export default function ProfileScreen() {
     </View>
   );
 }
+
+export default ProfileScreen
 

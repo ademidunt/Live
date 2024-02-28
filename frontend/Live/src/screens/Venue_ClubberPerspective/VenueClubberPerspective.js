@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, Modal, Button, StyleSheet } from 'react-native';
-import VenueReview from './Reviews/VenueReview';
+import { View, Text, Image, ScrollView, TouchableOpacity, Button, StyleSheet } from 'react-native';
+import VenueReview from '../VenueProfileScreen/Reviews/VenueReview';
+import VenueClubberDetails from './VenueClubberDetails';
+import VenueClubberContact from './VenueClubberContact'
+import VenueClubberEvents from './VenueClubberEvents';
 
 const VenueClubberPerspective = ({ route, navigation }) => {
-  navigation.setOptions({title: route.params.headerTitle})
   const [showEvents, setShowEvents] = useState(false);
+  const [selectedComponent, setSelectedComponent] = useState('details');
   const [venueInfo, setVenueInfo] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     const fetchVenueInfo = async () => {
@@ -14,11 +16,12 @@ const VenueClubberPerspective = ({ route, navigation }) => {
     };
 
     fetchVenueInfo();
-  }, []); 
+    navigation.setOptions({ title: venueInfo.venueName });
+  }, []);
 
   const getVenueData = async () => {
     try {
-      const response = await fetch(`${apiUrl}/venue/${route.params.id}`, {
+      const response = await fetch(`${apiUrl}/venue/${route.params.venueId}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',
@@ -40,67 +43,69 @@ const VenueClubberPerspective = ({ route, navigation }) => {
     setShowEvents(!showEvents);
   };
 
-  const handleEventRegistration = (eventId) => {
-    // Implement logic for event registration
-    console.log(`Registered for event with ID: ${eventId}`);
+  const renderComponent = () => {
+    switch (selectedComponent) {
+      case 'details':
+        return <VenueClubberDetails info={venueInfo}/>
+      case 'contact':
+        return <VenueClubberContact info={venueInfo}/>
+      case 'events':
+        return <VenueClubberEvents id={route.params.venueId}/>
+      case 'reviews':
+        return <VenueReview id={route.params.venueId} />;
+      default:
+        return null;
+    }
+  };
+
+  const handleComponentClick = (component) => {
+    setSelectedComponent(component);
   };
 
   return (
     <ScrollView style={styles.container}>
       <Image source={{ uri: 'https://via.placeholder.com/200' }} style={styles.image} />
-      <Text style={styles.description}>{venueInfo.description}</Text>
-      <Text style={styles.address}>{venueInfo.addressLine1}</Text>
-      <Text style={styles.avgRating}>Average Rating: {venueInfo.avgRating}</Text>
+      <View style={styles.componentButtons}>
+        <TouchableOpacity
+          style={[styles.componentButton, selectedComponent === 'details' && styles.selectedComponent]}
+          onPress={() => handleComponentClick('details')}
+        >
+          <Text style={styles.componentButtonText}>Details</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.componentButton, selectedComponent === 'contact' && styles.selectedComponent]}
+          onPress={() => handleComponentClick('contact')}
+        >
+          <Text style={styles.componentButtonText}>Contact</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.componentButton, selectedComponent === 'events' && styles.selectedComponent]}
+          onPress={() => handleComponentClick('events')}
+        >
+          <Text style={styles.componentButtonText}>Events</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.componentButton, selectedComponent === 'reviews' && styles.selectedComponent]}
+          onPress={() => handleComponentClick('reviews')}
+        >
+          <Text style={styles.componentButtonText}>Reviews</Text>
+        </TouchableOpacity>
+      </View>
 
-      <TouchableOpacity onPress={toggleEvents} style={styles.showEventsButton} disabled={true}>
-        <Text style={styles.showEventsButtonText}>Show Events</Text>
-      </TouchableOpacity>
-      {showEvents && (
-        <View style={styles.eventsContainer}>
-          {/* Display upcoming events */}
-          {venueInfo.upcomingEvents.map((event) => (
-            <View key={event.id} style={styles.eventItem}>
-              <Text style={styles.eventName}>{event.name}</Text>
-              <Text style={styles.eventDate}>{event.date}</Text>
-              <Button disabled={true}
-                title="Register for Event"
-                onPress={() => handleEventRegistration(event.id)}
-              />
-            </View>
-          ))}
-        </View>
-      )}
-
-      <VenueReview id={route.params.id} />
+      {renderComponent()}
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
     backgroundColor: '#fff', // Background color
   },
   image: {
-    width: 200,
+    width: '100%', // Updated to cover the whole page
     height: 200,
     resizeMode: 'cover',
     marginBottom: 10,
-    borderRadius: 8,
-  },
-  description: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: '#9166ED', // Primary color
-  },
-  address: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  avgRating: {
-    fontSize: 16,
-    marginBottom: 10,
-    color: '#4709CD', // Secondary color
   },
   showEventsButton: {
     backgroundColor: '#4709CD', // Secondary color
@@ -129,6 +134,33 @@ const styles = StyleSheet.create({
   },
   eventDate: {
     fontSize: 14,
+    marginBottom: 5,
+  },
+  componentButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  componentButton: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  componentButtonText: {
+    color: '#9166ED',
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  selectedComponent: {
+    borderBottomColor: '#9166ED',
+    borderBottomWidth: 2,
+  },
+  eventDescription: {
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  eventSpotsLeft: {
+    fontSize: 14,
+    color: '#4709CD',
     marginBottom: 5,
   },
 });

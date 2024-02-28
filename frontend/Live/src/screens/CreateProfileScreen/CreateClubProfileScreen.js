@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View,  Button, ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { ButtonDark } from '../../components/Buttons/Button';
 
 const CreateProfileScreen = () => {
   const navigation = useNavigation();
@@ -171,9 +172,7 @@ const CreateProfileScreen = () => {
       />
       <Button title="Add Tag" onPress={handleAddTag} />
 
-        <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
-          <Text style={styles.buttonText}>Create Profile</Text>
-        </TouchableOpacity>
+        <ButtonDark title={"Create Profile"} onPress={handleCreateProfile} style={{marginBottom: 5, width: 200, alignSelf: 'center'}}/>
       </View>
     </TouchableWithoutFeedback>
     </ScrollView>

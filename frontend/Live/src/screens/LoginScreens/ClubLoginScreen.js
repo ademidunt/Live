@@ -3,6 +3,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { ButtonDark, ButtonLight } from '../../components/Buttons/Button';
 
 const LoginScreen = () => {
 
@@ -22,14 +23,10 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={handleCreateProfile}>
-        <Text style={styles.buttonText}>Create Club</Text>
-      </TouchableOpacity>
+      <ButtonDark title={"Login"} onPress={handleLogin} style={{marginBottom: 5, width: 200}}/>
+
+      <ButtonLight title={"Create Club"} onPress={handleCreateProfile} style={{marginBottom: 5, width: 200}}/>
     </View>
   );
 };

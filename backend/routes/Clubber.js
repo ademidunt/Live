@@ -1,5 +1,5 @@
 import express from 'express';
-import { getClubbers, getClubber, createClubber, updateClubber, getClubberByToken, loginClubber} from '../controllers/clubberOps.js';
+import { getClubbers, getClubber, createClubber, updateClubberWithPhoto, getClubberByToken, loginClubber, updateClubberWithoutPhoto} from '../controllers/clubberOps.js';
 
 const app = express();
 
@@ -23,13 +23,22 @@ app.post('/', async (req, res) => {
     res.send(await createClubber(clubber));
 });
 //Update a clubber
+app.post('/update/photo/:clubberId', async (req, res) => {
+    const clubber = {
+        ...req.body,
+        ...{clubberId: req.params.clubberId}
+    }
+
+    res.send(await updateClubberWithPhoto(clubber));
+});
+
 app.post('/update/:clubberId', async (req, res) => {
     const clubber = {
         ...req.body,
         ...{clubberId: req.params.clubberId}
     }
 
-    res.send(await updateClubber(clubber));
+    res.send(await updateClubberWithoutPhoto(clubber));
 });
 
 //Get clubber by api token

@@ -1,5 +1,5 @@
 import { db } from "../firebase/firebase.js";
-import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query} from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query, arrayUnion, updateDoc} from 'firebase/firestore';
 /*
 Database operations for manipulating the event collection.
 */
@@ -91,9 +91,32 @@ export async function getEventByVenueId(venueId) {
             }
             dataArr.push(data);
         });
-        console.log(dataArr);
+        const currentTime = new Date().getTime();
+
+        //Filter events based on if they are in the past
+        const filteredEvents = dataArr.filter((event) => {
+            const eventTime = new Date(event.eventdate).getTime();
+            return eventTime >= currentTime;
+        })
+        console.log(filteredEvents);
     
-        return(dataArr);
+        return(filteredEvents);
+    } catch (error) {
+        console.error("Error getting event:", error);
+        throw error; // Re-throw the error to be caught by the calling function
+    }
+}
+
+//Register a clubber for an event
+export async function registerClubberForEvent(eventId, clubberId) {
+    try {
+        const eventRef = doc(db, "Event", eventId)
+        await updateDoc(eventRef, {
+            registeredPeople: arrayUnion(clubberId)
+        })
+
+        console.log("Registered " + clubberId +  " for event with ID: " + eventId)
+
     } catch (error) {
         console.error("Error getting event:", error);
         throw error; // Re-throw the error to be caught by the calling function

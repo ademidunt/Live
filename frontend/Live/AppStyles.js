@@ -13,9 +13,8 @@ const tabNavigator={
         tabBarStyle: {
             backgroundColor: '#4709CD',
             borderTopColor: "#4709CD"
-        } 
+        },
     }
 }
-
 
 module.exports = tabNavigator;

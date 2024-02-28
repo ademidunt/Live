@@ -3,6 +3,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { ButtonDark, ButtonLight } from '../../components/Buttons/Button';
+import { H1, H2, H3 } from '../../components/Text/Text';
 
 const LoginScreen = () => {
 
@@ -22,15 +24,11 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcom to Live! Let's get started! </Text>
-      
-      <TouchableOpacity style={styles.button} onPress={handleClubberLogin}>
-        <Text style={styles.buttonText}>I am a Clubber</Text>
-      </TouchableOpacity>
+      <H2 style={{marginBottom: 50}}>Welcome to Live! Let's get started!</H2>
 
-      <TouchableOpacity style={styles.button} onPress={handleClubLogin}>
-        <Text style={styles.buttonText}>I have a Club</Text>
-      </TouchableOpacity>
+      <ButtonDark title={"I am a Clubber"} onPress={handleClubberLogin} style={{marginBottom: 5, width: 200}}/>
+
+      <ButtonLight title={"I have a Club"} onPress={handleClubLogin} style={{marginBottom: 5, width: 200}}/>
     </View>
   );
 };

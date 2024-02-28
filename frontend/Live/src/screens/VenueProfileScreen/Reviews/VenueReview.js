@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, Modal, Button, StyleSheet } from 'react-native';
 import ReviewItem from './ReviewItem';
+import NewRating from '../NewRating/NewRating';
 
 const VenueReview = ({ id }) => {
   const [reviews, setReviews] = useState([]);
-  const [showReviews, setShowReviews] = useState(false);
   const [showAddReviewModal, setShowAddReviewModal] = useState(false);
 
   useEffect(() => {
@@ -35,31 +35,28 @@ const VenueReview = ({ id }) => {
     }
   };
 
-  const toggleReviews = () => {
-    setShowReviews(!showReviews);
-  };
-
   const handleAddReview = () => {
     setShowAddReviewModal(true);
+  };
+
+  const modalClosed = () => {
+    setShowAddReviewModal(false);
+    getVenueReviews();
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <TouchableOpacity onPress={toggleReviews} style={styles.showReviewsButton}>
-          <Text style={styles.showReviewsButtonText}>{`Show Reviews (${reviews.length})`}</Text>
+        <TouchableOpacity onPress={handleAddReview} style={styles.addReviewButton}>
+          <Text style={styles.addReviewButtonText}>Add a Review</Text>
         </TouchableOpacity>
-        {showReviews && (
-          <View style={styles.reviewsContainer}>
-            {/* Display reviews */}
-            {reviews.map((review, index) => (
-              <ReviewItem key={index} review={review} />
-            ))}
-            <TouchableOpacity onPress={handleAddReview} style={styles.addReviewButton}>
-              <Text style={styles.addReviewButtonText}>Add a Review</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+
+        <View style={styles.reviewsContainer}>
+          {/* Display reviews */}
+          {reviews.map((review, index) => (
+            <ReviewItem key={index} review={review} />
+          ))}
+        </View>
 
         {/* Modal for adding a review */}
         <Modal
@@ -68,8 +65,8 @@ const VenueReview = ({ id }) => {
           onRequestClose={() => setShowAddReviewModal(false)}
         >
           <View style={styles.modalContainer}>
-            <Text>Add Review Modal</Text>
-            <Button title="Close Modal" onPress={() => setShowAddReviewModal(false)} />
+            <NewRating venueId={id} />
+            <Button title="Close Modal" onPress={() => modalClosed()} />
           </View>
         </Modal>
       </ScrollView>
@@ -80,35 +77,27 @@ const VenueReview = ({ id }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff', // Background color
+    backgroundColor: '#F0EBF3', // Background color
+    padding: 20,
+    paddingBottom: 500,
   },
   scrollView: {
     padding: 20,
+    paddingBottom: 315,
   },
-  showReviewsButton: {
+  addReviewButton: {
     backgroundColor: '#4709CD', // Secondary color
     padding: 10,
     borderRadius: 8,
-    marginVertical: 10,
+    marginBottom: 10,
   },
-  showReviewsButtonText: {
+  addReviewButtonText: {
     color: '#fff', // White text color
     textAlign: 'center',
     fontSize: 16,
   },
   reviewsContainer: {
     marginTop: 10,
-  },
-  addReviewButton: {
-    backgroundColor: '#4709CD', // Secondary color
-    padding: 10,
-    borderRadius: 8,
-    marginVertical: 10,
-  },
-  addReviewButtonText: {
-    color: '#fff', // White text color
-    textAlign: 'center',
-    fontSize: 16,
   },
   modalContainer: {
     flex: 1,

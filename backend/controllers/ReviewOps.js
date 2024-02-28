@@ -208,11 +208,18 @@ export async function addRatingToVenueList(review) {
 
     const venue = await getVenue(review.venueId)
     const newRatingsList = venue.ratings 
-    
-    newRatingsList.push(parseInt(review.rating))
 
-    updateVenueRatingsList(review.venueId, newRatingsList)
-    updateRatingsAvg(review.venueId, newRatingsList)
+    if (newRatingsList) {
+        newRatingsList.push(parseInt(review.rating))
+        updateVenueRatingsList(review.venueId, newRatingsList)
+        updateRatingsAvg(review.venueId, newRatingsList)
+    } else {
+        let newList = [review.rating]
+        updateVenueRatingsList(review.venueId, newList)
+        updateRatingsAvg(review.venueId, newList)
+    }
+
+
   
     }catch(error) {
 

@@ -5,24 +5,30 @@ import { View, Text,FlatList, TouchableOpacity, RefreshControl, StatusBar } from
 import SearchBar from '../../components/SearchBar/SearchBar';
 import FilterPill from '../../components/FilterPills/FilterPill';
 import { useFocusEffect } from '@react-navigation/native';
-import FilterDropdown from '../../components/FilterDropdown/FilterDropdown';
+import { SubtleText } from '../../components/Text/Text';
+
+import * as Location from 'expo-location';
 
 const styles = require('./SearchScreenStyles');
 
 /**
  * Controls all operations on the search screen.
  */
-export default SearchScreen = ({ onSearch }) => {
+export default SearchScreen = ({ navigation }) => {
 
   const [search, setSearch] = useState('');//The search value
   const [data, setData] = useState([]);//Manages the data displayed during the search
   const [unfilteredData, setUnfilteredData] = useState([]);//Holds raw unfiltered/searched data
   const [refreshing, setRefreshing] = useState(false);//Whether the search list is refreshing or not
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  let MY_COORDS = null;
 
   //Get data for raw data
   const getVenues = async () => {
     setRefreshing(true);
-    fetch(`http://192.168.0.116:3000/Venue`,
+    fetch(`${apiUrl}/Venue`,
     {
       method: 'GET',
       headers: {
@@ -46,6 +52,30 @@ export default SearchScreen = ({ onSearch }) => {
  useEffect(() => {
   getVenues();
  }, []);
+
+ useEffect(() => {
+   (async () => {
+     
+     let { status } = await Location.requestForegroundPermissionsAsync();
+     if (status !== 'granted') {
+       setErrorMsg('Permission to access location was denied');
+       return;
+     }
+
+     let location = await Location.getCurrentPositionAsync({});
+     setLocation(location);
+   })();
+ }, []);
+
+ let text = 'Waiting..';
+ if (errorMsg) {
+   console.log(text);
+   text = errorMsg;
+ } else if (location) {
+   text = JSON.stringify(location);
+   console.log(text);
+   MY_COORDS = text;
+ }
  
 //Refresh when focus is put on search screen.
  useFocusEffect(
@@ -65,20 +95,51 @@ export default SearchScreen = ({ onSearch }) => {
   if (s !== undefined) {
     //Search and filter data
     const filteredData = unfilteredData.filter((venue) =>
-      venue.venueName.toLowerCase().includes(s.toLowerCase())
-    );
+      venue.venueName.toLowerCase().includes(s.toLowerCase()) || (venue.description && venue.description.toLowerCase().includes(s.toLowerCase()) ||
+      (venue.tags && venue.tags.includes(s))
+    ));
 
     console.log("Filtered Data " + JSON.stringify(filteredData));
     setData(filteredData);
   }
 }
+
+function getDistance(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2 - lat1);
+  var dLon = deg2rad(lon2 - lon1); 
+  var a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2)
+      ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in km
+  if (d < 1) {// Convert to meters if less than 1 km
+    d = Math.round(d * 1000); 
+    return d + "m"; // Round to nearest integer
+  } else {
+    d = Math.round(d);
+    return d + "km";
+  }
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
 //Render filter search list item.
 const renderItem = ({ item }) => (
   <View style={{alignSelf: 'flex-start', padding: 15}}>
     <TouchableOpacity
-      onPress={()=>{navigation.navigate('Profile', {venueId:item.venueId}); console.log("club selected", item.venueId)}}>
+      onPress={()=>{navigation.navigate('VenueClubberPerspective', {venueId: item.venueId})}}>
       <Text style={{fontSize: 20, fontWeight: 'light', color: "#000"}}>{item.venueName}</Text>
       <Text style={{fontSize: 15, fontWeight: 'bold', color: '#000', marginTop: 5}}>{item.description}</Text>
+      {item.lat !== undefined && item.lon !== undefined && location !== null ? (
+        <SubtleText>{getDistance(location.coords.latitude, location.coords.longitude, item.lat, item.lon)} away</SubtleText>
+      ) : (
+        <View/>
+      )}
+      <Text></Text>
       <View style={{flexDirection: 'row'}}>
       {item.tags !== undefined ? (
         item.tags.map((tag, index)=> (
@@ -100,7 +161,6 @@ return (
         <SearchBar onSearch={(search) => onSearchClick(search)}/>
       </View>
       <View style={{height: 0.5, backgroundColor: "gray", marginTop: 15}}/>
-      <FilterDropdown items={["E", "R", "I", "C"]}/>
       <View style={{width: "100%", flex: 1}}>
       <FlatList
         style={{backgroundColor: "#ffffff"}}
