@@ -2,6 +2,7 @@
 
 # dependencies
 node_modules/
+/global.js
 
 # Expo
 .expo/
