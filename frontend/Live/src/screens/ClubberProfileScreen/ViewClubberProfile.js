@@ -56,6 +56,11 @@ const handleViewReviews = () => {
   console.log('view clubber reviws button pressed');
 };
 
+const handleViewEvents = () => {
+  navigation.navigate('ClubberEvents')
+  console.log('view clubber events button pressed')
+}
+
 const handleImagePicker = async () => {
   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -330,6 +335,11 @@ return (
 
       <TouchableOpacity style={styles.editButton} onPress={handleViewReviews}>
         <Text style={styles.editButtonText}> My Reviews
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.editButton} onPress={handleViewEvents}>
+        <Text style={styles.editButtonText}> My Events
         </Text>
       </TouchableOpacity>
     </ScrollView>
