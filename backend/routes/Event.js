@@ -1,5 +1,5 @@
 import express from 'express';
-import { getEvent, getEvents, createEvent, updateEvent, getEventByVenueId, registerClubberForEvent} from '../controllers/EventOps.js';
+import { getEvent, getEvents, createEvent, updateEvent, getEventByVenueId, registerClubberForEvent, getClubberRegisteredEvents, deregisterClubberFromEvent} from '../controllers/EventOps.js';
 
 const app = express();
 
@@ -43,4 +43,11 @@ app.put('/register/:eventId', async(req, res) => {
     res.send(await registerClubberForEvent(req.params.eventId, req.query.clubberId));
 })
 
+app.get('/clubber/:clubberId', async(req, res) => {
+    res.send (await getClubberRegisteredEvents(req.params.clubberId))
+})
+
+app.put('/deregister/:eventId', async(req, res) => {
+    res.send (await deregisterClubberFromEvent(req.params.eventId, req.query.clubberId))
+})
 export default app;

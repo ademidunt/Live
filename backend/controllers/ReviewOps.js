@@ -104,25 +104,37 @@ export async function getReviewsByClubberId(clubberId) {
 
         let dataArr = []
         async function processQuerySnap(querySnapShot) {
+        let data = {};
             
           
             for (const doc of querySnapShot.docs) {
               let reviewId = {
                 "reviewId": doc.id
               };
-          
-              let venueData = await getVenue(doc.data().venueId);
-          
-              let venueName = {
-                "reviewedVenue": venueData.venueName
-              };
-          
-              let data = {
-                ...reviewId,
-                ...venueName,
-                ...doc.data()
-              };
-          
+
+              console.log("Id: " + doc.data().venueId)
+
+
+              if (doc.data().venueId != undefined) {
+                              
+                let venueData = await getVenue(doc.data().venueId);
+            
+                let venueName = {
+                    "reviewedVenue": venueData.venueName
+                };
+
+                data = {
+                    ...reviewId,
+                    ...venueName,
+                    ...doc.data()
+                }
+              } else {
+                data = {
+                    ...reviewId,
+                    ...doc.data()
+                }
+              }
+
               console.log(JSON.stringify(reviewId))
               dataArr.push(data);
             }
