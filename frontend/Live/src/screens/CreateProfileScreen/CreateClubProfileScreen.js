@@ -116,13 +116,6 @@ const CreateProfileScreen = () => {
         />
 
   
-      <Text>Address</Text>
-        <TextInput
-          style={styles.input}
-          value={addressLine1}
-          onChangeText={(text) => setAddressLine1(text)}
-        />
-
     <MapComponent></MapComponent>
      
     <Text>Tags:</Text>
