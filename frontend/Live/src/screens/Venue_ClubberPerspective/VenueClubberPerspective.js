@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, Button, StyleSheet } from 'react-native';
-import VenueReview from '../VenueProfileScreen/Reviews/VenueReview';
+import VenueReview from './Reviews/VenueReview';
 import VenueClubberDetails from './VenueClubberDetails';
 import VenueClubberContact from './VenueClubberContact'
-import VenueClubberEvents from './VenueClubberEvents';
+import VenueClubberEvents from './Events/VenueClubberEvents';
 
 const VenueClubberPerspective = ({ route, navigation }) => {
   const [showEvents, setShowEvents] = useState(false);

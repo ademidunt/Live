@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import {  TextInput, Text, View, Pressable, TouchableOpacity, Modal } from 'react-native';
+import { TextInput, Text, View, Pressable, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import DatePicker, { getFormatedDate } from 'react-native-modern-datepicker';
-const styles = require('../VenueProfileScreenStyles');
 
-const CreateNewEvent = ({ _venueId_ }) => {
+const CreateNewEvent = ({ venueId }) => {
   const startDate = getFormatedDate(new Date(), 'YYYY/MM/DD h:m');
   const [date, setDate] = useState(startDate.toString());
   const [eventName, setEventName] = useState('');
   const [background, setBackground] = useState('');
   const [numOfPeople, setNumOfPeople] = useState(null);
-  const [open, setOpen] = useState(false); // opens and closes modal
+  const [open, setOpen] = useState(false);
   const [showInputFields, setShowInputFields] = useState(true);
   const [eventCreated, setEventCreated] = useState(false);
 
@@ -34,9 +33,8 @@ const CreateNewEvent = ({ _venueId_ }) => {
           eventdate: date,
           eventBackground: background,
           maxPeople: numOfPeople,
-          venueId: _venueId_,
+          venueId: venueId,
           registeredPeople: []
-          // Add other fields as needed
         }),
       });
 
@@ -57,75 +55,74 @@ const CreateNewEvent = ({ _venueId_ }) => {
 
   const showCreateNewEventButton = () => {
     setShowInputFields(true);
-    setEventCreated(false); // Reset the event created state
+    setEventCreated(false);
   };
 
   return (
-    <View style={styles.contactSctn}>
+    <View style={styles.container}>
       {showInputFields ? (
         <>
-          <View style={[styles.contactCtnt]}>
-            <Text style={[styles.text]}>Event Name:</Text>
-            <View style={styles.contactCtntDsply}>
-              <TextInput
-                onChangeText={(text) => setEventName(text)} style={[styles.text]}
-                placeholder='Enter Event Name...'
-                placeholderTextColor="#FFFFFF">
-              </TextInput>
-            </View>
+          <View style={styles.inputField}>
+            <Text style={styles.label}>Event Name:</Text>
+            <TextInput
+              onChangeText={(text) => setEventName(text)}
+              style={styles.input}
+              placeholder='Enter Event Name...'
+              placeholderTextColor="#FFFFFF"
+            />
           </View>
-          <View>
-            <View>
-              <TouchableOpacity onPress={handleOnPress}>
-                <View style={styles.customButton}><Text style={styles.buttonText}>Select Date</Text></View>
-              </TouchableOpacity>
-              <Modal
-                animationType='slide'
-                transparent={true}
-                visible={open}
-              >
-                <View style={styles.centeredView}>
-                  <View style={styles.modalView}>
-                    <DatePicker
-                      options={{
-                        textHeaderColor: "#4709CD",
-                        selectedTextColor: "white",
-                        mainColor: "#4709CD"
-                      }}
-                      selected={date}
-                      minimumDate={startDate}
-                      onSelectedChange={date => handleDateChange(date)}
-                    />
-                    <TouchableOpacity onPress={handleOnPress}>
-                      <Text>Close</Text>
-                    </TouchableOpacity>
-                  </View>
+          <View style={styles.inputField}>
+            <TouchableOpacity onPress={handleOnPress}>
+              <View style={styles.datePickerButton}>
+                <Text style={styles.buttonText}>Select Date</Text>
+              </View>
+            </TouchableOpacity>
+            <Modal
+              animationType='slide'
+              transparent={true}
+              visible={open}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <DatePicker
+                    options={{
+                      textHeaderColor: "#4709CD",
+                      selectedTextColor: "white",
+                      mainColor: "#4709CD"
+                    }}
+                    selected={date}
+                    minimumDate={startDate}
+                    onSelectedChange={date => handleDateChange(date)}
+                  />
+                  <TouchableOpacity onPress={handleOnPress}>
+                    <Text>Close</Text>
+                  </TouchableOpacity>
                 </View>
-              </Modal>
-            </View>
-            <View>
-              <Text style={[styles.text]}>Selected Date: </Text><Text style={{ color: "#9166ED", display: "flex", flexDirection: "row", fontSize: 20 }}>{date}</Text>
+              </View>
+            </Modal>
+            <Text style={styles.selectedDate}>Date: {date}</Text>
+          </View>
+          <View style={styles.inputField}>
+            <Text style={styles.label}>Background:</Text>
+            <View style={styles.input}>
+              <TextInput onChangeText={(text) => setBackground(text)} placeholder="Enter Info..." placeholderTextColor="#FFFFFF" />
             </View>
           </View>
-          <View style={[styles.contactCtnt]}>
-            <Text style={[styles.text]}>Background:</Text>
-            <View style={[styles.aboutCtnt, styles.aboutLctn]}><TextInput onChangeText={(text) => setBackground(text)}>Enter Info</TextInput></View>
-          </View>
-          <Text style={[styles.text]}>Number of People:</Text>
-          <View style={[styles.contactCtntDsply]}>
+          <Text style={styles.label}>Number of People:</Text>
+          <View style={styles.input}>
             <TextInput
               keyboardType="numeric"
-              style={[styles.text]}
               placeholder='Enter Number...'
               placeholderTextColor="#FFFFFF"
-              onChangeText={(text) => setNumOfPeople(text)}>
-            </TextInput>
+              onChangeText={(text) => setNumOfPeople(text)}
+            />
           </View>
-          <View style={styles.logout}>
+          <View style={styles.createButtonContainer}>
             <Pressable onPress={createEvent} style={({ pressed }) => [
               { backgroundColor: pressed ? "#9166ED" : "#4709CD" },
-              styles.logoutBtn, styles.btn]}>
-              <Text style={styles.text}>Create Event</Text>
+              styles.createButton,
+            ]}>
+              <Text style={styles.buttonText}>Create Event</Text>
             </Pressable>
           </View>
         </>
@@ -136,18 +133,129 @@ const CreateNewEvent = ({ _venueId_ }) => {
               <Text style={styles.checkmark}>✓</Text>
             </View>
           )}
-          <View style={styles.logout}>
+          <View style={styles.createAnotherEventButtonContainer}>
             <Text style={styles.text}>Event Created! Click below to create another event</Text>
             <Pressable onPress={showCreateNewEventButton} style={({ pressed }) => [
               { backgroundColor: pressed ? "#9166ED" : "#4709CD" },
-              styles.logoutBtn, styles.btn]}>
-              <Text style={styles.text}>Create New Event</Text>
+              styles.createAnotherEventButton,
+            ]}>
+              <Text style={styles.buttonText}>Create New Event</Text>
             </Pressable>
           </View>
         </View>
       )}
     </View>
-  )
-}
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    padding: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#1E1E1E',
+    width: '100%',
+
+  },
+  inputField: {
+    flex: 1,
+    marginBottom: 10,
+    width: '100%',
+    color: '#FFFFFF'
+  },
+  input: {
+    borderWidth: 2,
+    borderColor: '#6A2EEB',
+    borderRadius: 8,
+    padding: 15,  // Increased padding for wider input fields
+    backgroundColor: '#404040',
+    color: '#FFFFFF',
+    marginBottom: 10,
+    width: '100%',  // Set width to 100%
+  },
+  label: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    marginBottom: 15,
+    textAlign: 'center'
+  },
+  selectedDate: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    marginBottom: 5,
+    textAlign: 'center'
+  },
+  datePickerButton: {
+    backgroundColor: '#4709CD',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: '96%',
+    height: '70%'
+  },
+  createButtonContainer: {
+    marginTop: 20,
+    width: '100%',
+  },
+  createButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#4709CD',
+    borderWidth: 2,
+    borderRadius: 10,
+    paddingVertical: 15,
+  },
+  eventCreatedContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  checkmarkContainer: {
+    marginBottom: 10,
+    color: '#FFFFFF',
+    fontSize: 30
+  },
+  createAnotherEventButtonContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+    width: '100%',
+  },
+  createAnotherEventButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#4709CD',
+    borderWidth: 2,
+    borderRadius: 10,
+    paddingVertical: 15,
+  },
+  text: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    marginBottom: 10,
+  },
+});
 
 export default CreateNewEvent;

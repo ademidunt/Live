@@ -1,5 +1,5 @@
 const webHandler =  require('./webHandler')
-const APIROUTE = 'Venue/';
+const APIROUTE = 'venue/';
 
 const getVenueProfiles = async function() {
     //AsedlTwX2fdmuN0yWiM1k4BzKFb2
@@ -18,7 +18,8 @@ const getVenueProfile = async (id) =>{
     //AsedlTwX2fdmuN0yWiM1k4BzKFb2
     try {
         const json =  await webHandler.get(`${APIROUTE}${id}`);
-        return json;
+        const venueData = JSON.parse(json)
+        return venueData;
     }
     catch(err){
 
@@ -40,6 +41,5 @@ module.exports = {
     getVenueProfile,
     getVenueProfiles,
     getVenueReviews
-
 }
 
