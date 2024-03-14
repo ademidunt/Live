@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import { Modal,Text, TouchableOpacity, View, StyleSheet, Button, Platform } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-export const ModalPicker = ({selectableValues, defaultValue}) => {
+export const ModalPicker = ({selectableValues, defaultValue, onValueChange, style}) => {
+  console.log(defaultValue,selectableValues)
   const [pickerVisible, setPickerVisible] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(defaultValue.toString());
+  const [selectedValue, setSelectedValue] = useState(defaultValue? defaultValue:selectableValues[0]);
 
 //   const numbers = Array.from({ length: 20 }, (_, i) => `${i + 1}`);
 
   return (
     <View style={styles.container}>
-      <Button title={selectedValue} onPress={() => setPickerVisible(true)} />
+      <Button title={"yes"} onPress={() => setPickerVisible(true)} />
       <Modal
         animationType="slide"
         transparent={true}
@@ -23,11 +24,11 @@ export const ModalPicker = ({selectableValues, defaultValue}) => {
           <View style={styles.modalView}>
             <Picker
               selectedValue={selectedValue}
-              style={{ height: 200, width: 150 }}
-              onValueChange={(itemValue) => setSelectedValue(itemValue)}
+              style={style? style:{ height: 200, width: 200 }}
+              onValueChange ={(itemValue, itemIndex) => {setSelectedValue(selectableValues[itemIndex]); console.log("clubSelected",selectableValues[itemIndex]); onValueChange(itemIndex);}}
             >
-              {selectableValues.map((number) => (
-                <Picker.Item key={number} label={number} value={number} />
+              {selectableValues.map((item) => (
+                <Picker.Item key={item.value} label={item.label} value={item.value} />
               ))}
             </Picker>
             <Button title="Done" onPress={() => setPickerVisible(false)} />
