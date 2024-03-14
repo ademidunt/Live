@@ -8,24 +8,22 @@ import { H2, H3, P } from '../Text/Text.js';
 
 const {width, height } = Dimensions.get("window")
 
-const ASPECT_RATIO = width/ height
-const LATITUDE_DELTA = 0.02;
-const LONGITUDE_DELTA = LATITUDE_DELTA *ASPECT_RATIO;
+//for setting up API
 const INITIAL_LAT = 43.009953;
 const INITIAL_LNG = -81.273613;
-const INITIAL_POSITION= {
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-};
 
-export default function MapComponent() {
-
+export default function MapComponent({updateAddress}) {
 
   const [searchText, setSearchText] = useState("");
   const [data,setData] = useState()
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [ mapRegion, setMapRegion ] = useState( {
+    latitude: 43.0096,
+    longitude: -81.2737,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+
+  })
   const [showDropdown, setShowDropdown] = useState(false);
   const mapKey = useRef(1);
 
@@ -41,8 +39,6 @@ export default function MapComponent() {
     try{
       const resp = await fetch (url)
       const json = await resp.json()
-      var places = []
-   
 
       if (json && json.results){
         const placesData = json.results.map(item => ({
@@ -54,66 +50,52 @@ export default function MapComponent() {
         setShowDropdown(true);
     }}catch(e){
       console.error(e)
-      
-
     }
   };
 
-  const handleSelectAddress = (address, latitude, longitude) => {
+  const handleSelectAddress = (address) => {
+    //show text in search bar
     setSearchText(address);
+    //cleardropdownItems
     setShowDropdown(false);
-    setSelectedLocation({ latitude, longitude });
-    console.log(latitude,longitude)
-    mapKey.current += 1;
+ 
   };
 
   return (
    
     <View style={styles.container}>
     <View style={styles.searchBox}>
-      <Text style={styles.searchBoxLabel}>Find Address</Text>
+      <P>Address</P>
       <TextInput
         style={styles.searchBoxField}
         onChangeText={(text) => {
           setSearchText(text);
         }}
         value={searchText}
-        placeholder="Enter address"
+        placeholder="Search Venue"
         autoCapitalize="sentences"
         onSubmitEditing={searchAddress} // Trigger search when return key is pressed
       />
 
-    </View>
-   
+    </View>   
     {showDropdown && (
         <View style={styles.dropdownContainer}>
         {data.map((item, index) => (
           <TouchableOpacity
             key={index}
             style={styles.dropdownItem}
-            onPress={() => handleSelectAddress(item.address, item.longitude, item.latitude)}
+            onPress={
+              () => {
+                updateAddress(item.address, item.longitude, item.latitude),
+                handleSelectAddress(item.address)
+              }
+            }
           >
             <P>{item.address}</P>
           </TouchableOpacity>
         ))}
       </View>
       )}
-    <MapView
-      key={mapKey.current}
-      style={styles.map}
-      provider={PROVIDER_GOOGLE}
-      initialRegion={INITIAL_POSITION}
-    >
-       {selectedLocation && (
-          <Marker
-            coordinate={{
-              latitude: selectedLocation.latitude,
-              longitude: selectedLocation.longitude,
-            }}
-            title={searchText}
-          />
-        )}
-    </MapView>
   </View>
 );
 }
@@ -126,18 +108,24 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 300, // Adjust the height as per your requirement
   },
-  searchBox: {
-  
-   
-      // borderColor: "#aaa",
-      // backgroundColor: "white",
-      // padding: 8,
-      // alignSelf: "center",
-      // marginTop: 20,
-
+  buttonTwo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#4709CD',
   },
+  buttonTwoText: {
+    color: '#4709CD',
+    fontSize: 16,
+  },
+
   searchBoxField: {
     height: 40,
+    borderRadius: 4,
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 10,
@@ -157,7 +145,6 @@ const styles = StyleSheet.create({
 
   },
   buttonLabel: {
-    // fontSize: 14,
     backgroundColor: "Red",
 
   },
@@ -179,8 +166,14 @@ const styles = StyleSheet.create({
     backgroundColor: '(189, 195, 199, 0.5)'
   },
   dropdownItem: {
-      fontSize: 24,
-      fontWeight: 'regular',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    marginBottom:10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#4709CD',
   },
 
 });
