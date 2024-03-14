@@ -11,8 +11,8 @@
 //global.apiUrl = 'http://192.168.253.50:3000'
 
 //thi ipadress
-//global.apiUrl = 'http://192.168.1.119:3000'
+global.apiUrl = 'http://192.168.1.119:3000'
 //debug
 
 //thi hotspot
-global.apiUrl = 'http://172.20.10.6:3000'
+//global.apiUrl = 'http://172.20.10.6:3000'
