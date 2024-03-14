@@ -52,11 +52,19 @@ export default function MapComponent({updateAddress}) {
       console.error(e)
     }
   };
+  
 
-  const handleSelectAddress = (address) => {
+  const handleSelectAddress = (address, lat, lon) => {
+    console.log("og map region", mapRegion)
     //show text in search bar
     setSearchText(address);
-    //cleardropdownItems
+    //updateMapview 
+    setMapRegion({
+      "latitude": lat,
+      "longitude": lon,
+      "latitudeDelta": 0.0500,
+      "longitudeDelta": 0.00421,}
+      )
     setShowDropdown(false);
  
   };
@@ -78,6 +86,21 @@ export default function MapComponent({updateAddress}) {
       />
 
     </View>   
+    <MapView 
+      region={mapRegion}
+      style={styles.map}
+      provider={PROVIDER_GOOGLE}
+      
+    >
+      <Marker
+          coordinate={{
+            latitude: mapRegion.latitude,
+            longitude: mapRegion.longitude,
+          }}
+          title="Your Marker Title"
+          description="Your Marker Description"
+        />
+        </MapView>
     {showDropdown && (
         <View style={styles.dropdownContainer}>
         {data.map((item, index) => (
@@ -87,7 +110,7 @@ export default function MapComponent({updateAddress}) {
             onPress={
               () => {
                 updateAddress(item.address, item.longitude, item.latitude),
-                handleSelectAddress(item.address)
+                handleSelectAddress(item.address, item.latitude, item.longitude)
               }
             }
           >
