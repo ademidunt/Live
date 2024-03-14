@@ -260,6 +260,16 @@ const saveToDatabaseNoPhoto = async () => {
 const handleFieldChange = (field, value) => {
   setEditableFields((prevFields) => ({ ...prevFields, [field]: value }));
 };
+ 
+const handleLogout = async () => {
+  try {
+      await clearToken(); // clearToken clears the token
+      navigation.navigate('Login'); // Navigate to the login screen
+  } catch (error) {
+      console.error('Failed to logout:', error);
+      // Handle logout failure, show a message to the user, etc.
+  }
+};
 
 const deleteImage = async () => {
 
@@ -342,6 +352,9 @@ return (
         <Text style={styles.editButtonText}> My Events
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.editButton} onPress={handleLogout}>
+                    <Text style={styles.editButtonText}>Logout</Text>
+                </TouchableOpacity>
     </ScrollView>
   </KeyboardAvoidingView>
 );
