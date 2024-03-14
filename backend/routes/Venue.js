@@ -10,7 +10,7 @@ app.get('/', async (req, res) => {
     res.send(await getVenues());
 });
 
-app.get('/feed/doc', async (req, res) => {
+app.post('/feed/doc', async (req, res) => {
     const limit = req.body.limit;
     const usrLat = req.body.lat;
     const usrLon = req.body.lon;

@@ -122,3 +122,64 @@ export async function registerClubberForEvent(eventId, clubberId) {
         throw error; // Re-throw the error to be caught by the calling function
     }
 }
+
+//Get event by clubberId
+export async function getClubberRegisteredEvents(clubberId) {
+    try {
+        const eventRef = collection(db, "Event");
+        const q = query(eventRef, where("registeredPeople", "array-contains", clubberId));
+        const querySnap = await getDocs(q);
+
+        let dataArr = []
+        querySnap.forEach((doc) => {
+            let docId = {
+                "eventId": doc.id
+            }
+            let data = {
+                ...docId,
+                ...doc.data()
+            }
+            dataArr.push(data);
+        });
+        const currentTime = new Date().getTime();
+
+        //Filter events based on if they are in the past
+        const filteredEvents = dataArr.filter((event) => {
+            const eventTime = new Date(event.eventdate).getTime();
+            return eventTime >= currentTime;
+        })
+        console.log(filteredEvents);
+    
+        return(filteredEvents);
+    } catch (error) {
+        console.error("Error getting event:", error);
+        throw error; // Re-throw the error to be caught by the calling function
+    }
+}
+
+export async function deregisterClubberFromEvent(eventId, clubberId) {
+    try {
+        const eventRef = doc(db, "Event", eventId);
+        const eventSnap = await getDoc(eventRef)
+
+        const currentClubbersRegistered = eventSnap.data().registeredPeople
+
+        const modifiedClubbers = removeValueFromArray(currentClubbersRegistered, clubberId)
+
+        await updateDoc(eventRef, {
+            registeredPeople: modifiedClubbers
+        })
+
+        console.log('Clubber deregisted successfully')
+    } catch (error) {
+        console.error("Error deregistering clubber: ", error)
+    }
+}
+
+function removeValueFromArray (array, valueToRemove) {
+    const index = array.indexOf(valueToRemove);
+    if (index !== -1) {
+      array.splice(index, 1);
+    }
+    return array;
+}

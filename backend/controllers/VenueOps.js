@@ -158,7 +158,7 @@ export async function loginVenue(email, password) {
         throw error;
     }
 }
-
+//Gets a fixed number of venues by proximity to the users coordinates.
 export async function getVenuesFeed(limit, usrLat, usrLon) {
     try {
         const querySnapshot = await getDocs(collection(db, "Venue"));

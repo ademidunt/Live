@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const EventItem = ({ event, _clubberId_ }) => {
+const EventItem = ({ event, _clubberId_}) => {
   const { eventBackground, name, eventdate, maxPeople, registeredPeople, eventId } = event;
   const [registrationStatus, setRegistrationStatus] = useState(registeredPeople.includes(_clubberId_) ? 'registered' : 'unregistered');
 
