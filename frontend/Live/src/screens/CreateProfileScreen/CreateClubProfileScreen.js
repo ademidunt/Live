@@ -24,6 +24,7 @@ const CreateProfileScreen = () => {
   const [url, setUrl] = useState('')
 
 
+
   const handleImagePicker = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -52,6 +53,35 @@ const CreateProfileScreen = () => {
     }
   };
 
+  const updateDatabase = async (newURL) => {
+    const userData = {
+      venueName,
+      address, 
+      lat,
+      lon,
+      email,
+      password,
+      description,
+      tags,
+      newURL,
+    };
+    console.log(`new session`);
+    fetch(`${apiUrl}/venue/`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          console.log(`added to the database successfully`);
+          navigation.navigate('ReloginClub');
+        } else {
+          console.log(`something went wrong ${JSON.stringify(res)}`);
+        }
+      });
+  };
 
   async function uploadImage (uri) {
     const response = await fetch(uri);
@@ -90,40 +120,11 @@ const CreateProfileScreen = () => {
    }        
 
     const newURL = await uploadImage(selectedImage.uri)
+    
+    console.log("The new url is" + newURL)
 
     //should probably add something that catches when the email is already in the adatabse and makes an alert
-    const updateDatabase = async (newURL) => {
-      const userData = {
-        venueName,
-        address, 
-        lat,
-        lon,
-        email,
-        password,
-        description,
-        tags,
-        newURL,
-      };
-      console.log(`new session`);
-      fetch(`${apiUrl}/venue/`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      })
-        .then(async (res) => {
-          if (res.ok) {
-            console.log(`added to the database successfully`);
-            navigation.navigate('ReloginClub');
-          } else {
-            console.log(`something went wrong ${JSON.stringify(res)}`);
-          }
-        });
-    };
-
-    updateDatabase();
-    console.log('User Data:', userData);
+    
   };
 
   const updateAddressClick = (address, longitude,latitude) => {
@@ -144,6 +145,9 @@ const CreateProfileScreen = () => {
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
+
+  
+
 
   return (
     
