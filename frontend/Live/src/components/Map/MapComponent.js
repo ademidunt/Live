@@ -68,7 +68,6 @@ export default function MapComponent({updateAddress}) {
     setShowDropdown(false);
  
   };
-
   return (
    
     <View style={styles.container}>
