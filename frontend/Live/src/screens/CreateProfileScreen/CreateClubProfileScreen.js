@@ -91,23 +91,19 @@ const CreateProfileScreen = () => {
 
     const newURL = await uploadImage(selectedImage.uri)
 
-    const userData = {
-      venueName,
-      address, 
-      lat,
-      lon,
-      email,
-      password,
-      description,
-      tags,
-      newURL
-    };
-
-
-  
-
     //should probably add something that catches when the email is already in the adatabse and makes an alert
-    const updateDatabase = async () => {
+    const updateDatabase = async (newURL) => {
+      const userData = {
+        venueName,
+        address, 
+        lat,
+        lon,
+        email,
+        password,
+        description,
+        tags,
+        newURL,
+      };
       console.log(`new session`);
       fetch(`${apiUrl}/venue/`, {
         method: 'POST',
