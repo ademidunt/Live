@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View,  Button, ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
+import { View,  Image, Button, ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ButtonDark } from '../../components/Buttons/Button';
 import MapComponent from '../../components/Map/MapComponent';
@@ -19,6 +19,7 @@ const CreateProfileScreen = () => {
   const [password, setpassword] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [tagInput, setTagInput] = useState('');
 
   const handleImagePicker = async () => {
