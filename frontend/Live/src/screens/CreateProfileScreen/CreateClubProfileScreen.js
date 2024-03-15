@@ -3,7 +3,11 @@ import { View,  Button, ScrollView, KeyboardAvoidingView, Text, TextInput, Touch
 import { useNavigation } from '@react-navigation/native';
 import { ButtonDark } from '../../components/Buttons/Button';
 import MapComponent from '../../components/Map/MapComponent';
-import {P} from '../../components/Text/Text.js'
+import {P} from '../../components/Text/Text.js';
+import * as ImagePicker from 'expo-image-picker';
+import { ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
+import { storage, } from "../../firebase/firebase.js";
+
 
 const CreateProfileScreen = () => {
   const navigation = useNavigation();
@@ -137,8 +141,16 @@ const CreateProfileScreen = () => {
         placeholder="Add tags one by one"
       />
 
+      <Text>Profile Picture:</Text>
+        <View>
+          {selectedImage && (
+            <Image source={selectedImage} style={{ width: 200, height: 200 }} />
+          )}
+          <Button title="Select Image" onPress={() => { handleImagePicker(); }} />
+        </View>
         <ButtonDark title={"Create Profile"} onPress={handleCreateProfile} style={{marginBottom: 5, width: 200, alignSelf: 'center'}}/>
       </View>
+
     </TouchableWithoutFeedback>
     </ScrollView>
     </KeyboardAvoidingView>
