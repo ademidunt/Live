@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal,Text, TouchableOpacity, View, StyleSheet, Button, Platform } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-export const ModalPicker = ({selectableValues, defaultValue, onValueChange, style}) => {
+export const ModalPicker = ({selectableValues, defaultValue, onValueChange, style, renderItem}) => {
   console.log(defaultValue,selectableValues)
   const [pickerVisible, setPickerVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState(defaultValue? defaultValue:selectableValues[0]);
@@ -20,7 +20,8 @@ export const ModalPicker = ({selectableValues, defaultValue, onValueChange, styl
           setPickerVisible(!pickerVisible);
         }}
       >
-        <View style={styles.centeredView}>
+        {renderItem}
+        {/* <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Picker
               selectedValue={selectedValue}
@@ -33,7 +34,7 @@ export const ModalPicker = ({selectableValues, defaultValue, onValueChange, styl
             </Picker>
             <Button title="Done" onPress={() => setPickerVisible(false)} />
           </View>
-        </View>
+        </View> */}
       </Modal>
     </View>
   );

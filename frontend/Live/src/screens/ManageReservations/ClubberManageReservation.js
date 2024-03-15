@@ -172,6 +172,21 @@ const ClubberManageReservation = () => {
       </View>
     );
 
+    // const renderTest = () => {
+    //   return(<Text>Test Works</Text>);
+    // };
+
+    const renderTest = () => {
+      return (
+        <View>
+          {/* Pass components as props */}
+          <CustomComponent>
+            <Text>This is a text component rendered inside CustomComponent</Text>
+          </CustomComponent>
+        </View>
+      );
+    };
+        
     
     // const renderFooter = () => {
     //   if (!loading) return null;
@@ -186,7 +201,7 @@ const ClubberManageReservation = () => {
         <Text style={styles.title}>Clubber Management Reservation</Text>
         <View style={styles.visualContainer}>
             <Text>You are booking a resrvation at:</Text>
-            <ModalPicker selectableValues={clubList} defaultValue={clubList[1]} onValueChange={handleValueChange} style={{ height: 200, width: 200 }}/>
+            <ModalPicker selectableValues={clubList} defaultValue={clubList[1]} onValueChange={handleValueChange} style={{ height: 200, width: 200 }} renderItem={renderTest}/>
             <Text>How many guest are you expecting? </Text>
             {/* <ModalPicker selectableValues={[0,1,2,3,4,5]} defaultValue={0}/> */}
             <ButtonDark title={"Submit"} style={{marginBottom: 5, width: 200}}/>
