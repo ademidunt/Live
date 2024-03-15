@@ -21,6 +21,8 @@ const CreateProfileScreen = () => {
   const [tags, setTags] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [tagInput, setTagInput] = useState('');
+  const [url, setUrl] = useState('')
+
 
   const handleImagePicker = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -81,12 +83,13 @@ const CreateProfileScreen = () => {
     );
   
   }
-
-  const handleCreateProfile = () => {
+  const handleCreateProfile = async () => {
     if (!venueName || !email || !password || !description || !address|| !lat|| !lon) {
       Alert.alert('Incomplete profile!', 'Please fill in all fields to create a profile.');
       return;
-    }        
+   }        
+
+    const newURL = await uploadImage(selectedImage.uri)
 
     const userData = {
       venueName,
@@ -97,6 +100,7 @@ const CreateProfileScreen = () => {
       password,
       description,
       tags,
+      newURL
     };
 
 
