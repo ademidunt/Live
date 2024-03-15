@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 
 
 const VenueProfileScreen = ({ route }) => {
-
+//added for navigation
   const navigation = useNavigation();
   
   const [selectedComponent, setSelectedComponent] = useState('about');
