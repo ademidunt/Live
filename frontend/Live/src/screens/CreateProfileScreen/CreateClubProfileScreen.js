@@ -51,6 +51,36 @@ const CreateProfileScreen = () => {
   };
 
 
+  async function uploadImage (uri) {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const storageRef = ref(storage, "images/" + new Date().getTime());
+   
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+   
+    // listen for events
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        // setProgress(progress.toFixed());
+      },
+      (error) => {
+        // handle error
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+         await updateDatabase(downloadURL)
+         console.log("File available at", downloadURL);      
+         return url
+          // save record
+        
+        });
+      },
+    );
+  
+  }
 
   const handleCreateProfile = () => {
     if (!venueName || !email || !password || !description || !address|| !lat|| !lon) {
