@@ -39,6 +39,36 @@ const CreateProfileScreen = () => {
       tags,
     };
 
+
+    const handleImagePicker = async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  
+      if (status !== 'granted') {
+        console.log('Permission to access media library denied');
+        return;
+      }
+  
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images, // here it is where we specify the allow format
+        allowsEditing: true,
+        aspect: [3, 4],
+        quality: 1,
+      });
+  
+      if (!result.canceled) {
+        // console.log(JSON.stringify(result))
+        setSelectedImage({ uri: result.assets[0].uri })
+  
+        // console.log("image uri is", result.assets[0].uri )
+        // await uploadImage(result.assets[0].uri, "image");
+  
+        //upload image 
+  
+        // console.log(profilePicture)
+      }
+    };
+  
+
     //should probably add something that catches when the email is already in the adatabse and makes an alert
     const updateDatabase = async () => {
       console.log(`new session`);
