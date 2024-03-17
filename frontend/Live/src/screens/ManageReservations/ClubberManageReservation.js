@@ -3,16 +3,20 @@ import { View, Text, TextInput, FlatList, Button, StyleSheet, ScrollView, Activi
 import { retrieveUID, retrieveUserType } from '../../handlers/authService';
 import { ButtonDark } from '../../components/Buttons/Button';
 import { SearchBar } from '../../components/SearchBar/SearchBar';
-import { ModalPicker } from '../../components/Picker/Picker';
+import { ModalPicker } from '../../components/Picker/ModalPicker';
+import { ConfirmationModal} from '../../components/Modals/ConfirmationModal';
 
 const ClubberManageReservation = () => {
     const [reservationRequests, setReservationRequests] = useState([]);
     const [userType, setUserType] = useState('');
     const [UID, setUID] = useState('');
     const [page, setPage] = useState(1);
-    const [hasNextPage, setHasNextPage] = useState(true);
+    // const [hasNextPage, setHasNextPage] = useState(true);
     const [clubList, setClubList] = useState([])
     const [selectedClub, setSelectedClub] = useState(null);
+    const [numOfGuests, setNumOfGuests] = useState(0)
+    const [numOfGuestList, setNumOfGuestsList] = useState(null)
+    const [submitButtonTitle, setSubmitButtonTitle] = useState("Submit")
 
     //const [loading, setLoading] = useState(false);
 
@@ -22,15 +26,12 @@ const ClubberManageReservation = () => {
         const retrievedUserType = await retrieveUserType();
         const retrievedUID = await retrieveUID();
         setUID(retrievedUID)
-        // retrieveUID = "terkdgiBIHhztW1Q9NHKWIuNd7H2"
-        // retrievedUserType = "clubber"
 
         setUserType(retrievedUserType);
         setUID(retrievedUID);
-        console.log(UID)
 
-        console.log('User type retrieved successfully:', retrievedUserType);
-        console.log('UID retrieved successfully:', retrievedUID);
+        // console.log('User type retrieved successfully:', retrievedUserType);
+        // console.log('UID retrieved successfully:', retrievedUID);
   
         // Fetch reservation requests from the server using fetch API
         const response = await fetch(`${apiUrl}/booking/clubber/${retrievedUID}`);
@@ -42,16 +43,24 @@ const ClubberManageReservation = () => {
         // Transform the data for the Modal picker
         const modalPickerClubList = venueListData.map(item => ({
           label: item.venueName,
-          value: item.venueId,
+          value: item.venueId
+        }));
+
+        // Transform the data for the Modal picker
+        const maxNumOfGuestList = [2,3,4,5,6,7,8,9,10,11,12].map(item => ({
+          label: item,
+          value: item
         }));
 
         setReservationRequests(data);
         setClubList(modalPickerClubList);
+        setNumOfGuestsList(maxNumOfGuestList)
+
 
         console.log("Reservation Data retrieved")
           // Append new data to existing data
-        setPage(page => page + 1);
-        setHasNextPage(data.length > 0); // Check if there's more data to fetch
+        // setPage(page => page + 1);
+        // setHasNextPage(data.length > 0); // Check if there's more data to fetch
 
       } catch (error) {
         console.error('Error retrieving user type and UID:', error);
@@ -64,22 +73,33 @@ const ClubberManageReservation = () => {
       fetchData();
     }, []);
 
-    const handleNextPage = () => {
-      fetchData();
-    };
+    // const handleNextPage = () => {
+    //   fetchData();
+    // };
 
-    const handlePreviousPage = () => {
-      if (page > 1) {
-        setReservationRequests([]); // Clear existing data
-        setPage(page => page - 1);
-        fetchData();
-      }
-    };
+    // const handlePreviousPage = () => {
+    //   if (page > 1) {
+    //     setReservationRequests([]); // Clear existing data
+    //     setPage(page => page - 1);
+    //     fetchData();
+    //   }
+    // };
 
-    const handleValueChange = (valueIndex) => {
+    const onClubValueChange = (valueIndex) => {
       console.log("retrieved clubID:", clubList[valueIndex]);
-      setSelectedClub( clubList[valueIndex].value);
+      setSelectedClub( clubList[valueIndex]);
     };
+    const onNumOfGuestsValueChange = (valueIndex) => {
+      console.log("retrieved numOfGuest:", numOfGuestList[valueIndex]);
+      setNumOfGuests(numOfGuestList[valueIndex]);
+    };
+
+    const onSubmitConfirmation = (submit) => {
+      if(submit){
+        sendReservationRequest()
+      }
+    }
+    
  // Helper function to format timestamp to a readable date string
     const formatDate = (timestampObject) => {
       if (!timestampObject || !timestampObject.seconds) {
@@ -107,106 +127,83 @@ const ClubberManageReservation = () => {
       const retrievedUID = await retrieveUID();
 
       const reservationRequest =  {
-        venueId,
+        venueId:selectedClub.value,
         clubberId: retrievedUID ,
-        numAttendees,
-        date,
+        numAttendees:numOfGuests.label,
+        //date:Date.now(),
         status: "pending"
       }
 
-      try {
-  
-        const sendReservationRequest = await fetch(`${apiUrl}/booking/${retrievedUID}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(reservationRequest),
-        });
+      console.log(reservationRequest);
 
-      }catch(error){
-        console.log("Unable to send reservation request")
+      if(numOfGuests.label== null || numOfGuests.label == undefined || selectedClub.value == null || selectedClub.value == undefined){
+        console.log('missing fields');
+      }else{
+        try {
+        
+
+          const sendReservationRequest = await fetch(`${apiUrl}/booking/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reservationRequest),
+          });
+  
+          //console.log('Raw server response:'+ JSON.stringify(sendReservationRequest));
+          // Check if the update was successful
+          if (sendReservationRequest.ok) {
+          console.log(`Reservation made successfully`);
+          // Fetch the updated reservation requests after the action is completed
+          fetchData();
+
+        } else {
+          setSubmitButtonTitle("Error")
+          console.error(`Error ${action}ing reservation. Status: ${updateResponse.status}`);
+        }
+  
+        }catch(error){
+          console.log("Unable to send reservation request")
+          setSubmitButtonTitle("Error")
+        }
       }
     }
 
-    // const handleAction = async (item, reservationId, action) => {
-    //   try {
-    //     // Update the status field based on the action
-    //     const updatedItem = {
-    //       ...item,
-    //       status: action === 'accept' ? 'accepted' : 'rejected',
-    //     };
-    
-    //     // Send a request to the server to update the reservation status
-    //     const updateResponse = await fetch(`${apiUrl}/booking/${reservationId}`, {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify(updatedItem),
-    //     });
-    
-    //     console.log('Raw server response:'+ JSON.stringify(updateResponse));
-    //     // Check if the update was successful
-    //     if (updateResponse.ok) {
-    //     console.log(`Reservation ${reservationId} ${action}ed successfully`);
-    //     // Fetch the updated reservation requests after the action is completed
-    //     fetchData();
-    //   } else {
-    //     console.error(`Error ${action}ing reservation. Status: ${updateResponse.status}`);
-    //   }
-  
-    //   } catch (error) {
-    //     console.error(`Error ${action}ing reservation:`, error);
-    //   }
-    // };
-    
+    const getClubNameFromID = (ID) =>{
+      return clubList.find(c => c.value === ID)?.label
+    }
 
 
     const renderItem = ({ item }) => (
-      <View style={styles.reservationContainer}>
+      <View style={styles.reservationRequestContainer}>
+        <Text>{`Club: ${getClubNameFromID(item.venueId)}`}</Text>
         <Text>{`Booking Date: ${formatDate(item.bookingDate)}`}</Text>
-        <Text>{`Target Date: ${formatDate(item.targetDate)}`}</Text>
+        {/* <Text>{`Target Date: ${formatDate(item.targetDate)}`}</Text> */}
         <Text>{`Status: ${item.status}`}</Text>
         <Text>{`Number of Attendees: ${item.numAttendees}`}</Text>
       </View>
     );
 
-    // const renderTest = () => {
-    //   return(<Text>Test Works</Text>);
-    // };
-
-    const renderTest = () => {
-      return (
-        <View>
-          {/* Pass components as props */}
-          <CustomComponent>
-            <Text>This is a text component rendered inside CustomComponent</Text>
-          </CustomComponent>
-        </View>
-      );
-    };
-        
-    
-    // const renderFooter = () => {
-    //   if (!loading) return null;
-    //   return <ActivityIndicator />;
-    // };
-  
-    const clubberName =  "Club Name"
-    //console.log(clubList)
 
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Clubber Management Reservation</Text>
         <View style={styles.visualContainer}>
+          <View style={styles.reservationContainer}>
             <Text>You are booking a resrvation at:</Text>
-            <ModalPicker selectableValues={clubList} defaultValue={clubList[1]} onValueChange={handleValueChange} style={{ height: 200, width: 200 }} renderItem={renderTest}/>
+            <ModalPicker buttonStyle={"ButtonLight"} buttonTitle={ selectedClub?selectedClub.label:"Change Club"} selectableValues={clubList} defaultValue={selectedClub} onValueChange={onClubValueChange} style={{ height: 200, width: 200 }}/>
             <Text>How many guest are you expecting? </Text>
-            {/* <ModalPicker selectableValues={[0,1,2,3,4,5]} defaultValue={0}/> */}
-            <ButtonDark title={"Submit"} style={{marginBottom: 5, width: 200}}/>
+            <ModalPicker buttonStyle={"ButtonLight"} buttonTitle={ `${numOfGuests?numOfGuests?.label:"Select Number"}`} selectableValues={numOfGuestList} defaultValue={0} onValueChange={onNumOfGuestsValueChange} style={{ height: 200, width: 200 }}/>
+            {/* <ButtonDark  onPress={() => sendReservationRequest()} title={"Submit"} style={{marginBottom: 5, width: 200}}/> */}
+            <ConfirmationModal  buttonStyle={"ButtonDark"} buttonTitle={submitButtonTitle} onSubmitAction={onSubmitConfirmation}/>
+        
+          </View>
+            {/* <Text>How many guest are you expecting? </Text> */}
+            {/* <ModalPicker buttonTitle={ `${numOfGuests?numOfGuests?.label:"Select Number"}`} selectableValues={numOfGuestList} defaultValue={0} onValueChange={onNumOfGuestsValueChange} style={{ height: 200, width: 200 }}/> */}
+            {/* <ButtonDark  onPress={() => sendReservationRequest()} title={"Submit"} style={{marginBottom: 5, width: 200}}/> */}
+            {/* <ConfirmationModal buttonStyle={"ButtonDark"} buttonTitle={"Submit"} onSubmitAction={onSubmitConfirmation}/> */}
         </View>
-        <View style={styles.visualContainer}>
+        <View style={[styles.visualContainer,{flex:2}]}>
         <Text>Your resrvations</Text>
         {/* <SearchBar onSearch={(search) => console.log(search)}/> */}
             {/* <TextInput
@@ -218,13 +215,14 @@ const ClubberManageReservation = () => {
                 <FlatList
                 data={reservationRequests}
                 keyExtractor={(item, index) => (item && item.bookingId ? item.bookingId : index.toString())}
-                onEndReached={fetchData}
-                onEndReachedThreshold={0.5}
+                // onEndReached={fetchData}
+                // onEndReachedThreshold={0.5}
                 renderItem={renderItem}
                // ListFooterComponent={renderFooter}
                 />
             </ScrollView>
-            
+            <ButtonDark  onPress={() => fetchData()} title={"Refresh"} style={{marginBottom: 5, width: 200}}/>
+
           {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
             <Button title="Previous Page" onPress={handlePreviousPage} disabled={page === 1} />
             <Button title="Next Page" onPress={handleNextPage} disabled={!hasNextPage} />
@@ -239,6 +237,8 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       padding: 20,
+      justifyContent: 'space-around',
+      
     },
     title: {
       fontSize: 20,
@@ -246,6 +246,12 @@ const styles = StyleSheet.create({
       marginBottom: 10,
     },
     reservationContainer: {
+      flex:1,
+      //flexDirection:'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    reservationRequestContainer:{
       marginVertical: 10,
       borderWidth: 1,
       borderColor: '#ccc',
@@ -261,8 +267,11 @@ const styles = StyleSheet.create({
         flex:1,
         borderRadius:5,
         borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         borderColor: '#ccc',
-        padding: 10
+        padding: 10,
+
     },
     submitContainer: {
         height:1,

@@ -1,30 +1,25 @@
 import React, { useState } from 'react';
 import { Modal,Text, TouchableOpacity, View, StyleSheet, Button, Platform } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { PickerComponent } from '../Picker/Picker';
 import { CustomModal} from '../Modals/CustomModal';
 
-//{selectableValues, defaultValue, onValueChange, style}
-
-export const PickerComponent = ({props}) =>{
-  //console.log("ModalPicker:",props?.selectableValues,props?.defaultValue, props?.onValueChange)
-
-  const [selectedValue, setSelectedValue] = useState(props?.defaultValue? props?.defaultValue :props?.selectableValues[0]?.label);
+export const ModalPicker = ({buttonStyle,buttonTitle,selectableValues, defaultValue, onValueChange, style}) =>{
 
   return(
     <View style={styles.container}>
-      <Picker
-      selectedValue={selectedValue}
-      style={props?.style? props?.style:{ height: 200, width: 200 }}
-      onValueChange ={(itemValue, itemIndex) => {setSelectedValue(itemValue); console.log("Selected",props?.selectableValues[itemIndex].label);props?.onValueChange(itemIndex);}}
-    >
-      {props?.selectableValues.map((item) => (
-        <Picker.Item key={item.value} label={item.label} value={item.value} />
-      ))}
-    </Picker>
+            <CustomModal buttonStyle={buttonStyle} buttonTitle={buttonTitle} RenderItem={PickerComponent} RenderItemProps={{selectableValues, defaultValue, onValueChange, style}}/>
     </View>
 
 
-
+    //<Picker
+    //   selectedValue={selectedValue}
+    //   style={style? style:{ height: 200, width: 200 }}
+    //   onValueChange ={(itemValue, itemIndex) => {setSelectedValue(selectableValues[itemIndex]); console.log("clubSelected",selectableValues[itemIndex]); onValueChange(itemIndex);}}
+    // >
+    //   {selectableValues.map((item) => (
+    //     <Picker.Item key={item.value} label={item.label} value={item.value} />
+    //   ))}
+    // </Picker>
   );
 };
 
@@ -69,10 +64,33 @@ export const PickerComponent = ({props}) =>{
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 0,
+
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 0,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
 
-export default PickerComponent;
+export default ModalPicker;
