@@ -1,43 +1,110 @@
 import React, { useState, useEffect } from 'react';
-import { View,  Button, ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
+import { View,  Image, Button, ScrollView, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Keyboard, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ButtonDark } from '../../components/Buttons/Button';
+import MapComponent from '../../components/Map/MapComponent';
+import {P} from '../../components/Text/Text.js';
+import * as ImagePicker from 'expo-image-picker';
+import { ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
+import { storage, } from "../../firebase/firebase.js";
+
 
 const CreateProfileScreen = () => {
   const navigation = useNavigation();
   const [venueName, setVenueName] = useState('');
-  const [addressLine1, setAddressLine1] = useState('');
-  const [addressLine2, setAddressLine2] = useState('');
-  const [city, setCity] = useState('');
-  const [province, setProvince] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [country, setCountry] = useState('');
+  const [lon, setLongitude] = useState('');
+  const [lat, setLatitude] = useState('');
+  const [address, setAddress] = useState('');
   const [email, setEmail] = useState('');
   const [password, setpassword] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [tagInput, setTagInput] = useState('');
+  const [url, setUrl] = useState('')
 
 
-  const handleCreateProfile = () => {
-    if (!venueName || !email || !password || !description || !city|| !province|| !postalCode || !country) {
+  const handleImagePicker = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (status !== 'granted') {
+      console.log('Permission to access media library denied');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // here it is where we specify the allow format
+      allowsEditing: true,
+      aspect: [3, 4],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      // console.log(JSON.stringify(result))
+      setSelectedImage({ uri: result.assets[0].uri })
+
+      // console.log("image uri is", result.assets[0].uri )
+      // await uploadImage(result.assets[0].uri, "image");
+
+      //upload image 
+
+      // console.log(profilePicture)
+    }
+  };
+
+
+  async function uploadImage (uri) {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const storageRef = ref(storage, "images/" + new Date().getTime());
+   
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+   
+    // listen for events
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        // setProgress(progress.toFixed());
+      },
+      (error) => {
+        // handle error
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+         await updateDatabase(downloadURL)
+         console.log("File available at", downloadURL);      
+         return url
+          // save record
+        
+        });
+      },
+    );
+  
+  }
+  const handleCreateProfile = async () => {
+    if (!venueName || !email || !password || !description || !address|| !lat|| !lon) {
       Alert.alert('Incomplete profile!', 'Please fill in all fields to create a profile.');
       return;
-    }        
+   }        
+
+    const newURL = await uploadImage(selectedImage.uri)
 
     const userData = {
       venueName,
-      addressLine1,
-      addressLine2,
-      postalCode,
-      city,
-      province,
-      country,
+      address, 
+      lat,
+      lon,
       email,
       password,
       description,
       tags,
+      newURL
     };
+
+
+  
 
     //should probably add something that catches when the email is already in the adatabse and makes an alert
     const updateDatabase = async () => {
@@ -63,6 +130,14 @@ const CreateProfileScreen = () => {
     console.log('User Data:', userData);
   };
 
+  const updateAddressClick = (address, longitude,latitude) => {
+
+    setAddress(address)
+    setLongitude(longitude)
+    setLatitude(latitude)
+    console.log("add", address, "long", longitude, "lat", latitude)
+  }
+
   const handleAddTag = () => {
     if (tagInput.trim() !== '') {
       setTags([...tags, tagInput]);
@@ -84,63 +159,21 @@ const CreateProfileScreen = () => {
 
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <View style={styles.container}>
-        <Text>Venue Name:</Text>
+        <P>Venue Name:</P>
         <TextInput
           style={styles.input}
           value={venueName}
           onChangeText={(text) => setVenueName(text)}
         />
-  
-      <Text>Address Line 1</Text>
-        <TextInput
-          style={styles.input}
-          value={addressLine1}
-          onChangeText={(text) => setAddressLine1(text)}
-        />
-      <Text>Address Line 2</Text>
-        <TextInput
-          style={styles.input}
-          value={addressLine2}
-          onChangeText={(text) => setAddressLine2(text)}
-        />
 
-      <Text>Postal Code</Text>
-        <TextInput
-          style={styles.input}
-          value={postalCode}
-          onChangeText={(text) => setPostalCode(text)}
-        />
- 
-      <Text>City </Text>
-        <TextInput
-          style={styles.input}
-          value={city}
-          onChangeText={(text) => setCity(text)}
-        />
-
-      <Text>Province/State </Text>
-        <TextInput
-          style={styles.input}
-          value={province}
-          onChangeText={(text) => setProvince(text)}
-        />
-
-      <Text>Country </Text>
-        <TextInput
-          style={styles.input}
-          value={country}
-          onChangeText={(text) => setCountry(text)}
-        />
-
-
-        <Text>Email:</Text>
+    <P>Email:</P>
         <TextInput
           style={styles.input}
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
 
-        <Text>Password:</Text>
+        <P>Password:</P>
         <TextInput
           style={styles.input}
           value={password}
@@ -148,7 +181,7 @@ const CreateProfileScreen = () => {
           onChangeText={(text) => setpassword(text)}
         />
 
-        <Text>Description:</Text>
+        <P>Description:</P>
         <TextInput
           style={styles.input}
           value={description}
@@ -156,7 +189,10 @@ const CreateProfileScreen = () => {
           multiline
         />
 
-    <Text>Tags:</Text>
+  
+    <MapComponent updateAddress={(add, long, lat)=>updateAddressClick(add, long, lat)}></MapComponent>
+     
+    <P>Tags:</P>
       <View style={styles.tagContainer}>
         {tags.map((tag, index) => (
           <View key={index} style={styles.tag}>
@@ -168,12 +204,20 @@ const CreateProfileScreen = () => {
         style={styles.input}
         value={tagInput}
         onChangeText={(text) => setTagInput(text)}
+        onSubmitEditing={handleAddTag}
         placeholder="Add tags one by one"
       />
-      <Button title="Add Tag" onPress={handleAddTag} />
 
+      <Text>Profile Picture:</Text>
+        <View>
+          {selectedImage && (
+            <Image source={selectedImage} style={{ width: 200, height: 200 }} />
+          )}
+          <Button title="Select Image" onPress={() => { handleImagePicker(); }} />
+        </View>
         <ButtonDark title={"Create Profile"} onPress={handleCreateProfile} style={{marginBottom: 5, width: 200, alignSelf: 'center'}}/>
       </View>
+
     </TouchableWithoutFeedback>
     </ScrollView>
     </KeyboardAvoidingView>
@@ -184,13 +228,22 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
   },
+  mapcontainer: {
+    flex: 1,
+  },
+  map: {
+    width: '100%',
+    height: 300, // Adjust the height as per your requirement
+  },
   input: {
     height: 40,
     borderColor: 'gray',
+    borderRadius: 4,
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
   },
+
   profilePicture: {
     width: 100,
     height: 100,

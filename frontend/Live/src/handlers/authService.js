@@ -81,6 +81,7 @@ export const clearToken = async () => {
     await AsyncStorage.removeItem('authToken');
     await AsyncStorage.removeItem('uid');
     await AsyncStorage.removeItem('userType');
+    console.log()
     console.log('Token cleared successfully');
   } catch (error) {
     console.error('Error clearing token:', error);

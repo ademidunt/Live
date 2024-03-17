@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import VenueReview from './Reviews/VenueReview';
 import VenueEvent from './Events/VenueEvent';
+import { retrieveUID, clearToken } from '../../handlers/authService';
+import { useNavigation } from '@react-navigation/native';
+
+
 
 const VenueProfileScreen = ({ route }) => {
+//added for navigation
+  const navigation = useNavigation();
+  
   const [selectedComponent, setSelectedComponent] = useState('about');
   const [venueData, setVenueData] = useState([]);
 
@@ -32,6 +39,16 @@ const VenueProfileScreen = ({ route }) => {
       }
     } catch (error) {
       console.error('Error fetching venue data:', error.message);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+        await clearToken(); // clearToken clears the token
+        navigation.navigate('ClubLogin'); // Navigate to the login screen
+    } catch (error) {
+        console.error('Failed to logout:', error);
+        // Handle logout failure, show a message to the user, etc.
     }
   };
 
@@ -115,6 +132,9 @@ const VenueProfileScreen = ({ route }) => {
         >
           <Text style={styles.componentButtonText}>Reservations</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.editButton} onPress={handleLogout}>
+                    <Text style={styles.editButtonText}>Logout</Text>
+                </TouchableOpacity>
       </View>
       {renderComponent()}
     </ScrollView>
