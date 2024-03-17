@@ -32,9 +32,8 @@ export default function ReservationScreen() {
     <View style={styles.container}>
      
       {/* Conditionally render ManageReservation based on userType */}
-      {/* {userType === 'venue' && <VenueManageReservation />} */}
-      {/* {userType === 'clubber' && <ClubberManageReservation />} */}
-      <ClubberManageReservation />
+      {userType === 'venue' && <VenueManageReservation />}
+      {userType === 'clubber' && <ClubberManageReservation />}
       {/* StatusBar component */}
       <StatusBar style="auto" />
     </View>
