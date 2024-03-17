@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import {retrieveUserType } from './src/handlers/authService.js';
 
 import ProfileScreen from "./src/screens/VenueProfileScreen/VenueProfileScreen";
 import SearchScreen from "./src/screens/SearchScreen/SearchScreen";
@@ -31,37 +32,51 @@ const Stack = createStackNavigator();
 const tabNavigator = require('./AppStyles')
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  return(
-  <NavigationContainer>
-    <Tab.Navigator 
-    initialRouteName={tabNavigator.initialRouteName}
-    screenOptions={({ route }) => ({
-      ...tabNavigator.screenOptions,
-      tabBarIcon: ({ focused, color, size }) => {
-        let iconName;
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkLoggedInStatus = async () => {
+      // Implement your logic to check user login status (e.g., retrieveUserType)
+      const userType = await retrieveUserType(); // Assuming retrieveUserType returns user type
+      setIsLoggedIn(!!userType); // Set isLoggedIn to true if userType is not empty
+    };
 
-        if (route.name === 'Search') {
-          iconName = focused ? 'search' : 'search-outline';
-        } else if (route.name === 'Login') {
-          iconName = focused ? 'log-in' : 'log-in-outline';
-        } else if (route.name === 'Reservation') {
-          iconName = focused ? 'calendar' : 'calendar-outline';
-        } else if (route.name === 'Profile') {
-          iconName = focused ? 'person' : 'person-outline';
-        }
+    checkLoggedInStatus();
+  }, []);
 
-        return <Ionicons name={iconName} size={size} color={color} />;
-      },
-    })}
-    >
-      <Tab.Screen name="Search" component={SearchStackNavigator}/>
-      <Tab.Screen name="Login" component={LoginStackNavigator} />
-      <Tab.Screen name="Reservation" component={ReservationStackNavigator} />
-      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
 
-    </Tab.Navigator>
-  </NavigationContainer>
+  return (
+    <NavigationContainer>
+      {isLoggedIn ? (
+        <Tab.Navigator
+          initialRouteName="Search"
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === 'Search') {
+                iconName = focused ? 'search' : 'search-outline';
+              } else if (route.name === 'Login') {
+                iconName = focused ? 'log-in' : 'log-in-outline';
+              } else if (route.name === 'Reservation') {
+                iconName = focused ? 'calendar' : 'calendar-outline';
+              } else if (route.name === 'Profile') {
+                iconName = focused ? 'person' : 'person-outline';
+              }
+
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+          })}
+        >
+          <Tab.Screen name="Search" component={SearchStackNavigator} />
+          <Tab.Screen name="Reservation" component={ReservationStackNavigator} />
+          <Tab.Screen name="Profile" component={ProfileStackNavigator} />
+        </Tab.Navigator>
+      ) : (
+        <LoginStackNavigator />
+      )}
+    </NavigationContainer>
   );
 };
 
