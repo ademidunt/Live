@@ -50,7 +50,7 @@ export default function App() {
     <NavigationContainer>
       {isLoggedIn ? (
         <Tab.Navigator
-          initialRouteName="Search"
+          initialRouteName="Welcome"
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
@@ -156,7 +156,9 @@ const ProfileStackNavigator = () => {
       },
     }}>
       {/*Static venue ID for now to implement event functionality*/}
-      <Stack.Screen name="Your Profile" component={ProfileScreen} initialParams={{venueId: 'AsedlTwX2fdmuN0yWiM1k4BzKFb2'}}/> 
+      <Stack.Screen name="Your Profile" component={ProfileScreen} initialParams={{venueId: 'AsedlTwX2fdmuN0yWiM1k4BzKFb2'}}/>
+      <Stack.Screen name="Welcome" component={LoginScreen} /> 
+      
     </Stack.Navigator>
   )
 }

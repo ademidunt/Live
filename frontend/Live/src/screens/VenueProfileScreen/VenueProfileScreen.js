@@ -45,7 +45,11 @@ const VenueProfileScreen = ({ route }) => {
   const handleLogout = async () => {
     try {
         await clearToken(); // clearToken clears the token
-        navigation.navigate('ClubLogin'); // Navigate to the login screen
+        navigation.navigate('Welcome'); // Navigate to the login screen
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Search' }],
+        });
     } catch (error) {
         console.error('Failed to logout:', error);
         // Handle logout failure, show a message to the user, etc.
