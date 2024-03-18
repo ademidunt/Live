@@ -1,10 +1,35 @@
 import { db, auth } from "../firebase/firebase.js";
-import { collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc} from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, addDoc, setDoc, orderBy, query, updateDoc, limit as limitFn} from 'firebase/firestore';
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 
 /*
 Database operations for manipulating the venue collection.
 */
+
+function getDistance(lat1, lon1, lat2, lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2 - lat1);
+    var dLon = deg2rad(lon2 - lon1); 
+    var a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2)
+        ; 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; // Distance in km
+    if (d < 1) {// Convert to meters if less than 1 km
+      d = Math.round(d * 1000); 
+      return d + "m"; // Round to nearest integer
+    } else {
+      d = Math.round(d);
+      return d + "km";
+    }
+  }
+  
+  function deg2rad(deg) {
+    return deg * (Math.PI/180)
+  }
+
 export async function getVenues() {
     try {
         const querySnapshot = await getDocs(collection(db, "Venue"));
@@ -131,5 +156,44 @@ export async function loginVenue(email, password) {
     catch(error){
         console.error("Login failed:", error);
         throw error;
+    }
+}
+//Gets a fixed number of venues by proximity to the users coordinates.
+export async function getVenuesFeed(limit, usrLat, usrLon) {
+    try {
+        const querySnapshot = await getDocs(collection(db, "Venue"));
+        
+        let dataArr = [];
+
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            let docId = {
+                "venueId": doc.id
+            };
+            let data = {
+                ...docId,
+                ...doc.data()
+            };
+            dataArr.push(data);
+        });
+
+        // Calculate distance from user for each venue and add it to the data
+        dataArr = dataArr.map(venue => ({
+            ...venue,
+            distance: getDistance(usrLat, usrLon, venue.lat, venue.lon)
+        }));
+
+        // Sort venues by distance from user
+        dataArr.sort((a, b) => a.distance - b.distance);
+
+        // Limit to the top 10 closest venues
+        dataArr = dataArr.slice(0, limit);
+
+        console.log(dataArr);
+
+        return dataArr;
+    } catch (error) {
+        console.error("Error getting venues:", error);
+        throw error; // Re-throw the error to be caught by the calling function
     }
 }

@@ -1,11 +1,11 @@
 import EventPost from '../../components/EventPost';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { View, Text,FlatList, TouchableOpacity, RefreshControl, StatusBar } from 'react-native';
+import { View, Text,FlatList, TouchableOpacity, RefreshControl, StatusBar, ActivityIndicator } from 'react-native';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import FilterPill from '../../components/FilterPills/FilterPill';
 import { useFocusEffect } from '@react-navigation/native';
-import { SubtleText } from '../../components/Text/Text';
+import { P, SubtleText } from '../../components/Text/Text';
 
 import * as Location from 'expo-location';
 
@@ -24,16 +24,24 @@ export default SearchScreen = ({ navigation }) => {
   const [errorMsg, setErrorMsg] = useState(null);
 
   let MY_COORDS = null;
+  const feedLimit = 20; //Max number of venues to load on the feed at one time.
 
   //Get data for raw data
-  const getVenues = async () => {
+  const getVenues = async (limit, lat, lon) => {
     setRefreshing(true);
-    fetch(`${apiUrl}/Venue`,
+    fetch(`${apiUrl}/venue/feed/doc`,
     {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-type': 'application/json',
       },
+      body: JSON.stringify(
+        {
+        limit,
+        lat,
+        lon
+      }
+      ),
     })
     .then(async (res) => {
       if (res.ok) {
@@ -48,24 +56,23 @@ export default SearchScreen = ({ navigation }) => {
       setRefreshing(false);
     });
  }
-//Get venue data when first opening the app
- useEffect(() => {
-  getVenues();
- }, []);
 
  useEffect(() => {
-   (async () => {
-     
-     let { status } = await Location.requestForegroundPermissionsAsync();
-     if (status !== 'granted') {
-       setErrorMsg('Permission to access location was denied');
-       return;
-     }
+  (async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+      return;
+    }
 
-     let location = await Location.getCurrentPositionAsync({});
-     setLocation(location);
-   })();
- }, []);
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
+    if (location) {
+      MY_COORDS = JSON.stringify(location);
+      getVenues(feedLimit, location.coords.latitude, location.coords.longitude);
+    }
+  })();
+}, []);
 
  let text = 'Waiting..';
  if (errorMsg) {
@@ -80,11 +87,13 @@ export default SearchScreen = ({ navigation }) => {
 //Refresh when focus is put on search screen.
  useFocusEffect(
   React.useCallback(() => {
-    getVenues();
+    if (MY_COORDS && location) {
+    getVenues(feedLimit, location.coords.latitude, location.coords.longitude);
     return () => {
       // Do something when the screen is unfocused
       // Useful for cleanup functions
     };
+  }
   }, [])
 );
 
@@ -162,6 +171,7 @@ return (
       </View>
       <View style={{height: 0.5, backgroundColor: "gray", marginTop: 15}}/>
       <View style={{width: "100%", flex: 1}}>
+      {MY_COORDS ? (
       <FlatList
         style={{backgroundColor: "#ffffff"}}
         data={data}
@@ -174,6 +184,12 @@ return (
           />
         }
       />
+      ) : (
+        <View style={{display: 'flex', flexDirection: 'row', margin: 15}}>
+            <ActivityIndicator size="small" color="#000000" style={{marginRight: 5}}/>
+            <SubtleText>Loading Location Data...</SubtleText>
+        </View>
+      )}
       </View>
     </View>
   );

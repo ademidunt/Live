@@ -56,6 +56,11 @@ const handleViewReviews = () => {
   console.log('view clubber reviws button pressed');
 };
 
+const handleViewEvents = () => {
+  navigation.navigate('ClubberEvents')
+  console.log('view clubber events button pressed')
+}
+
 const handleImagePicker = async () => {
   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -255,6 +260,16 @@ const saveToDatabaseNoPhoto = async () => {
 const handleFieldChange = (field, value) => {
   setEditableFields((prevFields) => ({ ...prevFields, [field]: value }));
 };
+ 
+const handleLogout = async () => {
+  try {
+      await clearToken(); // clearToken clears the token
+      navigation.navigate('clubLogin'); // Navigate to the login screen
+  } catch (error) {
+      console.error('Failed to logout:', error);
+      // Handle logout failure, show a message to the user, etc.
+  }
+};
 
 const deleteImage = async () => {
 
@@ -332,6 +347,14 @@ return (
         <Text style={styles.editButtonText}> My Reviews
         </Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.editButton} onPress={handleViewEvents}>
+        <Text style={styles.editButtonText}> My Events
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.editButton} onPress={handleLogout}>
+                    <Text style={styles.editButtonText}>Logout</Text>
+                </TouchableOpacity>
     </ScrollView>
   </KeyboardAvoidingView>
 );

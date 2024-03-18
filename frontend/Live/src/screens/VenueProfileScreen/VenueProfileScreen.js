@@ -1,290 +1,223 @@
-import { StatusBar } from 'expo-status-bar';
-import React, {useState, useRef, useEffect} from 'react';
-import { Modal, TouchableHighlight, TextInput, Image, Button, ScrollView, Text, View, Pressable } from 'react-native';
-import CreateNewEvent from './NewEvent/NewEvent';
-import CreateNewRating from './NewRating/NewRating';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import VenueReview from './Reviews/VenueReview';
+import VenueEvent from './Events/VenueEvent';
+import { retrieveUID, clearToken } from '../../handlers/authService';
+import { useNavigation } from '@react-navigation/native';
 
 
-const VenueProfileHandler = require('../../handlers/VenueProfileHandler')
-const styles = require('./VenueProfileScreenStyles')
 
-var isUser = false;
- 
-const ProfileScreen = ({ route }) => {
+const VenueProfileScreen = ({ route }) => {
+//added for navigation
+  const navigation = useNavigation();
+  
+  const [selectedComponent, setSelectedComponent] = useState('about');
+  const [venueData, setVenueData] = useState([]);
 
-  const [btnPressed, setActiveBtn] = useState('active');
-  const [isEdit , setIsEdit] = useState(false);
-  const [editChange , setEditChange] = useState(false)
-  const [modalVisible, setModalVisible] = useState(false);
+  useEffect(() => {
+    const fetchVenueInfo = async () => {
+      getVenueData();
+    };
 
-  const [venueData, setVenueData] = useState(VenueProfileHandler.getVenueProfile(`${route.params.id}`))
-
-  const [venueName, setVenueName] = useState ({cur: "venueName", new:'' })
-  const [aboutBioTxt, setBioTxt ] = useState({cur: "venueDesc" , new:''})
-  const [venueWeb, setVenueWeb] = useState({cur:"venueWeb", new:''})
-  const [venueNum, setVenueNum] = useState({cur:"venueNum", new:''})
-  const [venueMail, setVenueMail] = useState({cur:"venueMail", new:''})
-  const [location, setLocation] =  useState({cur: venueData.location , new:''})
-
-  useEffect(()=>{
-    console.log( )
-    const json = VenueProfileHandler.getVenueProfile(`${route.params.id}`)
-    console.log(json)
-
-    //console.log(venueData)
+    fetchVenueInfo();
   }, []);
 
-  const handleVenueData = () => {
-    const venueData ={
-      aboutBioTxt,
-      venueWeb,
-      venueWeb,
-      venueMail
+  const getVenueData = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/venue/${route.params.venueId}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const venueData = await response.json();
+        setVenueData(venueData);
+      } else {
+        console.log(`Something went wrong: ${JSON.stringify(response)}`);
+      }
+    } catch (error) {
+      console.error('Error fetching venue data:', error.message);
     }
+  };
 
-    // setVenueName({cur: venueData.venueName, new:'' })
-    // setBioTxt({cur: venueData.description , new:''});
-    // setLocation({cur: venueData.location , new:''});
-    
-  }
-
-  const[savedData , setSavedData] = useState([])
-  const saveData = () => {
-    if(!editChange){
+  const handleLogout = async () => {
+    try {
+        await clearToken(); // clearToken clears the token
+        navigation.navigate('ClubLogin'); // Navigate to the login screen
+    } catch (error) {
+        console.error('Failed to logout:', error);
+        // Handle logout failure, show a message to the user, etc.
     }
-  }
+  };
 
-  const discard = () => {
-    setEditChange(false)
-    setBioTxt({cur:"aboutBioTxt", new:''})
-    setVenueWeb({cur:"venueWeb", new:''})
-    setVenueNum({cur:"venueNum", new:''})
-    setVenueMail({cur:"venueMail", new:''})
+  const renderComponent = () => {
+    switch (selectedComponent) {
+      case 'about':
+        return (
+          <View style={styles.aboutSection}>
+            <Text style={styles.aboutText}>{venueData.description}</Text>
+            <Text style={styles.aboutText}>Address: {venueData.addressLine1}</Text>
+          </View>
+        );
+      case 'contact':
+        return (
+          <View style={styles.contactSection}>
+            <Text style={styles.contactText}>Website: {venueData.website}</Text>
+            <Text style={styles.contactText}>Number: {venueData.phoneNumber}</Text>
+            <Text style={styles.contactText}>Email: {venueData.email}</Text>
+          </View>
+        );
+      case 'events':
+        return <VenueEvent _venueId_={route.params.venueId} />;
+      case 'reviews':
+        return <VenueReview id={route.params.venueId} />;
+      case 'reservations':
+        <View>
 
-    console.log(venueData._j)
-  }
-
-  const EditTextInput = (newText, prop) => {
-    if(prop.cur != newText){
-      setEditChange(true);
-      prop.new = newText
+        </View>
+      default:
+        return null;
     }
-    return prop
-  }
+  };
+
+  const handleComponentClick = (component) => {
+    setSelectedComponent(component);
+  };
 
   return (
-    <View style={styles.ProfileScreen}>
-      <ScrollView style={styles.screen}>
-      {/* <Image></Image> */}
-      <Text style={styles.image}>Venue Pic:</Text>
-
-      <View style={styles.container}>
-
-        <View style={styles.header}>
-          <View style={[styles.headerCtnt, styles.venueName]}><Text style={[styles.text, styles.venueNameTxt]}>{venueName.cur}</Text></View>
-          {
-            isUser &&
-            <View style={[styles.headerCtnt, styles.edit]}>
-              <Pressable 
-              onPress={()=>{setIsEdit(!isEdit), isEdit && editChange ?setModalVisible(true):''}}
-              style={[]}>
-                { !isEdit &&
-                <Text style={[styles.text, styles.editTxt,]}>Edit</Text>
-                }
-                { isEdit &&
-                <Text style={[styles.text, styles.editTxt, styles.doneTxt]}>Done</Text>
-                }
-              </Pressable>
-
-              <Modal
-                animationType="slide"
-                visible={modalVisible}
-                transparent={true}
-                >
-                  <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                      <Text style={styles.text}>Save Changes?</Text>
-
-                      <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {setModalVisible(!modalVisible); saveData()}}>
-                        <Text style={styles.textStyle}>Save</Text>
-                      </Pressable>
-
-                      <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {setModalVisible(!modalVisible);discard();}}>
-                        <Text style={styles.textStyle}>Discard</Text>
-                      </Pressable>
-
-                    </View>
-                  </View>
-                </Modal>
-
-            </View>
-          }
-          {
-            !isUser &&
-            <View style={[styles.headerCtnt, styles.starRating]}><Text style={[styles.text]}>3.5</Text><Image source={require('../../../assets/ratingStar.png')}></Image></View>
-          }
+    <ScrollView style={styles.container}>
+      <Image source={{ uri: 'https://via.placeholder.com/200' }} style={styles.image} />
+      <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <Text style={styles.venueName}>{venueData.venueName}</Text>
+          <View style={styles.starRating}>
+            <Text style={styles.ratingText}>{Math.round(venueData.avgRating * 10) / 10}</Text>
+            <Image source={require('../../../assets/ratingStar.png')} />
+          </View>
+          <TouchableOpacity style={styles.editButton} onPress={() => setSelectedComponent('edit')}>
+            <Text style={styles.editButtonText}>Edit</Text>
+          </TouchableOpacity>
         </View>
-
-        <View style={styles.btnPnl}>
-          <View style={[styles.btnPnlRow , styles.btnPnlRow1]}>
-            <View style={styles.aboutBtn}>
-              <Pressable onPress={()=>{setActiveBtn('active')}} 
-                style={({pressed})=> [
-                {backgroundColor: pressed || btnPressed == 'active' ? "#9166ED": "#4709CD"},
-                styles.btn ]}>
-                  <Text style={styles.text}>About</Text>
-              </Pressable>
-            </View>
-            <View style={styles.reviewBtn}>
-            <Pressable onPress={()=>{setActiveBtn('newRating')}} 
-            style={({pressed})=> [
-            {backgroundColor: pressed || btnPressed == 'newRating' ? "#9166ED": "#4709CD"},
-            styles.btn ]}>
-              <Text style={styles.text}>Rating/Review</Text>
-            </Pressable>
-            </View>
-          </View>
-          <View style={[styles.btnPnlRow, styles.btnPnlRow2]}>
-          <View style={styles.contactInfoBtn}>
-            <Pressable onPress={()=>{setActiveBtn('contact')}} 
-            style={({pressed})=> [
-            {backgroundColor: pressed || btnPressed == 'contact' ? "#9166ED": "#4709CD"},
-            styles.btn ]}>
-              <Text style={styles.text}>Contact Info</Text>
-            </Pressable>
-          </View>
-          </View>
-          <View style={[styles.btnPnlRow, styles.btnPnlRow2]}>
-          <View style={styles.contactInfoBtn}>
-            <Pressable onPress={()=>{setActiveBtn('newEvent')}} 
-            style={({pressed})=> [
-            {backgroundColor: pressed || btnPressed == 'newEvent' ? "#9166ED": "#4709CD"},
-            styles.btn ]}>
-              <Text style={styles.text}>Create New Event</Text>
-            </Pressable>
-          </View>
-          </View>
-        </View>
-
-          {/* About section */}
-          {btnPressed == 'active' &&
-          <View style={styles.aboutSctn}>
-            <View style={[styles.aboutCtnt, isEdit? styles.aboutEdit: '']}>
-              <TextInput 
-              style={[styles.text, styles.aboutBioTxt, ]}
-              editable = {isEdit}
-              multiline
-              defaultValue = {aboutBioTxt.new != '' && editChange ? aboutBioTxt.new : aboutBioTxt.cur}
-              onEndEditing={(val) =>{setBioTxt(EditTextInput(val.nativeEvent.text, aboutBioTxt));}}
-              >
-              </TextInput>
-              {/* <EditTextInput text={aboutBioTxt} fnctn={aboutBioTxtFnc}></EditTextInput> */}
-            </View>
-            
-            <View style={[styles.aboutCtnt,styles.aboutLctn]}>
-              <Text>Location</Text>
-            </View>
-          </View>
-          }
-
-          {/* Contact section */}
-          {btnPressed == 'contact' &&
-          <View style={[styles.contactSctn]}>
-            <View style={[styles.contactCtnt]}>
-              <Text style={[styles.text]}>Website:</Text>
-              <View style={[styles.contactCtntDsply, isEdit? styles.aboutEdit: '']}>
-                <TextInput defaultValue= {venueWeb.new != '' && editChange? venueWeb.new : venueWeb.cur} 
-                            onEndEditing={(val) =>{setVenueWeb(EditTextInput(val.nativeEvent.text, venueWeb));}}                           
-                            editable = {isEdit} 
-                            style={[styles.text]}>
-                </TextInput>
-              </View>
-            </View>
-            <View style={[styles.contactCtnt]}>
-              <Text style={[styles.text]}>Number:</Text>
-              <View style={[styles.contactCtntDsply, isEdit? styles.aboutEdit: '']}>
-                <TextInput defaultValue= {venueNum.new != '' && editChange? venueNum.new : venueNum.cur} 
-                           onEndEditing={(val) =>{setVenueNum(EditTextInput(val.nativeEvent.text, venueNum));}}
-                           editable = {isEdit} 
-                           style={[styles.text]}>                         
-                </TextInput>
-              </View>
-            </View>
-            <View style={[styles.contactCtnt]}>
-              <Text style={[styles.text]}>Email:</Text>
-              <View style={[styles.contactCtntDsply, isEdit? styles.aboutEdit: '']}>
-                <TextInput defaultValue= {venueMail.new != '' && editChange? venueMail.new : venueMail.cur} 
-                            onEndEditing={(val) =>{setVenueMail(EditTextInput(val.nativeEvent.text, venueMail));}} 
-                            editable = {isEdit} 
-                            style={[styles.text]}>
-                </TextInput>
-              </View>
-            </View>
-            {/* <View style={[styles.contactCtnt]}>
-              <Text style={[styles.text]}>Instagram:</Text>
-              <View style={styles.instagramDsply}>
-                <Image style={[styles.instagram]} source={require('../../../assets/icons8-instagram-96.png')}></Image>
-                <View style={[styles.contactCtntDsply]}>
-                  <Text style={[styles.text]}>www.Instagram.com</Text>
-                </View>
-              </View>
-            </View> */}
-          </View>
-          }
-
-          {btnPressed == 'newRating' &&
-       <VenueReview id={route.params.venueId} />
-          }
-
-          {btnPressed == 'newEvent' &&
-            <CreateNewEvent _venueId_={route.params.venueId}/>
-          }
-
-          {
-            isUser &&
-          <View style={styles.logout}>
-          <Pressable
-           style={({pressed})=> [
-          {backgroundColor: pressed ? "#9166ED": "#4709CD"},
-          styles.logoutBtn, styles.btn ]}
-          >
-            <Text style={styles.text}>Logout</Text>
-          </Pressable>
-        </View>
-          }          
       </View>
-
-      </ScrollView>
-      {
-        !isUser &&
-        <View style={styles.userPnl}>
-          <View style={styles.userPnlCnt}>
-            <View style={styles.prices}>
-              <Text style={styles.text}>Prices?</Text>
-              <Pressable onPress={()=>{setActiveBtn('contact')}} 
-                  style={[styles.contactUsBtn]}>
-                    <Text style={[styles.text,styles.contactUsTxt]}>Contact Us</Text>
-              </Pressable>
-            </View>
-            <View style={styles.reservation}>
-              <Pressable onPress={()=>{}} 
-                style={({pressed})=> [
-                {backgroundColor: pressed ? "#9166ED": "#6A2EEB"},
-                styles.btn,styles.reservationBtn ]}>
-                  <Text style={[styles.text, styles.reservationTxt]}>Reservations</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      }
-    </View>
+      <View style={styles.componentButtons}>
+        <TouchableOpacity
+          style={[styles.componentButton, selectedComponent === 'about' && styles.selectedComponent]}
+          onPress={() => handleComponentClick('about')}
+        >
+          <Text style={styles.componentButtonText}>About</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.componentButton, selectedComponent === 'contact' && styles.selectedComponent]}
+          onPress={() => handleComponentClick('contact')}
+        >
+          <Text style={styles.componentButtonText}>Contact Info</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.componentButton, selectedComponent === 'events' && styles.selectedComponent]}
+          onPress={() => handleComponentClick('events')}
+        >
+          <Text style={styles.componentButtonText}>Events</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.componentButton, selectedComponent === 'reviews' && styles.selectedComponent]}
+          onPress={() => handleComponentClick('reviews')}
+        >
+          <Text style={styles.componentButtonText}>Ratings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.componentButton, selectedComponent === 'reservations' && styles.selectedComponent]}
+          onPress={() => handleComponentClick('reservations')}
+        >
+          <Text style={styles.componentButtonText}>Reservations</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.editButton} onPress={handleLogout}>
+                    <Text style={styles.editButtonText}>Logout</Text>
+                </TouchableOpacity>
+      </View>
+      {renderComponent()}
+    </ScrollView>
   );
-}
+};
 
-export default ProfileScreen
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#1E1E1E',
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+    marginBottom: 10,
+  },
+  header: {
+    padding: 20,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  venueName: {
+    fontSize: 30,
+    color: '#FFFFFF',
+  },
+  starRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 5,
+    backgroundColor: '#4709CD',
+    borderRadius: 20,
+    padding: 5,
+  },
+  ratingText: {
+    color: '#FFFFFF',
+    fontSize: 20,
+  },
+  editButton: {
+    backgroundColor: '#9166ED',
+    borderRadius: 8,
+    padding: 10,
+  },
+  editButtonText: {
+    color: '#FFFFFF',
+  },
+  componentButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  componentButton: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  componentButtonText: {
+    color: '#9166ED',
+    fontSize: 10,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  selectedComponent: {
+    borderBottomColor: '#9166ED',
+    borderBottomWidth: 2,
+  },
+  aboutSection: {
+    padding: 20,
+  },
+  aboutText: {
+    fontSize: 22,
+    marginBottom: 10,
+    color: '#FFFFFF',
+  },
+  contactSection: {
+    padding: 20,
+  },
+  contactText: {
+    fontSize: 22,
+    marginBottom: 10,
+    color: '#FFFFFF',
+  },
+});
 
+export default VenueProfileScreen;

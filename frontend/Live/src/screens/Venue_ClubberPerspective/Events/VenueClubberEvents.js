@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, View, StyleSheet } from 'react-native';
 import EventItem from './EventItem';
-import { retrieveUID } from '../../handlers/authService';
+import { retrieveUID } from '../../../handlers/authService';
 
 const VenueClubberEvents = ({ id }) => {
     const [clubberId, setClubberId] = useState('');
+    const [clubberData, setClubberData] = useState([])
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
