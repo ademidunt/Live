@@ -88,7 +88,7 @@ export default SearchScreen = ({ navigation }) => {
  useFocusEffect(
   React.useCallback(() => {
     if (MY_COORDS && location) {
-    getVenues(feedLimit, location.coords.latitude, location.coords.longitude);
+      getVenues(feedLimit, location.coords.latitude, location.coords.longitude);
     return () => {
       // Do something when the screen is unfocused
       // Useful for cleanup functions

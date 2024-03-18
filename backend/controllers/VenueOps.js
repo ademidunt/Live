@@ -17,13 +17,13 @@ function getDistance(lat1, lon1, lat2, lon2) {
         ; 
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
     var d = R * c; // Distance in km
-    if (d < 1) {// Convert to meters if less than 1 km
-      d = Math.round(d * 1000); 
-      return d + "m"; // Round to nearest integer
-    } else {
-      d = Math.round(d);
-      return d + "km";
-    }
+
+    console.log(d);
+
+    if (typeof d !== 'number' || isNaN(d))
+        return 10000000;
+    else
+        return d;
   }
   
   function deg2rad(deg) {
@@ -188,8 +188,6 @@ export async function getVenuesFeed(limit, usrLat, usrLon) {
 
         // Limit to the top 10 closest venues
         dataArr = dataArr.slice(0, limit);
-
-        console.log(dataArr);
 
         return dataArr;
     } catch (error) {
