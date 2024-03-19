@@ -43,7 +43,7 @@ export default function App() {
     };
 
     checkLoggedInStatus();
-  }, []);
+  }, [isLoggedIn]);
 
 
   return (
