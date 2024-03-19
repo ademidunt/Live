@@ -40,10 +40,7 @@ const LoginScreen = () => {
         storeUID(user);
   
         // Navigate to the appropriate screen after login
-        // navigation.navigate('ViewClubber');
-        navigation.navigate('HomeScreen');
-
-      } else {
+        navigation.navigate('SearchStackNavigator', { screen: 'Search Venues' });      } else {
         // Failed login
         // Log the error and full error response
         const errorText = await response.text();

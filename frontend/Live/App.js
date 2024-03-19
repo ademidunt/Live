@@ -42,8 +42,6 @@ const tabNavigator = require('./AppStyles')
 //       setIsLoggedIn(!!userType); // Set isLoggedIn to true if userType is not empty
 //     };
 
-//     checkLoggedInStatus();
-//   }, []);
 
 
 //   return (
