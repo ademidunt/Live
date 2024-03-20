@@ -48,7 +48,7 @@ const VenueProfileScreen = ({ route }) => {
         navigation.navigate('Welcome'); // Navigate to the login screen
         navigation.reset({
           index: 0,
-          routes: [{ name: 'Search' }],
+          routes: [{ name: 'Login' }],
         });
     } catch (error) {
         console.error('Failed to logout:', error);

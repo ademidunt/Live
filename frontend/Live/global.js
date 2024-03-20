@@ -18,4 +18,4 @@
 //global.apiUrl = 'http://172.20.10.6:3000'
 
 //Jackson ip
-global.apiUrl = 'http://192.168.8.183:3000'
+global.apiUrl = 'http://10.71.5.53:3000'

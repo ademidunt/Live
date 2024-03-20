@@ -147,6 +147,7 @@ const ReservationStackNavigator = () => {
 }
 
 const ProfileStackNavigator = () => {
+  
   return(
     <Stack.Navigator initialRouteName='Profile Stack' screenOptions={{
       headerStyle: {
@@ -159,10 +160,12 @@ const ProfileStackNavigator = () => {
       headerBackVisible: false,
       headerShown: false
     }}>
-      {/*Static venue ID for now to implement event functionality*/}
-      <Stack.Screen name="Your Profile" component={ProfileScreen} initialParams={{venueId: 'AsedlTwX2fdmuN0yWiM1k4BzKFb2'}}  options={{headerShown:true, headerBackVisible: false}}/>
-      <Stack.Screen name="Welcome" component={LoginScreen}  options={{headerShown:true, headerBackVisible: false}} /> 
       
+      <Stack.Screen name="Your Profile"  component={ProfileScreen}  options={{headerShown:true, headerBackVisible: false}}/>
+      <Stack.Screen name="Welcome" component={LoginScreen}  options={{headerShown:true, headerBackVisible: false}} /> 
+      <Stack.Screen name="ViewClubber" component={ViewClubberProfileScreen} />
+      <Stack.Screen name="ClubberReviews" component={ViewClubberReviews}/>
+      <Stack.Screen name="ClubberEvents" component={ViewClubberEvents}/>     
     </Stack.Navigator>
   )
 }
