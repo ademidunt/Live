@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Button, StyleSheet, ScrollView } from 'react-native';
 import { H1, H2, H3, P } from '../../components/Text/Text.js'
 import { retrieveUID, retrieveUserType } from '../../handlers/authService';
 
@@ -120,7 +120,7 @@ const formatDate = (timestampObject) => {
 
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>Reservation Management</Text>
       <View>
       <P>Pending Requests</P>
@@ -143,7 +143,7 @@ const formatDate = (timestampObject) => {
         />
       </View>
      
-    </View>
+    </ScrollView>
     
   );
 };
@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 10,
   },
+ 
 });
 
 export default ReservationManagement;
