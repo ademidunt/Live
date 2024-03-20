@@ -4,7 +4,7 @@ import { View, Text, Pressable, TextInput, Alert } from 'react-native';
 import { retrieveUID } from '../../../handlers/authService';
 
 
-const CreateNewRating = ({venueId}) => {
+const CreateNewRating = ({venueId, dismissModal}) => {
   const [ratingData, setRatingData] = useState({
     rating: '1', // Initial rating value
     text: '', // State to hold the review text
@@ -71,6 +71,7 @@ const CreateNewRating = ({venueId}) => {
         console.error(`Error occurred: ${error}`);
       });
       setRatingCreated(true)
+      dismissModal();
   };
 
 

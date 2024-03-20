@@ -1,5 +1,6 @@
 import { db } from "../firebase/firebase.js";
-import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query} from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, addDoc, setDoc, where, query, Timestamp } from 'firebase/firestore';
+
 /*
 Database operations for manipulating the booking collection.
 */
@@ -45,18 +46,24 @@ export async function getBooking(bookingId) {
 }
 //Create booking.
 export async function createBooking(booking) {
+
     try {
         let bookingId = null;
+        let bookingDate = null;
+
         await addDoc(collection(db, "Booking"), booking)
             .then(function(docRef){//Get new document id.
                 console.log("Created booking with ID: " + docRef.id);
                 bookingId = {"bookingId": docRef.id}
+                bookingDate = {"bookingDate":Timestamp.fromDate(new Date())}
             });
 
         booking = {//Create booking object with new id.
             ...booking,
-            ...bookingId
+            ...bookingId,
+            ...bookingDate
         }
+        updateBooking(booking)
         return booking;//Return booking object.
     } catch (error) {
         console.error("Error creating booking:", error);

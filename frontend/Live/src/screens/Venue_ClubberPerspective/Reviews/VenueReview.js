@@ -65,7 +65,7 @@ const VenueReview = ({ id }) => {
           onRequestClose={() => setShowAddReviewModal(false)}
         >
           <View style={styles.modalContainer}>
-            <NewRating venueId={id} />
+            <NewRating venueId={id} dismissModal={()=>modalClosed()}/>
             <Button title="Close Modal" onPress={() => modalClosed()} />
           </View>
         </Modal>
