@@ -41,6 +41,12 @@ const LoginScreen = () => {
   
         // Navigate to the appropriate screen after login
         // navigation.navigate('HomeScreen', { screen: 'Search Venues' });      } else {
+          navigation.navigate('HomeScreen', {
+            screen: 'Profile', params: {
+                screen: 'ViewClubber'
+            }
+        });
+         
          navigation.navigate('HomeScreen');      
       } else {
 
