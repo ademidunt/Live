@@ -19,3 +19,6 @@ global.apiUrl = 'http://192.168.0.116:3000'
 
 //thi hotspot
 //global.apiUrl = 'http://172.20.10.6:3000'
+
+//Jackson ip
+global.apiUrl = 'http://10.71.5.53:3000'

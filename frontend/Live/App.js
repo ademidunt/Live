@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import {retrieveUserType } from './src/handlers/authService.js';
 
 import ProfileScreen from "./src/screens/VenueProfileScreen/VenueProfileScreen";
 import SearchScreen from "./src/screens/SearchScreen/SearchScreen";
@@ -30,40 +31,52 @@ const Stack = createStackNavigator();
 
 const tabNavigator = require('./AppStyles')
 
-export default function App() {
+// export default function App() {
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  return(
-  <NavigationContainer>
-    <Tab.Navigator 
-    initialRouteName={tabNavigator.initialRouteName}
-    screenOptions={({ route }) => ({
-      ...tabNavigator.screenOptions,
-      tabBarIcon: ({ focused, color, size }) => {
-        let iconName;
+//   // Check if user is already logged in
+//   useEffect(() => {
+//     const checkLoggedInStatus = async () => {
+//       // Implement your logic to check user login status (e.g., retrieveUserType)
+//       const userType = await retrieveUserType(); // Assuming retrieveUserType returns user type
+//       setIsLoggedIn(!!userType); // Set isLoggedIn to true if userType is not empty
+//     };
 
-        if (route.name === 'Search') {
-          iconName = focused ? 'search' : 'search-outline';
-        } else if (route.name === 'Login') {
-          iconName = focused ? 'log-in' : 'log-in-outline';
-        } else if (route.name === 'Reservation') {
-          iconName = focused ? 'calendar' : 'calendar-outline';
-        } else if (route.name === 'Profile') {
-          iconName = focused ? 'person' : 'person-outline';
-        }
 
-        return <Ionicons name={iconName} size={size} color={color} />;
-      },
-    })}
-    >
-      <Tab.Screen name="Search" component={SearchStackNavigator}/>
-      <Tab.Screen name="Login" component={LoginStackNavigator} />
-      <Tab.Screen name="Reservation" component={ReservationStackNavigator} />
-      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
 
-    </Tab.Navigator>
-  </NavigationContainer>
-  );
-};
+//   return (
+//     <NavigationContainer>
+//       {isLoggedIn ? (
+//         <Tab.Navigator
+//           initialRouteName="Welcome"
+//           screenOptions={({ route }) => ({
+//             tabBarIcon: ({ focused, color, size }) => {
+//               let iconName;
+
+//               if (route.name === 'Search') {
+//                 iconName = focused ? 'search' : 'search-outline';
+//               } else if (route.name === 'Login') {
+//                 iconName = focused ? 'log-in' : 'log-in-outline';
+//               } else if (route.name === 'Reservation') {
+//                 iconName = focused ? 'calendar' : 'calendar-outline';
+//               } else if (route.name === 'Profile') {
+//                 iconName = focused ? 'person' : 'person-outline';
+//               }
+
+//               return <Ionicons name={iconName} size={size} color={color} />;
+//             },
+//           })}
+//         >
+//           <Tab.Screen name="Search" component={SearchStackNavigator} />
+//           <Tab.Screen name="Reservation" component={ReservationStackNavigator} />
+//           <Tab.Screen name="Profile" component={ProfileStackNavigator} />
+//         </Tab.Navigator>
+//       ) : (
+//         <LoginStackNavigator />
+//       )}
+//     </NavigationContainer>
+//   );
+// };
 
 const LoginStackNavigator = () => {
   return (
@@ -90,7 +103,7 @@ const LoginStackNavigator = () => {
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Relogin" component={createClubberProfileLogin} />
       <Stack.Screen name="ReloginClub" component={createClubProfileLogin} />
-
+      <Stack.Screen name="Search" component={SearchScreen} />
     </Stack.Navigator>
   );
 };
@@ -106,9 +119,11 @@ const SearchStackNavigator = () => {
     headerTitleStyle: {
       color: '#FFFFFF',
     },
+    headerBackVisible: false,
+    headerShown: false
   }}>
-    <Stack.Screen name="Search Venues" component={SearchScreen}/>
-    <Stack.Screen name="VenueClubberPerspective" component={VenueClubberPerspective}/>
+    <Stack.Screen name="Search Venues" component={SearchScreen}  options={{headerShown:true, headerBackVisible: false}}/>
+    <Stack.Screen name="VenueClubberPerspective" component={VenueClubberPerspective}  options={{headerShown:true, headerBackVisible: false}}/>
   </Stack.Navigator>
   );
 }
@@ -123,13 +138,16 @@ const ReservationStackNavigator = () => {
       headerTitleStyle: {
         color: '#FFFFFF',
       },
+      headerBackVisible: false,
+      headerShown: false
     }}>
-      <Stack.Screen name="Reservations" component={ReservationScreen}/>
+      <Stack.Screen name="Reservations" component={ReservationScreen}  options={{headerShown:true, headerBackVisible: false}}/>
     </Stack.Navigator>
   )
 }
 
 const ProfileStackNavigator = () => {
+  
   return(
     <Stack.Navigator initialRouteName='Profile Stack' screenOptions={{
       headerStyle: {
@@ -139,9 +157,128 @@ const ProfileStackNavigator = () => {
       headerTitleStyle: {
         color: '#FFFFFF',
       },
+      headerBackVisible: false,
+      headerShown: false
     }}>
-      {/*Static venue ID for now to implement event functionality*/}
-      <Stack.Screen name="Your Profile" component={ProfileScreen} initialParams={{venueId: 'AsedlTwX2fdmuN0yWiM1k4BzKFb2'}}/> 
+      
+      <Stack.Screen name="Your Profile"  component={ProfileScreen}  options={{headerShown:true, headerBackVisible: false}}/>
+      <Stack.Screen name="Welcome" component={LoginScreen}  options={{headerShown:true, headerBackVisible: false}} /> 
+      <Stack.Screen name="ViewClubber" component={ViewClubberProfileScreen} />
+      <Stack.Screen name="ClubberReviews" component={ViewClubberReviews}/>
+      <Stack.Screen name="ClubberEvents" component={ViewClubberEvents}/>     
     </Stack.Navigator>
   )
 }
+
+
+//App stack
+//Stack Navigator
+  //Login stack
+  //Stack Navigator
+
+  //default app stack
+  //TAB navigator
+    //Search
+    //Reservation
+    //profile
+
+    export default App =() =>{
+      const [isLoggedIn,setIsLoggedIn] =  useState(false)
+      const [initialrootName, setInitialrootName] = useState("Login")
+
+      const checkLoggedInStatus = async () => {
+        const userType = await retrieveUserType(); // Assuming retrieveUserType returns user type
+        setIsLoggedIn(!!userType); // Set isLoggedIn to true if userType is not empty
+        
+        if(!!userType){
+          setInitialrootName('HomeScreen')
+        }
+      };
+
+      // Check if user is already logged in
+      useEffect(() => {
+        console.log(initialrootName, isLoggedIn)
+         checkLoggedInStatus();
+      }, [isLoggedIn,initialrootName]);
+
+      return(
+        <NavigationContainer>
+          {/* {isLoggedIn?setInitialrootName('HomeScreen'):setInitialrootName('LoginScreen')} */}
+          <Stack.Navigator
+            initialRouteName={initialrootName}
+            screenOptions={{
+              headerBackVisible: false,
+              headerShown: false
+            }}
+          >
+            {/* Login Stack */}
+            <Stack.Screen name="Login" component={DefaultLoginStackNavigator} options={{headerShown:true, headerBackVisible: false}}  /> 
+           
+            {/* default app Tab Stack */}
+            <Stack.Screen name="HomeScreen" component={DefaultAppTabNavigator} options={{headerShown:true, headerBackVisible: false}} /> 
+          </Stack.Navigator>
+        </NavigationContainer>
+
+      )
+    }
+
+    const DefaultLoginStackNavigator = () =>{
+
+      return(
+        <Stack.Navigator initialRouteName="Welcome"
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: '#4709CD',
+            },
+            headerTintColor: '#FFFFFF',
+            headerTitleStyle: {
+              color: '#FFFFFF',
+            },
+            headerBackVisible: false,
+            headerShown: false
+          }}
+        >
+          <Stack.Screen name="Welcome" component={LoginScreen}  options={{headerBackVisible: false,headerShown: false}} />
+          <Stack.Screen name="ViewClubber" component={ViewClubberProfileScreen} options={{headerBackVisible: false,headerShown: true}}/>
+          <Stack.Screen name="ClubberReviews" component={ViewClubberReviews} options={{headerBackVisible: false,headerShown: true}}/>
+          <Stack.Screen name="ClubberEvents" component={ViewClubberEvents} options={{headerBackVisible: false,headerShown: true}}/>
+          <Stack.Screen name="ClubberLogin" component={ClubberLoginScreen} options={{headerBackVisible: false,headerShown: true}} />
+          <Stack.Screen name="ClubLogin" component={ClubLoginScreen} options={{headerBackVisible: false,headerShown: true}} />
+          <Stack.Screen name="CreateClubberProfile" component={CreateClubberProfileScreen} options={{headerBackVisible: false,headerShown: true}} />
+          <Stack.Screen name="CreateClubProfile" component={CreateClubProfileScreen} options={{headerBackVisible: false,headerShown: true}}/>
+          <Stack.Screen name="clubberLogin" component={clubberLogin} options={{headerBackVisible: false,headerShown: true}} />
+          <Stack.Screen name="venueLogin" component={venueLogin} options={{headerBackVisible: false,headerShown: true}} />
+        </Stack.Navigator>
+      )
+    }
+
+    const DefaultAppTabNavigator = () =>{
+
+      return(
+        <Tab.Navigator
+        initialRouteName="Search"
+          screenOptions={
+            ({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === 'Search') {
+                iconName = focused ? 'search' : 'search-outline';
+              } else if (route.name === 'Login') {
+                iconName = focused ? 'log-in' : 'log-in-outline';
+              } else if (route.name === 'Reservation') {
+                iconName = focused ? 'calendar' : 'calendar-outline';
+              } else if (route.name === 'Profile') {
+                iconName = focused ? 'person' : 'person-outline';
+              }
+
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            })
+          }>
+          <Tab.Screen name="Search" component={SearchStackNavigator} options={{headerBackVisible: false,headerShown: false}}/>
+          <Tab.Screen name="Reservation" component={ReservationStackNavigator} options={{headerBackVisible: false,headerShown: false}} />
+          <Tab.Screen name="Profile" component={ProfileStackNavigator} options={{headerBackVisible: false,headerShown: false}} />
+        </Tab.Navigator>
+      );
+    }

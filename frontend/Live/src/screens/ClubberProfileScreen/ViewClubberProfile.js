@@ -264,7 +264,10 @@ const handleFieldChange = (field, value) => {
 const handleLogout = async () => {
   try {
       await clearToken(); // clearToken clears the token
-      navigation.navigate('clubLogin'); // Navigate to the login screen
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      }); // Navigate to the login screen
   } catch (error) {
       console.error('Failed to logout:', error);
       // Handle logout failure, show a message to the user, etc.

@@ -1,5 +1,5 @@
 const tabNavigator={
-    initialRouteName:'./src/screens/SearchScreen/SearchScreen',
+    initialRouteName:'./src/screens/LoginScreens/LoginScreen',
     screenOptions:{
         headerShown: false,
         headerTintColor: '#4709CD',
