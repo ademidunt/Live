@@ -120,7 +120,7 @@ const formatDate = (timestampObject) => {
 
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.title}>Reservation Management</Text>
       <View>
       <P>Pending Requests</P>
@@ -143,7 +143,7 @@ const formatDate = (timestampObject) => {
         />
       </View>
      
-    </ScrollView>
+    </View>
     
   );
 };
