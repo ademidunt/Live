@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Button, StyleSheet, ScrollView } from 'react-native';
+import { H1, H2, H3, P } from '../../components/Text/Text.js'
 import { retrieveUID, retrieveUserType } from '../../handlers/authService';
 
 
@@ -7,6 +8,9 @@ const ReservationManagement = () => {
   const [reservationRequests, setReservationRequests] = useState([]);
   const [userType, setUserType] = useState('');
   const [UID, setUID] = useState('');
+  const [approvedRequests, setApprovedRequests] = useState([]);
+  const [rejectedRequests, setRejectedRequests] = useState([]);
+  const [pendingRequests, setPendingRequests] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -24,7 +28,19 @@ const ReservationManagement = () => {
       const data = await response.json();
   
       setReservationRequests(data);
-      console.log(data)
+      // console.log(data)
+
+      const approved = data.filter(item => item.status === 'accepted');
+      const rejected = data.filter(item => item.status === 'rejected');
+      const pending = data.filter(item => item.status !== 'accepted' && item.status !== 'rejected');
+      
+      setApprovedRequests(approved);
+      setRejectedRequests(rejected);
+      setPendingRequests(pending);
+      console.log("approved reservations ", approved)
+      console.log("rejected reservations ", rejected)
+      console.log("pending reservations ", pending)
+      
     } catch (error) {
       console.error('Error retrieving user type and UID:', error);
     }
@@ -104,14 +120,31 @@ const formatDate = (timestampObject) => {
 
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>Reservation Management</Text>
+      <View>
+      <P>Pending Requests</P>
       <FlatList
-        data={reservationRequests}
+        data={pendingRequests}
         keyExtractor={(item, index) => (item && item.bookingId ? item.bookingId : index.toString())}
         renderItem={renderItem}
       />
-    </View>
+      <P style={styles.sectionTitle}>Rejected Requests</P>
+        <FlatList
+          data={rejectedRequests}
+          keyExtractor={(item, index) => (item && item.bookingId ? item.bookingId : index.toString())}
+          renderItem={renderItem}
+        />
+      <P style={styles.sectionTitle}>Approved Requests</P>
+        <FlatList
+          data={approvedRequests}
+          keyExtractor={(item, index) => (item && item.bookingId ? item.bookingId : index.toString())}
+          renderItem={renderItem}
+        />
+      </View>
+     
+    </ScrollView>
+    
   );
 };
 
@@ -138,6 +171,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 10,
   },
+ 
 });
 
 export default ReservationManagement;
