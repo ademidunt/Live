@@ -65,7 +65,7 @@ const VenueEvent = ({ _venueId_ }) => {
           onRequestClose={() => setShowAddEventModal(false)}
         >
           <View style={styles.modalContainer}>
-            <CreateNewEvent venueId={_venueId_} />
+            <CreateNewEvent venueId={_venueId_} dismissModal={()=>modalClosed()}/>
             <Button title="Close Modal" onPress={() => modalClosed()} />
           </View>
         </Modal>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextInput, Text, View, Pressable, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import DatePicker, { getFormatedDate } from 'react-native-modern-datepicker';
 
-const CreateNewEvent = ({ venueId }) => {
+const CreateNewEvent = ({ venueId, dismissModal }) => {
   const startDate = getFormatedDate(new Date(), 'YYYY/MM/DD h:m');
   const [date, setDate] = useState(startDate.toString());
   const [eventName, setEventName] = useState('');
@@ -43,6 +43,8 @@ const CreateNewEvent = ({ venueId }) => {
         setEventCreated(true);
         setShowInputFields(false); // Hide input fields after creating event
         // You may want to update local state or perform additional actions here
+
+        dismissModal()
       } else {
         console.error('Failed to create event:', await response.text());
         // Handle the error, show a message to the user, etc.
