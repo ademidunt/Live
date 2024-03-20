@@ -10,21 +10,25 @@ import { useNavigation } from '@react-navigation/native';
 const VenueProfileScreen = ({ route }) => {
 //added for navigation
   const navigation = useNavigation();
-  
+  const [UID, setUID] = useState(null); // State to store the retrieved UID
+
   const [selectedComponent, setSelectedComponent] = useState('about');
   const [venueData, setVenueData] = useState([]);
 
   useEffect(() => {
     const fetchVenueInfo = async () => {
-      getVenueData();
+      const uid = await retrieveUID();
+      setUID(uid);
+      getVenueData(uid);
     };
 
     fetchVenueInfo();
   }, []);
 
-  const getVenueData = async () => {
+  const getVenueData = async (uid) => {
     try {
-      const response = await fetch(`${apiUrl}/venue/${route.params.venueId}`, {
+      const response = await fetch(`${apiUrl}/venue/${uid}`, {
+      //const response = await fetch(`${apiUrl}/venue/${route.params.venueId}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',
@@ -74,9 +78,11 @@ const VenueProfileScreen = ({ route }) => {
           </View>
         );
       case 'events':
-        return <VenueEvent _venueId_={route.params.venueId} />;
+        // return <VenueEvent _venueId_={route.params.venueId} />;
+        return <VenueEvent _venueId_={UID} />;
       case 'reviews':
-        return <VenueReview id={route.params.venueId} />;
+        // return <VenueReview id={route.params.venueId} />;
+        return <VenueReview id={UID} />;
       case 'reservations':
         <View>
 
@@ -190,6 +196,8 @@ const styles = StyleSheet.create({
   componentButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   componentButton: {
     flex: 1,
