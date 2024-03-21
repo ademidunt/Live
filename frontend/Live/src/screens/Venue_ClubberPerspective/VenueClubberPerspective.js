@@ -71,7 +71,7 @@ const VenueClubberPerspective = ({ route, navigation }) => {
       <View style={styles.componentButtons}>
         <TouchableOpacity
           style={[styles.componentButton, selectedComponent === 'details' && styles.selectedComponent]}
-          onPress={() => handleComponentClick('details')}
+          onPress={() => {handleComponentClick('details'); getVenueData();}}
         >
           <Text style={styles.componentButtonText}>Details</Text>
         </TouchableOpacity>
@@ -83,13 +83,13 @@ const VenueClubberPerspective = ({ route, navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.componentButton, selectedComponent === 'events' && styles.selectedComponent]}
-          onPress={() => handleComponentClick('events')}
+          onPress={() => {handleComponentClick('events');getVenueData();}}
         >
           <Text style={styles.componentButtonText}>Events</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.componentButton, selectedComponent === 'reviews' && styles.selectedComponent]}
-          onPress={() => handleComponentClick('reviews')}
+          onPress={() => {handleComponentClick('reviews');getVenueData();}}
         >
           <Text style={styles.componentButtonText}>Reviews</Text>
         </TouchableOpacity>
