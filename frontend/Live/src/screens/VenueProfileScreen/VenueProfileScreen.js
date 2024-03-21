@@ -68,7 +68,8 @@ const VenueProfileScreen = ({ route }) => {
               lat: venueData.lat,
               lon: venueData.lon,
               address: venueData,
-              avgRating: venueData.avgRating
+              avgRating: venueData.avgRating,
+              url: venueData.url
             })
           });
           if (response.ok) {
@@ -79,6 +80,7 @@ const VenueProfileScreen = ({ route }) => {
             setHasEdited(false)
             resetEditableFields()
             getVenueData(UID);
+
 
             // You may want to update local state or perform additional actions here
           } else {

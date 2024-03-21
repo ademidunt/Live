@@ -53,7 +53,6 @@ export default function MapComponent({updateAddress}) {
     }
   };
   
-
   const handleSelectAddress = (addressLine1, lat, lon) => {
     console.log("og map region", mapRegion)
     //show text in search bar
@@ -123,12 +122,16 @@ export default function MapComponent({updateAddress}) {
 }
 
 const styles = StyleSheet.create({
+  map: {
+    width: '100%',
+    height: 200, // Adjust the height as per your requirement
+  },
   container: {
     flex: 1,
   },
   map: {
     width: '100%',
-    height: 300, // Adjust the height as per your requirement
+    height: 250, // Adjust the height as per your requirement
   },
   buttonTwo: {
     flexDirection: 'row',
