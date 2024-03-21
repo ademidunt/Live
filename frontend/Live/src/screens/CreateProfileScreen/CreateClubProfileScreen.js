@@ -14,7 +14,7 @@ const CreateProfileScreen = () => {
   const [venueName, setVenueName] = useState('');
   const [lon, setLongitude] = useState('');
   const [lat, setLatitude] = useState('');
-  const [address, setAddress] = useState('');
+  const [addressLine1, setAddress] = useState('');
   const [email, setEmail] = useState('');
   const [password, setpassword] = useState('');
   const [description, setDescription] = useState('');
@@ -22,14 +22,14 @@ const CreateProfileScreen = () => {
   const [tagInput, setTagInput] = useState('');
 
   const handleCreateProfile = async () => {
-    if (!venueName || !email || !password || !description || !address|| !lat|| !lon) {
+    if (!venueName || !email || !password || !description || !addressLine1|| !lat|| !lon) {
       Alert.alert('Incomplete profile!', 'Please fill in all fields to create a profile.');
       return;
    }        
 
     const userData = {
       venueName,
-      address, 
+      addressLine1, 
       lat,
       lon,
       email,
@@ -62,12 +62,12 @@ const CreateProfileScreen = () => {
     console.log('User Data:', userData);
   };
 
-  const updateAddressClick = (address, longitude,latitude) => {
+  const updateAddressClick = (addressLine1, longitude,latitude) => {
 
-    setAddress(address)
+    setAddress(addressLine1)
     setLongitude(longitude)
     setLatitude(latitude)
-    console.log("add", address, "long", longitude, "lat", latitude)
+    console.log("add", addressLine1, "long", longitude, "lat", latitude)
   }
 
   const handleAddTag = () => {
@@ -122,7 +122,7 @@ const CreateProfileScreen = () => {
         />
 
   
-    <MapComponent updateAddress={(add, long, lat)=>updateAddressClick(add, long, lat)}></MapComponent>
+    <MapComponent updateAddress={(addressLine1, long, lat)=>updateAddressClick(addressLine1, long, lat)}></MapComponent>
      
     <P>Tags:</P>
       <View style={styles.tagContainer}>
@@ -140,13 +140,7 @@ const CreateProfileScreen = () => {
         placeholder="Add tags one by one"
       />
 
-      <Text>Profile Picture:</Text>
-        <View>
-          {selectedImage && (
-            <Image source={selectedImage} style={{ width: 200, height: 200 }} />
-          )}
-          <Button title="Select Image" onPress={() => { handleImagePicker(); }} />
-        </View>
+
         <ButtonDark title={"Create Profile"} onPress={handleCreateProfile} style={{marginBottom: 5, width: 200, alignSelf: 'center'}}/>
       </View>
 
