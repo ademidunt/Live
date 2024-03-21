@@ -124,7 +124,7 @@ const SearchStackNavigator = () => {
     headerLeft:null
   }}>
     <Stack.Screen name="Search Venues" component={SearchScreen}  options={{headerShown:true, headerBackVisible: false, headerLeft:null}}/>
-    <Stack.Screen name="VenueClubberPerspective" component={VenueClubberPerspective}  options={{headerShown:true, headerBackVisible: false}}/>
+    <Stack.Screen name="VenueClubberPerspective" component={VenueClubberPerspective}  options={{headerShown:true, headerBackVisible: true}}/>
   </Stack.Navigator>
   );
 }
@@ -164,6 +164,8 @@ const ProfileStackNavigator = () => {
       
       <Stack.Screen name="Your Profile"  component={ProfileScreen}  options={{headerShown:true, headerBackVisible: false, headerLeft:null}}/>
       <Stack.Screen name="Welcome" component={LoginScreen}  options={{headerShown:false, headerBackVisible: false}} /> 
+      <Stack.Screen name="ClubberReviews" component={ViewClubberReviews} options={{headerBackVisible: false,headerShown: true}}/>
+      <Stack.Screen name="ClubberEvents" component={ViewClubberEvents} options={{headerBackVisible: false,headerShown: true}}/>
       {/* <Stack.Screen name="ViewClubber" component={ViewClubberProfileScreen} />
       <Stack.Screen name="ClubberReviews" component={ViewClubberReviews}/>
       <Stack.Screen name="ClubberEvents" component={ViewClubberEvents}/>      */}
