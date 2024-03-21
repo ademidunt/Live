@@ -65,6 +65,9 @@ const VenueClubberPerspective = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <Image source={{ uri: 'https://via.placeholder.com/200' }} style={styles.image} />
+      <View style={styles.headerContent}>      
+        <Text style={styles.venueName}>{venueInfo.venueName}</Text>
+      </View>
       <View style={styles.componentButtons}>
         <TouchableOpacity
           style={[styles.componentButton, selectedComponent === 'details' && styles.selectedComponent]}
@@ -100,6 +103,13 @@ const VenueClubberPerspective = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff', // Background color
+  },
+  headerContent:{
+    padding:20
+  },
+  venueName: {
+    fontSize: 30,
+    color: '#000000',
   },
   image: {
     width: '100%', // Updated to cover the whole page

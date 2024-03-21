@@ -57,7 +57,6 @@ const VenueReview = ({ id }) => {
           </TouchableOpacity>
         }
 
-
         <View style={styles.reviewsContainer}>
           {/* Display reviews */}
           {reviews.map((review, index) => (
@@ -76,6 +75,9 @@ const VenueReview = ({ id }) => {
             <Button title="Close Modal" onPress={() => modalClosed()} />
           </View>
         </Modal>
+        <TouchableOpacity onPress={getVenueReviews} style={styles.addReviewButton}>
+          <Text style={styles.addReviewButtonText}>Refresh</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
