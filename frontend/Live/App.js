@@ -258,6 +258,16 @@ const ProfileStackNavigator = () => {
       return(
         <Tab.Navigator
         initialRouteName="Search"
+        // tabBarOptions={{
+        //   activeTintColor: '#FFFFFF', // Color of the active tab
+        //   headerTintColor: '#4709CD',
+        //   headerStyle: {
+        //     backgroundColor: "#4709CD",
+        //     },
+        //   inactiveTintColor: '#9166ED', // Color of inactive tabs
+        //   //labelStyle: { fontSize: 16 }, // Style for tab labels
+        //   style: { backgroundColor: '#4709CD' } // Style for the tab bar
+        // }}
           screenOptions={
             // {
             //   headerLeft:null,
@@ -279,6 +289,9 @@ const ProfileStackNavigator = () => {
 
               return <Ionicons name={iconName} size={size} color={color} />;
             },
+            backgroundColor: "#4709CD",
+            activeTintColor: '#FFFFFF', // Color of the active tab
+
             })
           }>
           <Tab.Screen name="Search" component={SearchStackNavigator} options={{headerBackVisible: false,headerShown: false, headerLeft:null}}/>

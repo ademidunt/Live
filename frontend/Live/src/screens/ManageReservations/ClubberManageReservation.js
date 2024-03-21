@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, FlatList, Button, StyleSheet, ScrollView, ActivityIndicator  } from 'react-native';
+import { Alert, View, Text, TextInput, FlatList, Button, StyleSheet, ScrollView, ActivityIndicator  } from 'react-native';
 import { retrieveUID, retrieveUserType } from '../../handlers/authService';
 import { ButtonDark } from '../../components/Buttons/Button';
 import { SearchBar } from '../../components/SearchBar/SearchBar';
@@ -156,6 +156,7 @@ const ClubberManageReservation = () => {
           console.log(`Reservation made successfully`);
           // Fetch the updated reservation requests after the action is completed
           fetchData();
+          Alert.alert(`Reservation made successfully`)
 
         } else {
           setSubmitButtonTitle("Error")

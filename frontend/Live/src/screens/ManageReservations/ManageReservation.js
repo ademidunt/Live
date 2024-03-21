@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, ScrollView } from 'react-native';
+import { Alert, View, Text, FlatList, Button, StyleSheet, ScrollView } from 'react-native';
 import { H1, H2, H3, P } from '../../components/Text/Text.js'
 import { retrieveUID, retrieveUserType } from '../../handlers/authService';
 
@@ -57,6 +57,8 @@ const ReservationManagement = () => {
         ...item,
         status: action === 'accept' ? 'accepted' : 'rejected',
       };
+      Alert.alert(`Reservation ${action}ed`)
+
   
       // Send a request to the server to update the reservation status
       const updateResponse = await fetch(`${apiUrl}/booking/${reservationId}`, {
