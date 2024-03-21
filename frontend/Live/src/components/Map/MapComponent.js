@@ -42,7 +42,7 @@ export default function MapComponent({updateAddress}) {
 
       if (json && json.results){
         const placesData = json.results.map(item => ({
-          address: item.formatted_address,
+          addressLine1: item.formatted_address,
           latitude: item.geometry.location.lat,
           longitude: item.geometry.location.lng
         }));
@@ -54,10 +54,10 @@ export default function MapComponent({updateAddress}) {
   };
   
 
-  const handleSelectAddress = (address, lat, lon) => {
+  const handleSelectAddress = (addressLine1, lat, lon) => {
     console.log("og map region", mapRegion)
     //show text in search bar
-    setSearchText(address);
+    setSearchText(addressLine1);
     //updateMapview 
     setMapRegion({
       "latitude": lat,
@@ -108,12 +108,12 @@ export default function MapComponent({updateAddress}) {
             style={styles.dropdownItem}
             onPress={
               () => {
-                updateAddress(item.address, item.longitude, item.latitude),
-                handleSelectAddress(item.address, item.latitude, item.longitude)
+                updateAddress(item.addressLine1, item.longitude, item.latitude),
+                handleSelectAddress(item.addressLine1, item.latitude, item.longitude)
               }
             }
           >
-            <P>{item.address}</P>
+            <P>{item.addressLine1}</P>
           </TouchableOpacity>
         ))}
       </View>

@@ -42,7 +42,6 @@ const VenueProfileScreen = ({ route }) => {
       venueName:'',
       description:'',
       email:'',
-      addressLine1:'',
       website:'',
       phoneNumber:''
     })
@@ -63,9 +62,14 @@ const VenueProfileScreen = ({ route }) => {
               venueName:editableFields.venueName == ''? venueData.venueName: editableFields.venueName,
               description:editableFields.description  == ''? venueData.description: editableFields.description,
               email:editableFields.email  == ''? venueData.email : editableFields.email,
-              addressLine1:editableFields.addressLine1  == ''? venueData.addressLine1 :editableFields.addressLine1,
               website:editableFields.website  == ''? venueData.website : editableFields.website,
-              phoneNumber:editableFields.phoneNumber  == ''? venueData.phoneNumber : editableFields.phoneNumber
+              phoneNumber:editableFields.phoneNumber  == ''? venueData.phoneNumber : editableFields.phoneNumber,
+              ratings: venueData.ratings,
+              tags: venueData.tags,
+              lat: venueData.lat,
+              lon: venueData.lon,
+              address: venueData,
+              avgRating: venueData.avgRating
             })
           });
           if (response.ok) {
