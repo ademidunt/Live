@@ -77,6 +77,7 @@ export async function createReview(review) {
             
         }
 
+
         addRatingToVenueList(review)  
         return review   
 
@@ -222,6 +223,7 @@ export async function addRatingToVenueList(review) {
     const newRatingsList = venue.ratings 
 
     if (newRatingsList) {
+        
         newRatingsList.push(parseInt(review.rating))
         updateVenueRatingsList(review.venueId, newRatingsList)
         updateRatingsAvg(review.venueId, newRatingsList)
@@ -275,10 +277,13 @@ export async function updateRatingsAvg(venueId, newRatingsList){
 
    console.log("the new list to loop through for avg is", newRatingsList)
     for ( let rating of newRatingsList){
-
-        sum += rating
+        const intRating = parseInt(rating)
+        console.log("the current sum is", sum)
+        sum += intRating
 
     }
+    const length = newRatingsList.length;
+    console.log("the length shoudl be ", length)
     const avg = sum / newRatingsList.length 
     console.log('the new rating for the venue should be', avg)
     updateVenueRatingsAvg(venueId, avg)

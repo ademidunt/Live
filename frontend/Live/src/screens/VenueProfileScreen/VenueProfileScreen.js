@@ -113,7 +113,9 @@ const VenueProfileScreen = ({ route }) => {
         const venueData = await response.json();
         setVenueData(venueData);
         if(venueData.url != ''){
+          console.log('show thi')
           setPic(venueData.url)
+         
         }
       } else {
         console.log(`Something went wrong: ${JSON.stringify(response)}`);

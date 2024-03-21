@@ -9,6 +9,7 @@ const VenueClubberPerspective = ({ route, navigation }) => {
   const [showEvents, setShowEvents] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState('details');
   const [venueInfo, setVenueInfo] = useState([]);
+  const [pic, setPic] = useState([]);
 
   useEffect(() => {
     const fetchVenueInfo = async () => {
@@ -31,6 +32,10 @@ const VenueClubberPerspective = ({ route, navigation }) => {
       if (response.ok) {
         const venueData = await response.json();
         setVenueInfo(venueData);
+        if (venueData != ''){
+          setPic(venueData.url)
+
+        }
       } else {
         console.log(`Something went wrong: ${JSON.stringify(response)}`);
       }
@@ -64,7 +69,7 @@ const VenueClubberPerspective = ({ route, navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Image source={{ uri: 'https://via.placeholder.com/200' }} style={styles.image} />
+      <Image source={{ uri: pic }} style={styles.image} />
       <View style={styles.headerContent}>      
         <Text style={styles.venueName}>{venueInfo.venueName}</Text>
       </View>
