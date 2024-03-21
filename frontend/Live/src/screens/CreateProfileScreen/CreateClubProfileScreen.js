@@ -18,6 +18,7 @@ const CreateProfileScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setpassword] = useState('');
   const [description, setDescription] = useState('');
+  const [url,setUrl]=useState('')
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
 
@@ -36,6 +37,7 @@ const CreateProfileScreen = () => {
       password,
       description,
       tags,
+      url,
     };
 
     //should probably add something that catches when the email is already in the adatabse and makes an alert

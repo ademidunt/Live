@@ -7,13 +7,11 @@ import { useNavigation } from '@react-navigation/native';
 import { ButtonDark,ButtonLight } from '../../components/Buttons/Button';
 import { ConfirmationModal} from '../../components/Modals/ConfirmationModal';
 
-
-
 const VenueProfileScreen = ({ route }) => {
 //added for navigation
   const navigation = useNavigation();
   const [UID, setUID] = useState(null); // State to store the retrieved UID
-
+  const [pic, setPic] = useState('https://via.placeholder.com/200');
   const [selectedComponent, setSelectedComponent] = useState('about');
   const [venueData, setVenueData] = useState([]);
   const [hasEdited, setHasEdited] = useState(false)
@@ -111,6 +109,9 @@ const VenueProfileScreen = ({ route }) => {
       if (response.ok) {
         const venueData = await response.json();
         setVenueData(venueData);
+        if(venueData.url != ''){
+          setPic(venueData.url)
+        }
       } else {
         console.log(`Something went wrong: ${JSON.stringify(response)}`);
       }
@@ -219,7 +220,7 @@ const VenueProfileScreen = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Image source={{ uri: 'https://via.placeholder.com/200' }} style={styles.image} />
+      <Image source={{ uri: pic }} style={styles.image} />
       <View style={styles.header}>
         <View style={styles.headerContent}>
           {!isEditing && <Text style={styles.venueName}>{venueData.venueName}</Text>}
