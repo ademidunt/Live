@@ -191,7 +191,7 @@ const ClubberManageReservation = () => {
         <Text style={styles.title}>Clubber Management Reservation</Text>
         <View style={styles.visualContainer}>
           <View style={styles.reservationContainer}>
-            <Text>You are booking a resrvation at:</Text>
+            <Text>You are booking a reservation at:</Text>
             <ModalPicker buttonStyle={"ButtonLight"} buttonTitle={ selectedClub?selectedClub.label:"Change Club"} selectableValues={clubList} defaultValue={selectedClub} onValueChange={onClubValueChange} style={{ height: 200, width: 200 }}/>
             <Text>How many guest are you expecting? </Text>
             <ModalPicker buttonStyle={"ButtonLight"} buttonTitle={ `${numOfGuests?numOfGuests?.label:"Select Number"}`} selectableValues={numOfGuestList} defaultValue={0} onValueChange={onNumOfGuestsValueChange} style={{ height: 200, width: 200 }}/>
@@ -205,7 +205,7 @@ const ClubberManageReservation = () => {
             {/* <ConfirmationModal buttonStyle={"ButtonDark"} buttonTitle={"Submit"} onSubmitAction={onSubmitConfirmation}/> */}
         </View>
         <View style={[styles.visualContainer,{flex:2}]}>
-        <Text>Your resrvations</Text>
+        <Text>Your reservations</Text>
         {/* <SearchBar onSearch={(search) => console.log(search)}/> */}
             {/* <TextInput
                 style={styles.input}
