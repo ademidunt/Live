@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+Alert,
 ScrollView,
 View,
 Text,
@@ -238,9 +239,11 @@ const saveToDatabaseNoPhoto = async () => {
 
       if (response.ok) {
         console.log('Changes saved successfully');
+        Alert.alert(`Changes saved successfully`)
         // You may want to update local state or perform additional actions here
       } else {
         console.error('Failed to save changes:', await response.text());
+        Alert.alert(`Failed to save changes`)
         // Handle the error, show a message to the user, etc.
       }
     } catch (error) {

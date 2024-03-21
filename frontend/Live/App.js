@@ -8,10 +8,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import {retrieveUserType } from './src/handlers/authService.js';
 
-import ProfileScreen from "./src/screens/VenueProfileScreen/VenueProfileScreen";
+//import VenueProfileScreen from "./src/screens/VenueProfileScreen/VenueProfileScreen";
 import SearchScreen from "./src/screens/SearchScreen/SearchScreen";
 import ReservationScreen from './src/screens/ReservationScreen/ReservationScreen';
-import TestScreen from './src/screens/TestScreen/TestScreen';
+import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen.js';
 import LoginScreen from "./src/screens/LoginScreens/LoginScreen";
 import ClubberLoginScreen from "./src/screens/LoginScreens/ClubberLoginScreen";
 import ClubLoginScreen from "./src/screens/LoginScreens/ClubLoginScreen";
@@ -78,35 +78,35 @@ const tabNavigator = require('./AppStyles')
 //   );
 // };
 
-const LoginStackNavigator = () => {
-  return (
-    <Stack.Navigator initialRouteName="Login"
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: '#4709CD',
-      },
-      headerTintColor: '#FFFFFF',
-      headerTitleStyle: {
-        color: '#FFFFFF',
-      },
-    }}>
-      <Stack.Screen name="Welcome" component={LoginScreen} />
-      <Stack.Screen name="ViewClubber" component={ViewClubberProfileScreen} />
-      <Stack.Screen name="ClubberReviews" component={ViewClubberReviews}/>
-      <Stack.Screen name="ClubberEvents" component={ViewClubberEvents}/>
-      <Stack.Screen name="ClubberLogin" component={ClubberLoginScreen} />
-      <Stack.Screen name="ClubLogin" component={ClubLoginScreen} />
-      <Stack.Screen name="CreateClubberProfile" component={CreateClubberProfileScreen} />
-      <Stack.Screen name="CreateClubProfile" component={CreateClubProfileScreen} />
-      <Stack.Screen name="clubberLogin" component={clubberLogin} />
-      <Stack.Screen name="venueLogin" component={venueLogin} />
-      <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="Relogin" component={createClubberProfileLogin} />
-      <Stack.Screen name="ReloginClub" component={createClubProfileLogin} />
-      <Stack.Screen name="Search" component={SearchScreen} />
-    </Stack.Navigator>
-  );
-};
+// const LoginStackNavigator = () => {
+//   return (
+//     <Stack.Navigator initialRouteName="Login"
+//     screenOptions={{
+//       headerStyle: {
+//         backgroundColor: '#4709CD',
+//       },
+//       headerTintColor: '#FFFFFF',
+//       headerTitleStyle: {
+//         color: '#FFFFFF',
+//       },
+//     }}>
+//       <Stack.Screen name="Welcome" component={LoginScreen} />
+//       <Stack.Screen name="ViewClubber" component={ViewClubberProfileScreen} />
+//       <Stack.Screen name="ClubberReviews" component={ViewClubberReviews}/>
+//       <Stack.Screen name="ClubberEvents" component={ViewClubberEvents}/>
+//       <Stack.Screen name="ClubberLogin" component={ClubberLoginScreen} />
+//       <Stack.Screen name="ClubLogin" component={ClubLoginScreen} />
+//       <Stack.Screen name="CreateClubberProfile" component={CreateClubberProfileScreen} />
+//       <Stack.Screen name="CreateClubProfile" component={CreateClubProfileScreen} />
+//       <Stack.Screen name="clubberLogin" component={clubberLogin} />
+//       <Stack.Screen name="venueLogin" component={venueLogin} />
+//       <Stack.Screen name="Profile" component={ProfileScreen} />
+//       <Stack.Screen name="Relogin" component={createClubberProfileLogin} />
+//       <Stack.Screen name="ReloginClub" component={createClubProfileLogin} />
+//       <Stack.Screen name="Search" component={SearchScreen} />
+//     </Stack.Navigator>
+//   );
+// };
 
 const SearchStackNavigator = () => {
   return(
@@ -120,10 +120,11 @@ const SearchStackNavigator = () => {
       color: '#FFFFFF',
     },
     headerBackVisible: false,
-    headerShown: false
+    headerShown: false,
+    headerLeft:null
   }}>
-    <Stack.Screen name="Search Venues" component={SearchScreen}  options={{headerShown:true, headerBackVisible: false}}/>
-    <Stack.Screen name="VenueClubberPerspective" component={VenueClubberPerspective}  options={{headerShown:true, headerBackVisible: false}}/>
+    <Stack.Screen name="Search Venues" component={SearchScreen}  options={{headerShown:true, headerBackVisible: false, headerLeft:null}}/>
+    <Stack.Screen name="VenueClubberPerspective" component={VenueClubberPerspective}  options={{headerShown:true, headerBackVisible: true}}/>
   </Stack.Navigator>
   );
 }
@@ -141,7 +142,7 @@ const ReservationStackNavigator = () => {
       headerBackVisible: false,
       headerShown: false
     }}>
-      <Stack.Screen name="Reservations" component={ReservationScreen}  options={{headerShown:true, headerBackVisible: false}}/>
+      <Stack.Screen name="Reservations" component={ReservationScreen}  options={{headerShown:true, headerBackVisible: false, headerLeft:null}}/>
     </Stack.Navigator>
   )
 }
@@ -161,11 +162,13 @@ const ProfileStackNavigator = () => {
       headerShown: false
     }}>
       
-      <Stack.Screen name="Your Profile"  component={ProfileScreen}  options={{headerShown:true, headerBackVisible: false}}/>
-      <Stack.Screen name="Welcome" component={LoginScreen}  options={{headerShown:true, headerBackVisible: false}} /> 
-      <Stack.Screen name="ViewClubber" component={ViewClubberProfileScreen} />
+      <Stack.Screen name="Your Profile"  component={ProfileScreen}  options={{headerShown:true, headerBackVisible: false, headerLeft:null}}/>
+      <Stack.Screen name="Welcome" component={LoginScreen}  options={{headerShown:false, headerBackVisible: false}} /> 
+      <Stack.Screen name="ClubberReviews" component={ViewClubberReviews} options={{headerBackVisible: false,headerShown: true}}/>
+      <Stack.Screen name="ClubberEvents" component={ViewClubberEvents} options={{headerBackVisible: false,headerShown: true}}/>
+      {/* <Stack.Screen name="ViewClubber" component={ViewClubberProfileScreen} />
       <Stack.Screen name="ClubberReviews" component={ViewClubberReviews}/>
-      <Stack.Screen name="ClubberEvents" component={ViewClubberEvents}/>     
+      <Stack.Screen name="ClubberEvents" component={ViewClubberEvents}/>      */}
     </Stack.Navigator>
   )
 }
@@ -215,7 +218,7 @@ const ProfileStackNavigator = () => {
             <Stack.Screen name="Login" component={DefaultLoginStackNavigator} options={{headerShown:true, headerBackVisible: false}}  /> 
            
             {/* default app Tab Stack */}
-            <Stack.Screen name="HomeScreen" component={DefaultAppTabNavigator} options={{headerShown:true, headerBackVisible: false}} /> 
+            <Stack.Screen name="HomeScreen" component={DefaultAppTabNavigator} options={{headerShown:false, headerBackVisible: false, headerLeft:null}} /> 
           </Stack.Navigator>
         </NavigationContainer>
 
@@ -257,7 +260,21 @@ const ProfileStackNavigator = () => {
       return(
         <Tab.Navigator
         initialRouteName="Search"
+        // tabBarOptions={{
+        //   activeTintColor: '#FFFFFF', // Color of the active tab
+        //   headerTintColor: '#4709CD',
+        //   headerStyle: {
+        //     backgroundColor: "#4709CD",
+        //     },
+        //   inactiveTintColor: '#9166ED', // Color of inactive tabs
+        //   //labelStyle: { fontSize: 16 }, // Style for tab labels
+        //   style: { backgroundColor: '#4709CD' } // Style for the tab bar
+        // }}
           screenOptions={
+            // {
+            //   headerLeft:null,
+            //   headerBackVisible:false
+            // }
             ({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
@@ -274,11 +291,14 @@ const ProfileStackNavigator = () => {
 
               return <Ionicons name={iconName} size={size} color={color} />;
             },
+            backgroundColor: "#4709CD",
+            activeTintColor: '#FFFFFF', // Color of the active tab
+
             })
           }>
-          <Tab.Screen name="Search" component={SearchStackNavigator} options={{headerBackVisible: false,headerShown: false}}/>
-          <Tab.Screen name="Reservation" component={ReservationStackNavigator} options={{headerBackVisible: false,headerShown: false}} />
-          <Tab.Screen name="Profile" component={ProfileStackNavigator} options={{headerBackVisible: false,headerShown: false}} />
+          <Tab.Screen name="Search" component={SearchStackNavigator} options={{headerBackVisible: false,headerShown: false, headerLeft:null}}/>
+          <Tab.Screen name="Reservation" component={ReservationStackNavigator} options={{headerBackVisible: false,headerShown: false, headerLeft:null}} />
+          <Tab.Screen name="Profile" component={ProfileStackNavigator} options={{headerBackVisible: false,headerShown: false, headerLeft:null}} />
         </Tab.Navigator>
       );
     }

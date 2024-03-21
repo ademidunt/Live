@@ -47,7 +47,7 @@ const VenueClubberDetails = ({ info }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0EBF3', // Background color
+    backgroundColor: '#FFFFFF', // Background color
     padding: 20,
     paddingBottom: 500,
   },

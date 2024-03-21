@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, FlatList, Button, StyleSheet, ScrollView, ActivityIndicator  } from 'react-native';
+import { Alert, View, Text, TextInput, FlatList, Button, StyleSheet, ScrollView, ActivityIndicator  } from 'react-native';
 import { retrieveUID, retrieveUserType } from '../../handlers/authService';
 import { ButtonDark } from '../../components/Buttons/Button';
 import { SearchBar } from '../../components/SearchBar/SearchBar';
@@ -156,6 +156,7 @@ const ClubberManageReservation = () => {
           console.log(`Reservation made successfully`);
           // Fetch the updated reservation requests after the action is completed
           fetchData();
+          Alert.alert(`Reservation made successfully`)
 
         } else {
           setSubmitButtonTitle("Error")
@@ -190,7 +191,7 @@ const ClubberManageReservation = () => {
         <Text style={styles.title}>Clubber Management Reservation</Text>
         <View style={styles.visualContainer}>
           <View style={styles.reservationContainer}>
-            <Text>You are booking a resrvation at:</Text>
+            <Text>You are booking a reservation at:</Text>
             <ModalPicker buttonStyle={"ButtonLight"} buttonTitle={ selectedClub?selectedClub.label:"Change Club"} selectableValues={clubList} defaultValue={selectedClub} onValueChange={onClubValueChange} style={{ height: 200, width: 200 }}/>
             <Text>How many guest are you expecting? </Text>
             <ModalPicker buttonStyle={"ButtonLight"} buttonTitle={ `${numOfGuests?numOfGuests?.label:"Select Number"}`} selectableValues={numOfGuestList} defaultValue={0} onValueChange={onNumOfGuestsValueChange} style={{ height: 200, width: 200 }}/>
@@ -204,7 +205,7 @@ const ClubberManageReservation = () => {
             {/* <ConfirmationModal buttonStyle={"ButtonDark"} buttonTitle={"Submit"} onSubmitAction={onSubmitConfirmation}/> */}
         </View>
         <View style={[styles.visualContainer,{flex:2}]}>
-        <Text>Your resrvations</Text>
+        <Text>Your reservations</Text>
         {/* <SearchBar onSearch={(search) => console.log(search)}/> */}
             {/* <TextInput
                 style={styles.input}

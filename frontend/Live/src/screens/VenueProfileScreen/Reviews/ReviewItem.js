@@ -55,6 +55,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    borderColor:'#4709CD',
+    borderWidth:2
   },
   description: {
     fontSize: 16,

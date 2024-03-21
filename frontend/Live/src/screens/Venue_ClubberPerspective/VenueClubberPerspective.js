@@ -65,10 +65,13 @@ const VenueClubberPerspective = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <Image source={{ uri: 'https://via.placeholder.com/200' }} style={styles.image} />
+      <View style={styles.headerContent}>      
+        <Text style={styles.venueName}>{venueInfo.venueName}</Text>
+      </View>
       <View style={styles.componentButtons}>
         <TouchableOpacity
           style={[styles.componentButton, selectedComponent === 'details' && styles.selectedComponent]}
-          onPress={() => handleComponentClick('details')}
+          onPress={() => {handleComponentClick('details'); getVenueData();}}
         >
           <Text style={styles.componentButtonText}>Details</Text>
         </TouchableOpacity>
@@ -80,13 +83,13 @@ const VenueClubberPerspective = ({ route, navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.componentButton, selectedComponent === 'events' && styles.selectedComponent]}
-          onPress={() => handleComponentClick('events')}
+          onPress={() => {handleComponentClick('events');getVenueData();}}
         >
           <Text style={styles.componentButtonText}>Events</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.componentButton, selectedComponent === 'reviews' && styles.selectedComponent]}
-          onPress={() => handleComponentClick('reviews')}
+          onPress={() => {handleComponentClick('reviews');getVenueData();}}
         >
           <Text style={styles.componentButtonText}>Reviews</Text>
         </TouchableOpacity>
@@ -100,6 +103,13 @@ const VenueClubberPerspective = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff', // Background color
+  },
+  headerContent:{
+    padding:20
+  },
+  venueName: {
+    fontSize: 30,
+    color: '#000000',
   },
   image: {
     width: '100%', // Updated to cover the whole page

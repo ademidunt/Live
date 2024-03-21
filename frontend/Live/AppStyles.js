@@ -4,7 +4,7 @@ const tabNavigator={
         headerShown: false,
         headerTintColor: '#4709CD',
         headerStyle: {
-        backgroundColor: "#4709CD",
+        backgroundColor: "#FFFFFF",
         },
     
         tabBarActiveTintColor: '#FFFFFF',

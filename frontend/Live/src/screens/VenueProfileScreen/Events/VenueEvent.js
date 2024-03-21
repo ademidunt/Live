@@ -77,7 +77,7 @@ const VenueEvent = ({ _venueId_ }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1E1E1E', // Background color
+    backgroundColor: '#FFFFFF', // Background color
     padding: 20,
     paddingBottom: 500,
   },

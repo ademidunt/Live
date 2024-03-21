@@ -14,27 +14,91 @@ const CreateProfileScreen = () => {
   const [venueName, setVenueName] = useState('');
   const [lon, setLongitude] = useState('');
   const [lat, setLatitude] = useState('');
-  const [address, setAddress] = useState('');
+  const [addressLine1, setAddress] = useState('');
   const [email, setEmail] = useState('');
   const [password, setpassword] = useState('');
   const [description, setDescription] = useState('');
+  const [url,setUrl]=useState('')
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
+  const [url, setUrl] = useState('')
 
+
+  const handleImagePicker = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (status !== 'granted') {
+      console.log('Permission to access media library denied');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // here it is where we specify the allow format
+      allowsEditing: true,
+      aspect: [3, 4],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      // console.log(JSON.stringify(result))
+      setSelectedImage({ uri: result.assets[0].uri })
+
+      // console.log("image uri is", result.assets[0].uri )
+      // await uploadImage(result.assets[0].uri, "image");
+
+      //upload image 
+
+      // console.log(profilePicture)
+    }
+  };
+
+
+  async function uploadImage (uri) {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const storageRef = ref(storage, "images/" + new Date().getTime());
+   
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+   
+    // listen for events
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        // setProgress(progress.toFixed());
+      },
+      (error) => {
+        // handle error
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+         await updateDatabase(downloadURL)
+         console.log("File available at", downloadURL);      
+         return url
+          // save record
+        
+        });
+      },
+    );
+  
+  }
   const handleCreateProfile = async () => {
-    if (!venueName || !email || !password || !description || !address|| !lat|| !lon) {
+    if (!venueName || !email || !password || !description || !addressLine1|| !lat|| !lon) {
       Alert.alert('Incomplete profile!', 'Please fill in all fields to create a profile.');
       return;
    }        
+
     const userData = {
       venueName,
-      address, 
+      addressLine1, 
       lat,
       lon,
       email,
       password,
       description,
       tags,
+      url,
     };
 
     //should probably add something that catches when the email is already in the adatabse and makes an alert
@@ -50,7 +114,8 @@ const CreateProfileScreen = () => {
         .then(async (res) => {
           if (res.ok) {
             console.log(`added to the database successfully`);
-            navigation.navigate('ReloginClub');
+            navigation.navigate('Login', {
+              screen: 'venueLogin'});
           } else {
             console.log(`something went wrong ${JSON.stringify(res)}`);
           }
@@ -61,12 +126,12 @@ const CreateProfileScreen = () => {
     console.log('User Data:', userData);
   };
 
-  const updateAddressClick = (address, longitude,latitude) => {
+  const updateAddressClick = (addressLine1, longitude,latitude) => {
 
-    setAddress(address)
+    setAddress(addressLine1)
     setLongitude(longitude)
     setLatitude(latitude)
-    console.log("add", address, "long", longitude, "lat", latitude)
+    console.log("add", addressLine1, "long", longitude, "lat", latitude)
   }
 
   const handleAddTag = () => {
@@ -121,7 +186,7 @@ const CreateProfileScreen = () => {
         />
 
   
-    <MapComponent updateAddress={(add, long, lat)=>updateAddressClick(add, long, lat)}></MapComponent>
+    <MapComponent updateAddress={(addressLine1, long, lat)=>updateAddressClick(addressLine1, long, lat)}></MapComponent>
      
     <P>Tags:</P>
       <View style={styles.tagContainer}>
@@ -138,7 +203,8 @@ const CreateProfileScreen = () => {
         onSubmitEditing={handleAddTag}
         placeholder="Add tags one by one"
       />
-        
+
+
         <ButtonDark title={"Create Profile"} onPress={handleCreateProfile} style={{marginBottom: 5, width: 200, alignSelf: 'center'}}/>
       </View>
 
