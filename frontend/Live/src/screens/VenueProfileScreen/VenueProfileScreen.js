@@ -32,6 +32,7 @@ const VenueProfileScreen = ({ route }) => {
     };
 
     fetchVenueInfo();
+    console.log('avg', venueData?.avgRating)
   }, []);
 
 
@@ -232,7 +233,7 @@ const VenueProfileScreen = ({ route }) => {
             </TextInput>}
           <View style={styles.headerContainer}>
             <View style={styles.starRating}>
-              <Text style={styles.ratingText}>{Math.round(venueData.avgRating * 10) / 10}</Text>
+              <Text style={styles.ratingText}>{venueData?.avgRating == undefined? '0':Math.round(venueData.avgRating * 10) / 10}</Text>
               <Image source={require('../../../assets/ratingStar.png')} />
             </View>
             {<ButtonDark title={!isEditing?'Edit':'Save'} onPress={() => {setIsEditing(!isEditing); sendEditedData()}} style={styles.editButton}></ButtonDark>}
