@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, Modal, Button, StyleSheet } from 'react-native';
 import ReviewItem from './ReviewItem';
 import NewRating from '../../VenueProfileScreen/NewRating/NewRating';
+import { retrieveUserType } from '../../../handlers/authService';
 
 const VenueReview = ({ id }) => {
   const [reviews, setReviews] = useState([]);
   const [showAddReviewModal, setShowAddReviewModal] = useState(false);
-
+  const [userType, setUserType] = useState('')
   useEffect(() => {
     const fetchVenueReviews = async () => {
       getVenueReviews();
+      const retrievedUserType = await retrieveUserType();
+      setUserType(retrievedUserType)
     };
 
     fetchVenueReviews();
@@ -47,9 +50,13 @@ const VenueReview = ({ id }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <TouchableOpacity onPress={handleAddReview} style={styles.addReviewButton}>
+        {
+          userType == 'clubber' && 
+          <TouchableOpacity onPress={handleAddReview} style={styles.addReviewButton}>
           <Text style={styles.addReviewButtonText}>Add a Review</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        }
+
 
         <View style={styles.reviewsContainer}>
           {/* Display reviews */}
