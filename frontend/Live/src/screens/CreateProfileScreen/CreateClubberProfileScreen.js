@@ -77,7 +77,8 @@ const CreateProfileScreen = () => {
       .then(async (res) => {
         if (res.ok) {
           console.log(`clubber added to the database successfully`);
-          navigation.navigate('Relogin');
+          navigation.navigate('Login', {
+                screen: 'clubberLogin'});
         } else {
           console.log(`something went wrong ${JSON.stringify(res)}`);
         }

@@ -53,7 +53,8 @@ const CreateProfileScreen = () => {
         .then(async (res) => {
           if (res.ok) {
             console.log(`added to the database successfully`);
-            navigation.navigate('ReloginClub');
+            navigation.navigate('Login', {
+              screen: 'venueLogin'});
           } else {
             console.log(`something went wrong ${JSON.stringify(res)}`);
           }
