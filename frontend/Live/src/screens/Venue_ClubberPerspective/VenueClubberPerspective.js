@@ -69,7 +69,7 @@ const VenueClubberPerspective = ({ route, navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Image source={{ uri: pic }} style={styles.image} />
+      <Image source={{ uri: venueInfo.url }} style={styles.image} />
       <View style={styles.headerContent}>      
         <Text style={styles.venueName}>{venueInfo.venueName}</Text>
       </View>
